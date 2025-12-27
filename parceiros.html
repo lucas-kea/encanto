@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Parceiros - Encanto Festas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-blue: #1E3A8A;
+            --brand-accent: #2563EB;
+            --brand-bg: #F8FAFC;
+            --card-border: #E2E8F0;
+        }
+
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--brand-bg);
+            color: #334155;
+            -webkit-tap-highlight-color: transparent;
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, h4, .brand-font { 
+            font-family: 'Baloo 2', cursive; 
+        }
+
+        /* Design de Cartão Minimalista com Foto */
+        .user-card {
+            background: white;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            border: 1px solid var(--card-border);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: relative;
+        }
+
+        .user-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--brand-accent);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-image-wrapper {
+            width: 100%;
+            aspect-ratio: 2.5 / 1; 
+            overflow: hidden;
+            background: #F1F5F9;
+        }
+
+        .card-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            transition: transform 0.6s ease;
+        }
+
+        .user-card:hover .card-image-wrapper img {
+            transform: scale(1.05);
+        }
+
+        /* Chips de Navegação */
+        .nav-chip {
+            padding: 10px 18px;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+            background: white;
+            color: #64748B;
+            border: 1px solid #E2E8F0;
+            white-space: nowrap;
+        }
+
+        .nav-chip.active {
+            background: var(--brand-blue);
+            color: white;
+            border-color: var(--brand-blue);
+        }
+
+        /* Botões */
+        .contact-btn {
+            height: 40px;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            width: 100%;
+            transition: all 0.2s;
+            gap: 6px;
+        }
+
+        .btn-whatsapp { background: #25D366; color: white; }
+        .btn-map { background: var(--brand-blue); color: white; }
+        .btn-catalog { background: #F1F5F9; color: var(--brand-blue); border: 1px solid #E2E8F0; }
+        .btn-disabled { background: #E2E8F0 !important; color: #94A3B8 !important; pointer-events: none; cursor: not-allowed; border: none; opacity: 0.6; }
+
+        .tag {
+            font-size: 8px;
+            font-weight: 700;
+            color: #64748B;
+            background: #F8FAFC;
+            padding: 3px 8px;
+            border-radius: 5px;
+            text-transform: uppercase;
+            border: 1px solid #F1F5F9;
+        }
+
+        .official-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #FEF3C7;
+            color: #92400E;
+            font-size: 8px;
+            font-weight: 900;
+            padding: 4px 8px;
+            border-radius: 50px;
+            border: 1px solid #FDE68A;
+            text-transform: uppercase;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-reveal { animation: fadeInUp 0.5s ease-out forwards; }
+
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- Configuração da cor da barra do browser (Chrome, Safari, Samsung Internet, etc) -->
+    <meta name="theme-color" content="#2563eb">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="msapplication-navbutton-color" content="#2563eb">
+
+    <title>Encanto Festas - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-blue: #2563eb;
+            --deep-blue: #1e3a8a;
+            --marketing-gold: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            --marketing-glow: 0 0 20px rgba(245, 158, 11, 0.5);
+        }
+
+        html, body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        h1, h2, h3, h4, .brand-font {
+            font-family: 'Baloo 2', cursive;
+            line-height: 1.2;
+        }
+        
+        .glass-header {
+            background: #2563eb; 
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .item-card {
+            transition: transform 0.25s ease-out, opacity 0.25s ease-out;
+            animation: fadeIn 0.4s ease-out forwards;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            will-change: transform, opacity;
+            user-select: none;
+            touch-action: pan-y; 
+        }
+
+        @keyframes fadeIn {
+            from { transform: translateY(8px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .dismissing {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease !important;
+            transform: translateX(120%) !important;
+            opacity: 0 !important;
+            pointer-events: none;
+        }
+
+        .modal-view {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(100%);
+            background: linear-gradient(180deg, #2563eb 0%, #1e3a8a 100%);
+            background-attachment: fixed;
+            visibility: hidden;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+        }
+        .modal-view.active {
+            transform: translateY(0%);
+            visibility: visible;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .line-clamp-msg {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .item-card.expanded .line-clamp-msg {
+            -webkit-line-clamp: unset;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cabeçalho Fixo -->
+    <header id="mainHeader" class="fixed top-0 left-0 right-0 w-full glass-header z-[50] h-16">
+        <div class="max-w-xl mx-auto px-3 h-full flex justify-between items-center">
+            
+            <!-- Logo e Identidade -->
+            <a href="index.html" class="flex items-center gap-2 active:scale-95 transition-transform outline-none text-decoration-none group">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdX7GkygoIKwK06MzeweiE0GPt5I1rsz808w&s" 
+                    class="w-10 h-10 rounded-full border-2 border-yellow-400 shadow-sm transition-transform group-hover:rotate-12"
+                    alt="Logo Encanto Festas">
+                
+                <div class="inline-flex flex-col items-start leading-none -mt-1.5 ml-0.5">
+                    <div class="text-xl font-bold brand-font tracking-tight">
+                        <span class="text-white">Encanto</span><span class="text-yellow-400">Festas</span>
+                    </div>
+                    <span class="text-[7.2px] font-black text-white/90 uppercase -mt-0.5 tracking-[0.15em] w-full text-justify ml-[2px]" style="text-align-last: justify;">
+                        LOCAÇÃO DE BRINQUEDOS
+                    </span>
+                </div>
+            </a>
+            
+            <div class="flex items-center gap-2">
+                <!-- Apenas Botão de Notificações -->
+                <button id="notifBtn" class="relative p-2.5 bg-white/10 rounded-xl text-white hover:bg-white/20 transition-all active:scale-90 flex items-center justify-center outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                    </svg>
+                    <span id="notifBadge" class="hidden absolute top-2 right-2 w-2.5 h-2.5 bg-yellow-400 rounded-full border-2 border-blue-600 animate-pulse"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MODAL DE NOTIFICAÇÕES -->
+    <div id="notifModal" class="modal-view hidden flex flex-col">
+        <div class="px-5 py-3 border-b border-white/10 flex justify-between items-center bg-blue-900/40 backdrop-blur-xl">
+            <div class="flex items-center gap-4">
+                <button id="closeNotif" class="p-2 text-white/70 hover:text-white transition-colors bg-white/10 rounded-lg outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <h2 class="text-lg font-bold brand-font text-white">Notificações</h2>
+            </div>
+            <button id="markAllRead" class="text-[10px] font-bold uppercase tracking-widest text-blue-200 hover:text-white transition-colors outline-none">Limpar Tudo</button>
+        </div>
+        <div id="notifContainer" class="flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar pb-10"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, updateDoc, arrayUnion, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const fbConfigRaw = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const NOTIF_URL = 'notificacoes.json';
+
+        let db, auth, user;
+        let readIds = JSON.parse(localStorage.getItem('encanto_read_ids') || '[]').map(id => Number(id)); 
+        let rawNotifications = [];
+
+        const getEl = (id) => document.getElementById(id);
+
+        const init = async () => {
+            fetchNotifications();
+
+            if (fbConfigRaw) {
+                try {
+                    const firebaseConfig = JSON.parse(fbConfigRaw);
+                    const app = initializeApp(firebaseConfig);
+                    auth = getAuth(app);
+                    db = getFirestore(app);
+                    
+                    // Auth FIRST
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+
+                    onAuthStateChanged(auth, u => { 
+                        if (u) { 
+                            user = u; 
+                            setupPersistenceListener(); 
+                        } 
+                    });
+                } catch (e) { 
+                    console.warn("Firebase Offline ou Erro de Configuração"); 
+                }
+            }
+        };
+
+        const setupPersistenceListener = () => {
+            if (!user || !db) return;
+            const stateRef = doc(db, 'artifacts', appId, 'users', user.uid, 'notification_data', 'state');
+            onSnapshot(stateRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const cloudIds = (docSnap.data().readIds || []).map(id => Number(id));
+                    readIds = [...new Set([...readIds, ...cloudIds])];
+                    localStorage.setItem('encanto_read_ids', JSON.stringify(readIds));
+                    updateNotifUI();
+                }
+            }, (error) => {
+                console.error("Erro ao ouvir notificações em tempo real:", error);
+            });
+        };
+
+        async function fetchNotifications() {
+            try {
+                const response = await fetch(`${NOTIF_URL}?t=${new Date().getTime()}`);
+                if (response.ok) {
+                    rawNotifications = await response.json();
+                }
+            } catch (e) {
+                rawNotifications = [{ id: 101, titulo: "Bem-vindo! 🎈", mensagem: "Confira as novidades no seu painel.", tipo: "info", data: new Date().toISOString() }];
+            }
+            updateNotifUI();
+        }
+
+        function updateNotifUI() {
+            const active = rawNotifications.filter(n => !readIds.includes(Number(n.id)));
+            active.sort((a, b) => new Date(b.data) - new Date(a.data));
+            const badge = getEl('notifBadge');
+            if (badge) badge.classList.toggle('hidden', active.length === 0);
+            renderNotifs(active);
+        }
+
+        function renderNotifs(list) {
+            const container = getEl('notifContainer');
+            if (!container) return;
+
+            if (list.length === 0) {
+                container.innerHTML = `<div class="text-center py-20 opacity-20 text-white brand-font text-xl">Tudo em dia!</div>`;
+                return;
+            }
+            container.innerHTML = '';
+            list.forEach(n => {
+                const card = document.createElement('div');
+                card.className = "item-card p-4 rounded-[1.5rem] text-white shadow-lg cursor-pointer transition-all";
+                card.innerHTML = `
+                    <div class="flex gap-3">
+                        <div class="w-10 h-10 shrink-0 rounded-xl bg-white/10 flex items-center justify-center text-xl shadow-inner pointer-events-none">
+                            ${n.tipo === 'alerta' ? '⚡' : '✨'}
+                        </div>
+                        <div class="flex-1 min-w-0 pointer-events-none">
+                            <h3 class="font-bold text-sm leading-tight mb-1 text-white">${n.titulo}</h3>
+                            <p class="text-[13px] text-blue-50/80 mb-2 leading-relaxed line-clamp-msg">${n.mensagem}</p>
+                            <button class="mark-btn text-[10px] font-bold text-blue-300 hover:text-white uppercase transition-colors pointer-events-auto">Marcar como lido</button>
+                        </div>
+                    </div>
+                `;
+                card.onclick = (e) => {
+                    if (e.target.classList.contains('mark-btn')) {
+                        e.stopPropagation(); 
+                        card.classList.add('dismissing'); 
+                        setTimeout(() => persistReadId(n.id), 450); 
+                        return;
+                    }
+                    const msgPara = card.querySelector('.line-clamp-msg');
+                    if (msgPara) {
+                        const isTruncated = msgPara.scrollHeight > msgPara.clientHeight;
+                        if (isTruncated && !card.classList.contains('expanded')) { 
+                            card.classList.add('expanded'); 
+                        } else if (n.link) {
+                            window.location.href = n.link;
+                        }
+                    }
+                };
+                container.appendChild(card);
+            });
+        }
+
+        async function persistReadId(id) {
+            const nid = Number(id);
+            if (!readIds.includes(nid)) { 
+                readIds.push(nid); 
+                localStorage.setItem('encanto_read_ids', JSON.stringify(readIds)); 
+            }
+            updateNotifUI();
+            
+            if (user && db) {
+                const stateRef = doc(db, 'artifacts', appId, 'users', user.uid, 'notification_data', 'state');
+                try { 
+                    await updateDoc(stateRef, { readIds: arrayUnion(nid) }); 
+                } catch (e) { 
+                    await setDoc(stateRef, { readIds }); 
+                }
+            }
+        }
+
+        async function markAllNotificationsAsRead() {
+            const newIds = rawNotifications.map(n => Number(n.id));
+            readIds = [...new Set([...readIds, ...newIds])];
+            localStorage.setItem('encanto_read_ids', JSON.stringify(readIds));
+            updateNotifUI();
+            
+            if (user && db) {
+                const stateRef = doc(db, 'artifacts', appId, 'users', user.uid, 'notification_data', 'state');
+                try { 
+                    await updateDoc(stateRef, { readIds: readIds }); 
+                } catch (e) { 
+                    await setDoc(stateRef, { readIds: readIds }); 
+                }
+            }
+        }
+
+        const setupUIListeners = () => {
+            const btnNotif = getEl('notifBtn');
+            const btnCloseNotif = getEl('closeNotif');
+            const btnMarkAll = getEl('markAllRead');
+            const modalNotif = getEl('notifModal');
+
+            if (btnNotif && modalNotif) {
+                btnNotif.onclick = () => { 
+                    modalNotif.classList.remove('hidden'); 
+                    setTimeout(() => modalNotif.classList.add('active'), 10); 
+                };
+            }
+
+            if (btnCloseNotif && modalNotif) {
+                btnCloseNotif.onclick = () => { 
+                    modalNotif.classList.remove('active'); 
+                    setTimeout(() => modalNotif.classList.add('hidden'), 400); 
+                };
+            }
+
+            if (btnMarkAll) {
+                btnMarkAll.onclick = () => markAllNotificationsAsRead();
+            }
+        };
+
+        setupUIListeners();
+        init();
+    </script>
+</body>
+</html>
+<body class="pt-4">
+
+    <!-- Popup de Construção -->
+    <div id="construction-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm px-6 hidden">
+        <div class="bg-white rounded-[2rem] p-8 max-w-sm w-full text-center shadow-2xl animate-reveal">
+            <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            </div>
+            <h3 class="text-2xl font-black text-slate-900 brand-font mb-2">Área em Construção</h3>
+            <p class="text-sm text-slate-500 font-medium mb-6 leading-relaxed">Estamos preparando novidades incríveis para você. Por enquanto, alguns dados podem estar sendo atualizados.</p>
+            <button onclick="closeModal()" class="w-full h-12 bg-blue-900 text-white rounded-xl font-bold uppercase tracking-wider text-xs hover:bg-blue-800 transition-colors">Entendi</button>
+        </div>
+    </div>
+
+    <!-- Espaço para Cabeçalho Personalizado -->
+    <div class="w-full h-24 bg-transparent" id="custom-header-space"></div>
+
+    <!-- Filtros -->
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 mb-6">
+        <div class="flex gap-2 px-4 py-4 overflow-x-auto scrollbar-hide">
+            <button class="nav-chip active" onclick="filterCategory('all', this)">Tudo</button>
+            <button class="nav-chip" onclick="filterCategory('salao', this)">Salões</button>
+            <button class="nav-chip" onclick="filterCategory('decoracao', this)">Decoração</button>
+            <button class="nav-chip" onclick="filterCategory('comida', this)">Comida</button>
+            <button class="nav-chip" onclick="filterCategory('brinquedos', this)">Brinquedos</button>
+            <button class="nav-chip" onclick="filterCategory('personalizados', this)">Personalizados</button>
+            <button class="nav-chip" onclick="filterCategory('som', this)">Som & Iluminação</button>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="px-6 mb-8 text-center">
+        <h2 class="text-3xl font-extrabold text-slate-900 leading-tight">Nossos <span class="text-blue-700">Parceiros.</span></h2>
+        <p class="text-[10px] text-slate-400 mt-2 font-bold max-w-xs mx-auto uppercase tracking-widest">A seleção oficial da Encanto Festas</p>
+    </header>
+
+    <!-- Grid de Duas Colunas -->
+    <main class="px-4 md:px-6 pb-24 grid grid-cols-2 gap-3 md:gap-6" id="partner-grid">
+        <!-- Renderizado via JS -->
+    </main>
+
+    <!-- Espaço para Rodapé Personalizado -->
+    <div class="w-full h-32 bg-transparent border-t border-slate-100 flex items-center justify-center" id="custom-footer-space">
+        <!-- Espaço reservado para o rodapé -->
+    </div>
+
+    <script>
+        const partners = [
+            // --- SALÕES ---
+            { name: "Consulado Garden", category: "salao", loc: "Centro", img: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80", wa: "5547999999999", tags: ["Climatizado", "500 conv."] },
+            { name: "Vitoria Eventos", category: "salao", loc: "Rocio Grande", img: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?q=80", wa: "5547999999999", tags: ["Estacionamento", "Acessível"] },
+            { name: "Chama no Var", category: "salao", loc: "Rocio Pequeno", img: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80", wa: "5547999999999", tags: ["Rústico", "Espaço Garden"] },
+            { name: "WIP Festas", category: "salao", loc: "Morro Grande", img: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80", wa: "5547999999999", tags: ["Moderno", "Brinquedos"] },
+            { name: "Clube 21", category: "salao", loc: "Sandra Regina", img: "https://images.unsplash.com/photo-1470753937643-efad93c239fa?q=80", wa: "5547999999999", tags: ["Frente Mar", "Amplo"] },
+            { name: "Espaço Paraíso", category: "salao", loc: "Tapera", img: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80", wa: "5547999999999", tags: ["Natureza", "Brinquedos"] },
+            { name: "Tchê Bebe", category: "salao", loc: "Centro", img: "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80", wa: "5547999999999", tags: ["Infantil", "Climatizado"] },
+            { name: "Casarão Calixto", category: "salao", loc: "Paulas", img: "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80", wa: "5547999999999", tags: ["Histórico", "Vista Mar"] },
+            { name: "Chácara do Gilberto", category: "salao", loc: "Ubatuba", img: "https://images.unsplash.com/photo-1504159506876-f8338247a14a?q=80", wa: "5547999999999", tags: ["Campo", "Piscina"] },
+            { name: "Majid Lounge", category: "salao", loc: "Centro", img: "https://images.unsplash.com/photo-1530103043960-ef38714abb15?q=80", wa: "5547999999999", tags: ["Premium", "Lounge"] },
+
+            // --- COMIDA (Oficiais primeiro) ---
+            { name: "Juju Bolos", category: "comida", foodType: "Bolos Artísticos", isOfficial: true, img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80", wa: "5547999999999", catalog: "link-do-catalogo", tags: ["Doces", "Bolos"] },
+            { name: "Michele Salgados", category: "comida", foodType: "Salgados", isOfficial: true, img: "https://images.unsplash.com/photo-1541530538661-002660144f80?q=80", wa: "5547999999999", catalog: "link-do-catalogo", tags: ["Fritos", "Assados"] },
+            { name: "Karol Katering", category: "comida", foodType: "Buffet & Katering", img: "https://images.unsplash.com/photo-1555244162-803834f70033?q=80", wa: "5547999999999", tags: ["Buffet Completo", "Eventos"] },
+            { name: "Mara Salgados", category: "comida", foodType: "Salgados", img: "https://images.unsplash.com/photo-1619096252214-ef06c45683e3?q=80", wa: "5547999999999", tags: ["Tradicional", "Festa"] },
+            { name: "Doce Fran", category: "comida", foodType: "Doces Finos", img: "https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80", wa: "5547999999999", tags: ["Doces"] },
+            { name: "Doce Ana", category: "comida", foodType: "Sobremesas", img: "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?q=80", wa: "5547999999999", tags: ["Doces Gourmet"] },
+
+            // --- DECORAÇÃO ---
+            { name: "Joice Decorações", category: "decoracao", img: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80", wa: "5547999999999", tags: ["Eventos", "Festas"] },
+            { name: "C de Coração", category: "decoracao", img: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80", wa: "5547999999999", tags: ["Afetiva", "Minimalista"] },
+            { name: "Ivina Alugue Decore", category: "decoracao", img: "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?q=80", wa: "5547999999999", tags: ["Locação", "Mobiliário"] },
+            { name: "Impacto Decorações", category: "decoracao", img: "https://images.unsplash.com/photo-1472653372322-694d6d0d2966?q=80", wa: "5547999999999", tags: ["Cenografia", "Grandes Eventos"] },
+            { name: "Emporio das Embalagens", category: "decoracao", img: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80", wa: "5547999999999", tags: ["Artigos", "Festas"] },
+
+            // --- PERSONALIZADOS ---
+            { name: "Flávia Mendes Decoração", category: "personalizados", img: "https://images.unsplash.com/photo-1454165833767-027ffea9e772?q=80", wa: "5547999999999", tags: ["Personalizados", "Design"] },
+
+            // --- BRINQUEDOS ---
+            { name: "Klem Brinquedos", category: "brinquedos", img: "https://images.unsplash.com/photo-1566411520896-01e7ca4726af?q=80", wa: "5547999999999", tags: ["Infláveis", "Cama Elástica"] },
+            { name: "Pula Kids", category: "brinquedos", img: "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?q=80", wa: "5547999999999", tags: ["Locação", "Infantil"] },
+            { name: "Manah Brinquedos", category: "brinquedos", img: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80", wa: "5547999999999", tags: ["Diversão", "Eventos"] },
+            { name: "Bibi Locações", category: "brinquedos", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?q=80", wa: "5547999999999", tags: ["Brinquedos", "Festas"] },
+
+            // --- SOM ---
+            { name: "BegPromosom", category: "som", img: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80", wa: "5547999999999", tags: ["DJ", "Iluminação", "Som"] }
+        ];
+
+        function closeModal() {
+            document.getElementById('construction-modal').classList.add('hidden');
+        }
+
+        function renderPartners(category = 'all') {
+            const grid = document.getElementById('partner-grid');
+            grid.innerHTML = '';
+
+            // Filtrar e Ordenar: Oficiais primeiro
+            let filtered = category === 'all' ? partners : partners.filter(p => p.category === category);
+            filtered.sort((a, b) => (b.isOfficial || false) - (a.isOfficial || false));
+
+            filtered.forEach((p, i) => {
+                const card = document.createElement('div');
+                card.className = "user-card animate-reveal";
+                card.style.animationDelay = `${i * 0.05}s`;
+
+                // Identificador embaixo da foto
+                let subTitle = "";
+                if (p.category === 'salao') {
+                    subTitle = p.loc;
+                } else if (p.category === 'comida') {
+                    subTitle = p.foodType || "Comida";
+                } else {
+                    subTitle = p.category;
+                }
+
+                // Lógica de botões
+                const waLink = `https://wa.me/${p.wa}`;
+                const catalogBtnClass = (p.catalog) ? 'btn-catalog' : 'btn-disabled';
+                const catalogLink = (p.catalog) ? p.catalog : 'javascript:void(0)';
+
+                card.innerHTML = `
+                    ${p.isOfficial ? `<div class="official-badge"><svg class="w-2 h-2" fill="currentColor" viewBox="0 0 24 24"><path d="m12 15 2 5 2-5 5-2-5-2-2-5-2 5-5 2z"/></svg>Parceiro Oficial</div>` : ''}
+                    <div class="card-image-wrapper">
+                        <img src="${p.img}" alt="${p.name}" loading="lazy">
+                    </div>
+                    
+                    <div class="p-3 md:p-4 flex flex-col flex-grow">
+                        <div class="mb-2">
+                            <h4 class="text-[11px] md:text-sm font-black text-slate-900 leading-tight mb-1 truncate">${p.name}</h4>
+                            <span class="text-[7px] md:text-[8px] font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded uppercase self-start">
+                                ${subTitle}
+                            </span>
+                        </div>
+
+                        <div class="flex flex-wrap gap-1 mb-3">
+                            ${p.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-auto">
+                            <a href="${waLink}" target="_blank" class="contact-btn btn-whatsapp">
+                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                                WhatsApp
+                            </a>
+                            ${p.category === 'salao' ? 
+                                `<a href="https://www.google.com/maps" target="_blank" class="contact-btn btn-map">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>Mapa
+                                </a>` : 
+                                `<a href="${catalogLink}" target="_blank" class="contact-btn ${catalogBtnClass}">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Catálogo
+                                </a>`
+                            }
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        window.filterCategory = (category, el) => {
+            document.querySelectorAll('.nav-chip').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            renderPartners(category);
+        };
+
+        window.onload = function() {
+            document.getElementById('construction-modal').classList.remove('hidden');
+            renderPartners();
+        };
+    </script>
+</body>
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Encanto Festas - Navegação</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: transparent;
+            -webkit-tap-highlight-color: transparent;
+            scroll-behavior: smooth;
+        }
+        h1, h2, h3, h4, .brand-font {
+            font-family: 'Baloo 2', cursive;
+        }
+        .min-h-screen-safe {
+            min-height: 100vh;
+            min-height: 100dvh;
+        }
+        
+        /* Cores de Marca */
+        .bg-primary { background-color: #2563EB; }
+        .text-primary { color: #2563EB; }
+        .bg-secondary { background-color: #FACC15; }
+        .text-secondary { color: #CA8A04; }
+        
+        /* Animação "Vai e Volta" (Bounce) Profissional - Sem Forwards para resetar sempre */
+        @keyframes bounce-click {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.85); }
+            100% { transform: scale(1); }
+        }
+
+        .click-bounce:active {
+            animation: bounce-click 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Garantir que o link mude de cor e anime corretamente */
+        .nav-item {
+            transition: color 0.2s ease;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .nav-item:active {
+            color: #2563EB !important;
+        }
+
+        .floating-fab {
+            box-shadow: 0 8px 25px rgba(250, 204, 21, 0.4);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        #bottom-nav {
+            padding-bottom: env(safe-area-inset-bottom);
+            height: calc(4.5rem + env(safe-area-inset-bottom));
+            /* Garantia de visibilidade em PC/Tablet com sombra superior */
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+
+        /* Popup Slide */
+        #custom-popup {
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+        body.popup-open #custom-popup {
+            transform: translateY(0);
+        }
+        .popup-overlay {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        body.popup-open .popup-overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .menu-card {
+            transition: transform 0.1s ease, background-color 0.2s ease;
+        }
+    </style>
+</head>
+<body class="text-gray-800 min-h-screen-safe flex flex-col">
+
+    <!-- [LOCK: COFRE DE ÍCONES] -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="icon-house" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        </symbol>
+        <symbol id="icon-handshake" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/>
+        </symbol>
+        <symbol id="icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/><path d="M12 5v14"/>
+        </symbol>
+        <symbol id="icon-book-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>
+        </symbol>
+        <symbol id="icon-user-round" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/>
+        </symbol>
+        <symbol id="icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/>
+        </symbol>
+        <symbol id="icon-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 12 20 22 4 22 4 12"/><rect width="20" height="5" x="2" y="7"/><line x1="12" x2="12" y1="22" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+        </symbol>
+        <symbol id="icon-whatsapp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+        </symbol>
+        <symbol id="icon-school" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2v-5"/>
+        </symbol>
+        <symbol id="icon-tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42l-8.704-8.704Z"/><line x1="7" x2="7.01" y1="7" y2="7"/>
+        </symbol>
+        <symbol id="icon-layout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="3" x2="21" y1="9" y2="9"/><line x1="9" x2="9" y1="21" y2="9"/>
+        </symbol>
+        <symbol id="icon-more" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
+        </symbol>
+    </svg>
+    <!-- [/LOCK] -->
+
+    <main class="flex-grow w-full">
+        <!-- Área vazia para foco no footer -->
+    </main>
+
+    <div class="popup-overlay fixed inset-0 bg-black/60 z-[90]" onclick="togglePopup()"></div>
+
+    <div id="custom-popup" class="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-[3rem] shadow-2xl h-[72vh] overflow-y-auto">
+        <div class="sticky top-0 bg-white pt-5 pb-3 z-10" onclick="togglePopup()">
+            <div class="w-16 h-1.5 bg-gray-200 rounded-full mx-auto cursor-pointer active:bg-gray-300 transition-colors"></div>
+        </div>
+        <div id="popup-content-area" class="px-8 pb-12">
+            <!-- Conteúdo carregado via Script -->
+        </div>
+    </div>
+
+    <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 w-full bg-white border-t border-gray-100 z-[80] flex items-start">
+        <div class="grid grid-cols-5 w-full h-full max-w-7xl mx-auto">
+            <!-- Início -->
+            <a href="index.html" class="nav-item click-bounce flex flex-col items-center justify-center text-gray-400">
+                <svg class="w-6 h-6"><use href="#icon-house"></use></svg>
+                <span class="text-[10px] font-semibold mt-1">Início</span>
+            </a>
+            
+            <!-- Parceiros (Ativo e Não Clicável) -->
+            <a href="javascript:void(0)" class="nav-item flex flex-col items-center justify-center text-primary pointer-events-none cursor-default">
+                <svg class="w-6 h-6"><use href="#icon-handshake"></use></svg>
+                <span class="text-[10px] font-semibold mt-1">Parceiros</span>
+            </a>
+
+            <!-- Botão Central (Gera o Popup de Itens) -->
+            <div class="relative flex justify-center">
+                <button onclick="togglePopup()" class="floating-fab click-bounce absolute -top-8 bg-secondary text-blue-900 w-16 h-16 rounded-full flex items-center justify-center border-4 border-white">
+                    <svg class="w-9 h-9"><use href="#icon-plus"></use></svg>
+                </button>
+            </div>
+
+            <!-- Catálogo -->
+            <a href="catalogo.html" class="nav-item click-bounce flex flex-col items-center justify-center text-gray-400">
+                <svg class="w-6 h-6"><use href="#icon-book-open"></use></svg>
+                <span class="text-[10px] font-semibold mt-1">Catálogo</span>
+            </a>
+
+            <!-- Perfil -->
+            <a href="perfil.html" class="nav-item click-bounce flex flex-col items-center justify-center text-gray-400">
+                <svg class="w-6 h-6"><use href="#icon-user-round"></use></svg>
+                <span class="text-[10px] font-semibold mt-1">Perfil</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        const POPUP_CONTENT = `
+            <div class="text-center mb-6">
+                <h2 class="text-xl font-extrabold brand-font text-primary">Ações Rápidas</h2>
+                <p class="text-gray-400 text-xs">O que deseja fazer agora?</p>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <!-- Fazer Reserva -->
+                <button onclick="window.location.href='calendario.html'" class="menu-card click-bounce p-4 bg-blue-50 rounded-[2rem] border border-blue-100 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-lg shadow-blue-200 mb-2">
+                        <svg class="w-6 h-6 text-white"><use href="#icon-calendar"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-blue-900">Fazer Reserva</span>
+                </button>
+
+                <!-- Encanto Escola -->
+                <button onclick="window.location.href='escola.html'" class="menu-card click-bounce p-4 bg-purple-50 rounded-[2rem] border border-purple-100 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center shadow-lg shadow-purple-200 mb-2">
+                        <svg class="w-6 h-6 text-white"><use href="#icon-school"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-purple-900">Encanto Escola</span>
+                </button>
+
+                <!-- Brinquedos Usados -->
+                <button onclick="window.location.href='usados.html'" class="menu-card click-bounce p-4 bg-orange-50 rounded-[2rem] border border-orange-100 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-orange-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-orange-200 mb-2">
+                        <svg class="w-6 h-6 text-white"><use href="#icon-tag"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-orange-900 text-center leading-tight">Brinquedos Usados</span>
+                </button>
+
+                <!-- Criar Site -->
+                <button onclick="window.location.href='site.html'" class="menu-card click-bounce p-4 bg-slate-50 rounded-[2rem] border border-slate-200 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-slate-700 text-white rounded-full flex items-center justify-center shadow-lg shadow-slate-300 mb-2">
+                        <svg class="w-6 h-6 text-white"><use href="#icon-layout"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-slate-900">Criar Site</span>
+                </button>
+
+                <!-- Convide e Ganhe -->
+                <button onclick="window.location.href='convide.html'" class="menu-card click-bounce p-4 bg-yellow-50 rounded-[2rem] border border-yellow-100 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-secondary text-blue-900 rounded-full flex items-center justify-center shadow-lg shadow-yellow-200 mb-2">
+                        <svg class="w-6 h-6"><use href="#icon-gift"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-yellow-900 text-center leading-tight">Convide Ganhe</span>
+                </button>
+
+                <!-- WhatsApp -->
+                <button onclick="window.location.href='https://wa.me/5547992277324?text=Olá!%20Gostaria%20de%20falar%20sobre%20as%20festas.'" class="menu-card click-bounce p-4 bg-green-50 rounded-[2rem] border border-green-100 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-green-200 mb-2">
+                        <svg class="w-6 h-6 text-white"><use href="#icon-whatsapp"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-green-900 text-center">WhatsApp</span>
+                </button>
+            </div>
+
+            <!-- Botão Outros (Centralizado e Menor) -->
+            <div class="mt-6 flex justify-center">
+                <button onclick="window.location.href='outros.html'" class="menu-card click-bounce py-3 px-10 bg-gray-50 rounded-full border border-gray-100 flex items-center gap-2 shadow-sm">
+                    <svg class="w-4 h-4 text-gray-500"><use href="#icon-more"></use></svg>
+                    <span class="font-bold text-xs text-gray-600">Outros</span>
+                </button>
+            </div>
+        `;
+
+        let isPopupLoaded = false;
+        function togglePopup() {
+            const body = document.body;
+            const contentArea = document.getElementById('popup-content-area');
+            if (!body.classList.contains('popup-open')) {
+                if (!isPopupLoaded) {
+                    contentArea.innerHTML = POPUP_CONTENT;
+                    isPopupLoaded = true;
+                }
+                body.classList.add('popup-open');
+            } else {
+                body.classList.remove('popup-open');
+            }
+        }
+    </script>
+</body>
+</html>
+</html>
