@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Encanto Festas - Navegação</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: transparent;
+            -webkit-tap-highlight-color: transparent;
+            scroll-behavior: smooth;
+        }
+        h1, h2, h3, h4, .brand-font {
+            font-family: 'Baloo 2', cursive;
+        }
+        .min-h-screen-safe {
+            min-height: 100vh;
+            min-height: 100dvh;
+        }
+        
+        /* Cores de Marca */
+        .bg-primary { background-color: #2563EB; }
+        .text-primary { color: #2563EB; }
+        .bg-secondary { background-color: #FACC15; }
+        .text-secondary { color: #CA8A04; }
+        
+        /* Animação "Vai e Volta" (Bounce) Profissional - Sem Forwards para resetar sempre */
+        @keyframes bounce-click {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.85); }
+            100% { transform: scale(1); }
+        }
+
+        .click-bounce:active {
+            animation: bounce-click 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Garantir que o link mude de cor e anime corretamente */
+        .nav-item {
+            transition: color 0.2s ease;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .nav-item:active {
+            color: #2563EB !important;
+        }
+
+        .floating-fab {
+            box-shadow: 0 8px 25px rgba(250, 204, 21, 0.4);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        #bottom-nav {
+            padding-bottom: env(safe-area-inset-bottom);
+            height: calc(4.5rem + env(safe-area-inset-bottom));
+            /* Garantia de visibilidade em PC/Tablet com sombra superior */
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+
+        /* Popup Slide */
+        #custom-popup {
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+        body.popup-open #custom-popup {
+            transform: translateY(0);
+        }
+        .popup-overlay {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        body.popup-open .popup-overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .menu-card {
+            transition: transform 0.1s ease, background-color 0.2s ease;
+        }
+    </style>
+</head>
+<body class="text-gray-800 min-h-screen-safe flex flex-col">
+
+    <!-- [LOCK: COFRE DE ÍCONES] -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="icon-house" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        </symbol>
+        <symbol id="icon-handshake" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/>
+        </symbol>
+        <symbol id="icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/><path d="M12 5v14"/>
+        </symbol>
+        <symbol id="icon-book-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>
+        </symbol>
+        <symbol id="icon-user-round" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/>
+        </symbol>
+        <symbol id="icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/>
+        </symbol>
+        <symbol id="icon-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 12 20 22 4 22 4 12"/><rect width="20" height="5" x="2" y="7"/><line x1="12" x2="12" y1="22" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+        </symbol>
+        <symbol id="icon-whatsapp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+        </symbol>
+        <symbol id="icon-school" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2v-5"/>
+        </symbol>
+        <symbol id="icon-tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42l-8.704-8.704Z"/><line x1="7" x2="7.01" y1="7" y2="7"/>
+        </symbol>
+        <symbol id="icon-layout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="3" x2="21" y1="9" y2="9"/><line x1="9" x2="9" y1="21" y2="9"/>
+        </symbol>
+        <symbol id="icon-more" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
+        </symbol>
+    </svg>
+    <!-- [/LOCK] -->
+
+    <main class="flex-grow w-full">
+        <!-- Área vazia para foco no footer -->
+    </main>
+
+    <div class="popup-overlay fixed inset-0 bg-black/60 z-[90]" onclick="togglePopup()"></div>
+
+    <div id="custom-popup" class="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-[3rem] shadow-2xl h-[72vh] overflow-y-auto">
+        <div class="sticky top-0 bg-white pt-5 pb-3 z-10" onclick="togglePopup()">
+            <div class="w-16 h-1.5 bg-gray-200 rounded-full mx-auto cursor-pointer active:bg-gray-300 transition-colors"></div>
+        </div>
+        <div id="popup-content-area" class="px-8 pb-12">
+            <!-- Conteúdo carregado via Script -->
+        </div>
+    </div>
+
+    <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 w-full bg-white border-t border-gray-100 z-[80] flex items-start">
+        <div class="grid grid-cols-5 w-full h-full max-w-7xl mx-auto">
+            <!-- Início -->
+            <a href="index.html" class="nav-item click-bounce flex flex-col items-center justify-center text-gray-400">
+                <svg class="w-6 h-6"><use href="#icon-house"></use></svg>
+                <span class="text-[10px] font-semibold mt-1">Início</span>
+            </a>
+            
+            <!-- Parceiros -->
+            <a href="parceiros.html" class="nav-item click-bounce flex flex-col items-center justify-center text-gray-400">
+                <svg class="w-6 h-6"><use href="#icon-handshake"></use></svg>
+                <span class="text-[10px] font-semibold mt-1">Parceiros</span>
+            </a>
+
+            <!-- Botão Central (Gera o Popup de Itens) -->
+            <div class="relative flex justify-center">
+                <button onclick="togglePopup()" class="floating-fab click-bounce absolute -top-8 bg-secondary text-blue-900 w-16 h-16 rounded-full flex items-center justify-center border-4 border-white">
+                    <svg class="w-9 h-9"><use href="#icon-plus"></use></svg>
+                </button>
+            </div>
+
+            <!-- Catálogo -->
+            <a href="catalogo.html" class="nav-item click-bounce flex flex-col items-center justify-center text-gray-400">
+                <svg class="w-6 h-6"><use href="#icon-book-open"></use></svg>
+                <span class="text-[10px] font-semibold mt-1">Catálogo</span>
+            </a>
+
+            <!-- Perfil -->
+            <a href="perfil.html" class="nav-item click-bounce flex flex-col items-center justify-center text-gray-400">
+                <svg class="w-6 h-6"><use href="#icon-user-round"></use></svg>
+                <span class="text-[10px] font-semibold mt-1">Perfil</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        const POPUP_CONTENT = `
+            <div class="text-center mb-6">
+                <h2 class="text-xl font-extrabold brand-font text-primary">Ações Rápidas</h2>
+                <p class="text-gray-400 text-xs">O que deseja fazer agora?</p>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <!-- Fazer Reserva -->
+                <button onclick="window.location.href='calendario.html'" class="menu-card click-bounce p-4 bg-blue-50 rounded-[2rem] border border-blue-100 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-lg shadow-blue-200 mb-2">
+                        <svg class="w-6 h-6 text-white"><use href="#icon-calendar"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-blue-900">Fazer Reserva</span>
+                </button>
+
+                <!-- Encanto Escola -->
+                <button onclick="window.location.href='escola.html'" class="menu-card click-bounce p-4 bg-purple-50 rounded-[2rem] border border-purple-100 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center shadow-lg shadow-purple-200 mb-2">
+                        <svg class="w-6 h-6 text-white"><use href="#icon-school"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-purple-900">Encanto Escola</span>
+                </button>
+
+                <!-- Brinquedos Usados -->
+                <button onclick="window.location.href='usados.html'" class="menu-card click-bounce p-4 bg-orange-50 rounded-[2rem] border border-orange-100 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-orange-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-orange-200 mb-2">
+                        <svg class="w-6 h-6 text-white"><use href="#icon-tag"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-orange-900 text-center leading-tight">Brinquedos Usados</span>
+                </button>
+
+                <!-- Criar Site -->
+                <button onclick="window.location.href='site.html'" class="menu-card click-bounce p-4 bg-slate-50 rounded-[2rem] border border-slate-200 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-slate-700 text-white rounded-full flex items-center justify-center shadow-lg shadow-slate-300 mb-2">
+                        <svg class="w-6 h-6 text-white"><use href="#icon-layout"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-slate-900">Criar Site</span>
+                </button>
+
+                <!-- Convide e Ganhe -->
+                <button onclick="window.location.href='convide.html'" class="menu-card click-bounce p-4 bg-yellow-50 rounded-[2rem] border border-yellow-100 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-secondary text-blue-900 rounded-full flex items-center justify-center shadow-lg shadow-yellow-200 mb-2">
+                        <svg class="w-6 h-6"><use href="#icon-gift"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-yellow-900 text-center leading-tight">Convide Ganhe</span>
+                </button>
+
+                <!-- WhatsApp -->
+                <button onclick="window.location.href='https://wa.me/5547992277324?text=Olá!%20Gostaria%20de%20falar%20sobre%20as%20festas.'" class="menu-card click-bounce p-4 bg-green-50 rounded-[2rem] border border-green-100 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-green-200 mb-2">
+                        <svg class="w-6 h-6 text-white"><use href="#icon-whatsapp"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-green-900 text-center">WhatsApp</span>
+                </button>
+            </div>
+
+            <!-- Botão Outros (Centralizado e Menor) -->
+            <div class="mt-6 flex justify-center">
+                <button onclick="window.location.href='outros.html'" class="menu-card click-bounce py-3 px-10 bg-gray-50 rounded-full border border-gray-100 flex items-center gap-2 shadow-sm">
+                    <svg class="w-4 h-4 text-gray-500"><use href="#icon-more"></use></svg>
+                    <span class="font-bold text-xs text-gray-600">Outros</span>
+                </button>
+            </div>
+        `;
+
+        let isPopupLoaded = false;
+        function togglePopup() {
+            const body = document.body;
+            const contentArea = document.getElementById('popup-content-area');
+            if (!body.classList.contains('popup-open')) {
+                if (!isPopupLoaded) {
+                    contentArea.innerHTML = POPUP_CONTENT;
+                    isPopupLoaded = true;
+                }
+                body.classList.add('popup-open');
+            } else {
+                body.classList.remove('popup-open');
+            }
+        }
+    </script>
+</body>
+</html>
