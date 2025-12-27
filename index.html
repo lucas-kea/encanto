@@ -1,1 +1,1521 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Encanto Festas - Locação de Brinquedos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* =========================================================================================
+           AVISO PARA IA: NÃO ALTERAR NADA QUE NÃO FOI PEDIDO, APENAS O QUE FOI ORDENADO
+           ========================================================================================= */
+        
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            -webkit-tap-highlight-color: transparent;
+            scroll-behavior: smooth;
+        }
 
+        body.modal-active {
+            overflow: hidden !important;
+            height: 100vh !important;
+            position: fixed;
+            width: 100%;
+        }
+
+        h1, h2, h3, h4, .brand-font { font-family: 'Baloo 2', cursive; }
+        
+        :root {
+            --brand-blue: #2563EB;
+            --brand-yellow: #FACC15;
+        }
+
+        .bg-primary { background-color: var(--brand-blue); }
+        .text-primary { color: var(--brand-blue); }
+        .border-primary { border-color: var(--brand-blue); }
+        .bg-secondary { background-color: var(--brand-yellow); }
+
+        /* ESTILO UNIFORME PARA TÍTULOS DE SEÇÃO */
+        .section-header-premium {
+            font-family: 'Baloo 2', cursive;
+            color: var(--brand-blue);
+            font-weight: 800;
+            text-transform: uppercase;
+            text-align: center;
+            font-size: 1.25rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.2rem;
+            display: block;
+        }
+
+        /* --- SLIDER 13 ITENS (VELOCIDADE 0.9) --- */
+        .infinite-slider-track {
+            display: flex;
+            gap: 12px;
+            overflow-x: hidden; /* Alterado de auto para hidden para o efeito infinito fluir melhor */
+            padding: 10px 10px 20px 10px;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: auto !important;
+            white-space: nowrap;
+        }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .slider-card {
+            flex: 0 0 220px; 
+            min-width: 220px;
+            height: 150px; 
+            background: white;
+            border-radius: 1.25rem;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: transform 0.2s ease;
+            user-select: none;
+            cursor: pointer;
+        }
+        .slider-card img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+        .card-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 12px;
+        }
+        .card-title { color: white; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; text-align: center; padding: 0 10px; }
+
+        /* --- ROLETA INTERATIVA --- */
+        #roulette-overlay {
+            z-index: 9999;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(15px);
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            touch-action: none; 
+            overscroll-behavior: none;
+        }
+        .roulette-modal-content {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 3rem;
+            width: 92%;
+            max-width: 380px;
+            padding: 1.5rem;
+            color: white;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        .wheel-outer {
+            position: relative;
+            width: min(270px, 72vw);
+            height: min(270px, 72vw);
+            margin: 1rem auto;
+            border: 8px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            background: #0f172a;
+            box-shadow: 0 0 40px rgba(37, 99, 235, 0.2);
+            cursor: grab;
+        }
+        .wheel-outer:active { cursor: grabbing; }
+        
+        #wheel { 
+            width: 100%; 
+            height: 100%; 
+            transition: transform 8s cubic-bezier(0.1, 0, 0.1, 1);
+            pointer-events: none;
+        }
+        .wheel-pointer { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 35px; z-index: 40; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.3)); }
+        
+        .prize-text { font-size: 4px; font-weight: 900; fill: white; letter-spacing: 0.1px; }
+
+        /* --- COUNTDOWN STYLES --- */
+        .countdown-box {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-family: 'Baloo 2', cursive;
+            font-weight: 800;
+            font-size: 1.15rem;
+            color: white;
+        }
+        .promo-card {
+            background: var(--brand-blue);
+            box-shadow: 0 10px 40px -10px rgba(37, 99, 235, 0.4);
+        }
+
+        .savings-tag {
+            background: rgba(250, 204, 21, 0.15);
+            border: 1px solid rgba(250, 204, 21, 0.3);
+            color: var(--brand-yellow);
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        #promo-modal-overlay {
+            z-index: 10000;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(15px);
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .luxury-modal {
+            background: white;
+            width: 100%;
+            max-width: 380px;
+            border-radius: 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.5);
+        }
+        .promo-header-premium {
+            background: var(--brand-blue);
+            padding: 40px 24px;
+            color: white;
+        }
+        .luxury-badge-top {
+            background: var(--brand-yellow);
+            color: var(--brand-blue);
+            font-size: 10px;
+            font-weight: 900;
+            padding: 4px 16px;
+            border-radius: 99px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        .ticket-body { padding: 32px 24px; background: white; }
+        .luxury-coupon-container {
+            background: #F8FAFC;
+            border: 2px solid #E2E8F0;
+            padding: 24px 16px;
+            border-radius: 2rem;
+            margin-bottom: 24px;
+            cursor: pointer;
+        }
+        .coupon-code-text { font-family: 'Baloo 2', cursive; font-size: 2.2rem; font-weight: 800; color: var(--brand-blue); letter-spacing: 5px; }
+        
+        .timer-premium-stack {
+            background: #f1f5f9;
+            border-radius: 2rem;
+            padding: 20px;
+            margin-bottom: 24px;
+            border: 1px solid #e2e8f0;
+        }
+        .timer-bottom-grid {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+        .timer-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 45px;
+        }
+        .timer-val-sub { font-size: 18px; font-weight: 800; color: var(--brand-blue); line-height: 1; font-family: 'Baloo 2', cursive; }
+        .timer-label-sub { font-size: 8px; font-weight: 800; color: #94A3B8; text-transform: uppercase; margin-top: 4px; letter-spacing: 0.5px; }
+
+        .btn-close-luxury { background: var(--brand-blue); color: white; width: 100%; padding: 18px; border-radius: 1.5rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2); }
+
+        .trust-container {
+            background: white;
+            border-radius: 2.5rem;
+            padding: 40px 24px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        }
+        .experience-counter-box {
+            background: #2563EB;
+            border-radius: 2rem;
+            padding: 30px;
+            margin-bottom: 40px;
+            text-align: center;
+            box-shadow: 0 20px 40px -10px rgba(37, 99, 235, 0.3);
+        }
+        .neighborhood-entry-premium {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8fafc;
+            padding: 18px 22px;
+            border-radius: 1.5rem;
+            margin-bottom: 12px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .rank-number-box {
+            width: 32px;
+            height: 32px;
+            background: #2563EB;
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 14px;
+            margin-right: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .neighborhood-entry-premium.active-bairro {
+            border-color: #FACC15;
+            background: #fffef5;
+            box-shadow: 0 4px 15px rgba(250, 204, 21, 0.15);
+        }
+        .neighborhood-entry-premium.active-bairro .rank-number-box {
+            background: #FACC15;
+            color: #1e3a8a;
+        }
+
+        .faq-item-luxury {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 1.5rem;
+            margin-bottom: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+        }
+        .faq-btn {
+            width: 100%;
+            padding: 20px 24px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 500;
+            color: #ffffff;
+            background-color: var(--brand-blue);
+            font-size: 0.95rem;
+            letter-spacing: -0.01em;
+        }
+        .faq-btn svg { color: #ffffff; }
+        .faq-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #ffffff;
+        }
+        .faq-content-inner {
+            padding: 24px;
+            font-size: 0.85rem;
+            color: #475569;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .premium-card-wrapper {
+            background: white;
+            border-radius: 2.5rem;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.02);
+            overflow: hidden;
+        }
+        .iframe-embed-container {
+            border-radius: 1.8rem;
+            overflow: hidden;
+            width: 100%;
+            border: 1px solid #f1f5f9;
+        }
+
+        .contact-luxury-list {
+            padding: 20px 5px 0 5px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            transition: transform 0.2s ease;
+        }
+        .contact-item:active { transform: scale(0.98); }
+        .icon-circle {
+            width: 42px;
+            height: 42px;
+            background: #f1f5f9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border: 1px solid #e2e8f0;
+            color: var(--brand-blue);
+        }
+        .contact-text {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #334155;
+            letter-spacing: -0.01em;
+        }
+        .cnpj-tag {
+            font-size: 0.65rem;
+            color: #94A3B8;
+            font-weight: 500;
+            display: block;
+            margin-top: 2px;
+        }
+    </style>
+</head> 
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- Configuração da cor da barra do browser (Chrome, Safari, Samsung Internet, etc) -->
+    <meta name="theme-color" content="#2563eb">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="msapplication-navbutton-color" content="#2563eb">
+
+    <title>Encanto Festas - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-blue: #2563eb;
+            --deep-blue: #1e3a8a;
+            --marketing-gold: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            --marketing-glow: 0 0 20px rgba(245, 158, 11, 0.5);
+        }
+
+        html, body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        h1, h2, h3, h4, .brand-font {
+            font-family: 'Baloo 2', cursive;
+            line-height: 1.2;
+        }
+        
+        .glass-header {
+            background: #2563eb; 
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .item-card {
+            transition: transform 0.25s ease-out, opacity 0.25s ease-out;
+            animation: fadeIn 0.4s ease-out forwards;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            will-change: transform, opacity;
+            user-select: none;
+            touch-action: pan-y; 
+        }
+
+        @keyframes fadeIn {
+            from { transform: translateY(8px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .dismissing {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease !important;
+            transform: translateX(120%) !important;
+            opacity: 0 !important;
+            pointer-events: none;
+        }
+
+        .modal-view {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(100%);
+            background: linear-gradient(180deg, #2563eb 0%, #1e3a8a 100%);
+            background-attachment: fixed;
+            visibility: hidden;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+        }
+        .modal-view.active {
+            transform: translateY(0%);
+            visibility: visible;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .line-clamp-msg {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .item-card.expanded .line-clamp-msg {
+            -webkit-line-clamp: unset;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cabeçalho Fixo -->
+    <header id="mainHeader" class="fixed top-0 left-0 right-0 w-full glass-header z-[50] h-16">
+        <div class="max-w-xl mx-auto px-3 h-full flex justify-between items-center">
+            
+            <!-- Logo e Identidade -->
+            <a href="index.html" class="flex items-center gap-2 active:scale-95 transition-transform outline-none text-decoration-none group">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdX7GkygoIKwK06MzeweiE0GPt5I1rsz808w&s" 
+                    class="w-10 h-10 rounded-full border-2 border-yellow-400 shadow-sm transition-transform group-hover:rotate-12"
+                    alt="Logo Encanto Festas">
+                
+                <div class="inline-flex flex-col items-start leading-none -mt-1.5 ml-0.5">
+                    <div class="text-xl font-bold brand-font tracking-tight">
+                        <span class="text-white">Encanto</span><span class="text-yellow-400">Festas</span>
+                    </div>
+                    <span class="text-[7.2px] font-black text-white/90 uppercase -mt-0.5 tracking-[0.15em] w-full text-justify ml-[2px]" style="text-align-last: justify;">
+                        LOCAÇÃO DE BRINQUEDOS
+                    </span>
+                </div>
+            </a>
+            
+            <div class="flex items-center gap-2">
+                <!-- Apenas Botão de Notificações -->
+                <button id="notifBtn" class="relative p-2.5 bg-white/10 rounded-xl text-white hover:bg-white/20 transition-all active:scale-90 flex items-center justify-center outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                    </svg>
+                    <span id="notifBadge" class="hidden absolute top-2 right-2 w-2.5 h-2.5 bg-yellow-400 rounded-full border-2 border-blue-600 animate-pulse"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MODAL DE NOTIFICAÇÕES -->
+    <div id="notifModal" class="modal-view hidden flex flex-col">
+        <div class="px-5 py-3 border-b border-white/10 flex justify-between items-center bg-blue-900/40 backdrop-blur-xl">
+            <div class="flex items-center gap-4">
+                <button id="closeNotif" class="p-2 text-white/70 hover:text-white transition-colors bg-white/10 rounded-lg outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <h2 class="text-lg font-bold brand-font text-white">Notificações</h2>
+            </div>
+            <button id="markAllRead" class="text-[10px] font-bold uppercase tracking-widest text-blue-200 hover:text-white transition-colors outline-none">Limpar Tudo</button>
+        </div>
+        <div id="notifContainer" class="flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar pb-10"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, updateDoc, arrayUnion, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const fbConfigRaw = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const NOTIF_URL = 'notificacoes.json';
+
+        let db, auth, user;
+        let readIds = JSON.parse(localStorage.getItem('encanto_read_ids') || '[]').map(id => Number(id)); 
+        let rawNotifications = [];
+
+        const getEl = (id) => document.getElementById(id);
+
+        const init = async () => {
+            fetchNotifications();
+
+            if (fbConfigRaw) {
+                try {
+                    const firebaseConfig = JSON.parse(fbConfigRaw);
+                    const app = initializeApp(firebaseConfig);
+                    auth = getAuth(app);
+                    db = getFirestore(app);
+                    
+                    // Auth FIRST
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+
+                    onAuthStateChanged(auth, u => { 
+                        if (u) { 
+                            user = u; 
+                            setupPersistenceListener(); 
+                        } 
+                    });
+                } catch (e) { 
+                    console.warn("Firebase Offline ou Erro de Configuração"); 
+                }
+            }
+        };
+
+        const setupPersistenceListener = () => {
+            if (!user || !db) return;
+            const stateRef = doc(db, 'artifacts', appId, 'users', user.uid, 'notification_data', 'state');
+            onSnapshot(stateRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const cloudIds = (docSnap.data().readIds || []).map(id => Number(id));
+                    readIds = [...new Set([...readIds, ...cloudIds])];
+                    localStorage.setItem('encanto_read_ids', JSON.stringify(readIds));
+                    updateNotifUI();
+                }
+            }, (error) => {
+                console.error("Erro ao ouvir notificações em tempo real:", error);
+            });
+        };
+
+        async function fetchNotifications() {
+            try {
+                const response = await fetch(`${NOTIF_URL}?t=${new Date().getTime()}`);
+                if (response.ok) {
+                    rawNotifications = await response.json();
+                }
+            } catch (e) {
+                rawNotifications = [{ id: 101, titulo: "Bem-vindo! 🎈", mensagem: "Confira as novidades no seu painel.", tipo: "info", data: new Date().toISOString() }];
+            }
+            updateNotifUI();
+        }
+
+        function updateNotifUI() {
+            const active = rawNotifications.filter(n => !readIds.includes(Number(n.id)));
+            active.sort((a, b) => new Date(b.data) - new Date(a.data));
+            const badge = getEl('notifBadge');
+            if (badge) badge.classList.toggle('hidden', active.length === 0);
+            renderNotifs(active);
+        }
+
+        function renderNotifs(list) {
+            const container = getEl('notifContainer');
+            if (!container) return;
+
+            if (list.length === 0) {
+                container.innerHTML = `<div class="text-center py-20 opacity-20 text-white brand-font text-xl">Tudo em dia!</div>`;
+                return;
+            }
+            container.innerHTML = '';
+            list.forEach(n => {
+                const card = document.createElement('div');
+                card.className = "item-card p-4 rounded-[1.5rem] text-white shadow-lg cursor-pointer transition-all";
+                card.innerHTML = `
+                    <div class="flex gap-3">
+                        <div class="w-10 h-10 shrink-0 rounded-xl bg-white/10 flex items-center justify-center text-xl shadow-inner pointer-events-none">
+                            ${n.tipo === 'alerta' ? '⚡' : '✨'}
+                        </div>
+                        <div class="flex-1 min-w-0 pointer-events-none">
+                            <h3 class="font-bold text-sm leading-tight mb-1 text-white">${n.titulo}</h3>
+                            <p class="text-[13px] text-blue-50/80 mb-2 leading-relaxed line-clamp-msg">${n.mensagem}</p>
+                            <button class="mark-btn text-[10px] font-bold text-blue-300 hover:text-white uppercase transition-colors pointer-events-auto">Marcar como lido</button>
+                        </div>
+                    </div>
+                `;
+                card.onclick = (e) => {
+                    if (e.target.classList.contains('mark-btn')) {
+                        e.stopPropagation(); 
+                        card.classList.add('dismissing'); 
+                        setTimeout(() => persistReadId(n.id), 450); 
+                        return;
+                    }
+                    const msgPara = card.querySelector('.line-clamp-msg');
+                    if (msgPara) {
+                        const isTruncated = msgPara.scrollHeight > msgPara.clientHeight;
+                        if (isTruncated && !card.classList.contains('expanded')) { 
+                            card.classList.add('expanded'); 
+                        } else if (n.link) {
+                            window.location.href = n.link;
+                        }
+                    }
+                };
+                container.appendChild(card);
+            });
+        }
+
+        async function persistReadId(id) {
+            const nid = Number(id);
+            if (!readIds.includes(nid)) { 
+                readIds.push(nid); 
+                localStorage.setItem('encanto_read_ids', JSON.stringify(readIds)); 
+            }
+            updateNotifUI();
+            
+            if (user && db) {
+                const stateRef = doc(db, 'artifacts', appId, 'users', user.uid, 'notification_data', 'state');
+                try { 
+                    await updateDoc(stateRef, { readIds: arrayUnion(nid) }); 
+                } catch (e) { 
+                    await setDoc(stateRef, { readIds }); 
+                }
+            }
+        }
+
+        async function markAllNotificationsAsRead() {
+            const newIds = rawNotifications.map(n => Number(n.id));
+            readIds = [...new Set([...readIds, ...newIds])];
+            localStorage.setItem('encanto_read_ids', JSON.stringify(readIds));
+            updateNotifUI();
+            
+            if (user && db) {
+                const stateRef = doc(db, 'artifacts', appId, 'users', user.uid, 'notification_data', 'state');
+                try { 
+                    await updateDoc(stateRef, { readIds: readIds }); 
+                } catch (e) { 
+                    await setDoc(stateRef, { readIds: readIds }); 
+                }
+            }
+        }
+
+        const setupUIListeners = () => {
+            const btnNotif = getEl('notifBtn');
+            const btnCloseNotif = getEl('closeNotif');
+            const btnMarkAll = getEl('markAllRead');
+            const modalNotif = getEl('notifModal');
+
+            if (btnNotif && modalNotif) {
+                btnNotif.onclick = () => { 
+                    modalNotif.classList.remove('hidden'); 
+                    setTimeout(() => modalNotif.classList.add('active'), 10); 
+                };
+            }
+
+            if (btnCloseNotif && modalNotif) {
+                btnCloseNotif.onclick = () => { 
+                    modalNotif.classList.remove('active'); 
+                    setTimeout(() => modalNotif.classList.add('hidden'), 400); 
+                };
+            }
+
+            if (btnMarkAll) {
+                btnMarkAll.onclick = () => markAllNotificationsAsRead();
+            }
+        };
+
+        setupUIListeners();
+        init();
+    </script>
+</body>
+</html>
+<body class="text-gray-700 flex flex-col min-h-screen bg-slate-50">
+
+    <!-- ROLETA DE BOAS VINDAS -->
+    <div id="roulette-overlay">
+        <div id="roulette-modal" class="roulette-modal-content text-center">
+            <div class="relative z-10">
+                <div class="inline-block bg-yellow-400 text-slate-900 text-[10px] font-black px-4 py-1 rounded-full uppercase mb-2">Presente de Boas-Vindas</div>
+                <h3 class="text-xl font-black text-white brand-font mb-1 uppercase tracking-tight">Gire e Ganhe!</h3>
+                <p class="text-blue-100/70 text-[10px] font-medium mb-2">Só com a Encanto Festas :)</p>
+                
+                <div class="wheel-outer" id="wheel-drag-area">
+                    <img class="wheel-pointer" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ef4444'%3E%3Cpath d='M12 21l-8-12h16l-8 12z'/%3E%3C/svg%3E" alt="Ponteiro">
+                    <svg id="wheel" viewBox="0 0 100 100"><g id="wheel-segments"></g></svg>
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white border-4 border-blue-600 rounded-full z-20 shadow-xl overflow-hidden pointer-events-none">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdX7GkygoIKwK06MzeweiE0GPt5I1rsz808w&s" class="w-full h-full object-contain" alt="Logo">
+                    </div>
+                </div>
+
+                <button id="spin-btn" onclick="spinWheel()" class="w-full bg-yellow-400 text-slate-900 font-black py-4 rounded-2xl shadow-xl active:scale-95 transition-all transform uppercase tracking-widest text-sm mb-4">Girar</button>
+                <button onclick="closeRoulette()" class="text-blue-100/40 text-[10px] font-bold uppercase tracking-widest hover:text-white">Entrar sem desconto</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- POPUP DE PROMOÇÃO -->
+    <div id="promo-modal-overlay" onclick="closePromoModal(event)">
+        <div class="luxury-modal" onclick="event.stopPropagation()">
+            <div class="promo-header-premium">
+                <div class="luxury-badge-top">Exclusivo</div>
+                <h3 class="text-2xl font-black brand-font uppercase leading-none mb-2">CUPOM DE DESCONTO</h3>
+                <p class="text-blue-100 text-[11px] font-medium opacity-80 uppercase tracking-widest">Aproveite agora mesmo</p>
+            </div>
+            <div class="ticket-body">
+                <p class="text-slate-400 text-[10px] font-bold uppercase tracking-[0.2em] mb-4">Código de Desconto</p>
+                <div class="luxury-coupon-container" onclick="copyPromoCoupon()">
+                    <span id="coupon-code" class="coupon-code-text">MIXCASTLE</span>
+                    <div id="copy-status" class="text-[9px] font-black text-blue-600 uppercase tracking-widest mt-3 opacity-60">Toque para copiar</div>
+                </div>
+                <div class="timer-premium-stack">
+                    <div class="timer-bottom-grid">
+                        <div class="timer-unit">
+                            <span id="modal-days" class="timer-val-sub">00</span>
+                            <span class="timer-label-sub">Dias</span>
+                        </div>
+                        <div class="timer-unit">
+                            <span id="modal-hours" class="timer-val-sub">00</span>
+                            <span class="timer-label-sub">Horas</span>
+                        </div>
+                        <div class="timer-unit">
+                            <span id="modal-mins" class="timer-val-sub">00</span>
+                            <span class="timer-label-sub">Min</span>
+                        </div>
+                        <div class="timer-unit">
+                            <span id="modal-segs" class="timer-val-sub">00</span>
+                            <span class="timer-label-sub">Seg</span>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="closePromoModal(null)" class="btn-close-luxury">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="flex-grow">
+        <!-- Hero Section -->
+        <section class="bg-gradient-to-b from-blue-600 to-blue-500 text-white rounded-b-[2.5rem] shadow-xl px-6 pt-24 pb-14 text-center relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none" style="background-image: radial-gradient(circle, #ffffff 1px, transparent 1px); background-size: 20px 20px;"></div>
+            <div class="inline-flex items-center gap-1.5 bg-blue-800/40 backdrop-blur-md text-blue-50 text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest mb-6 border border-white/10 shadow-sm">
+                <svg class="w-3.5 h-3.5 text-blue-100" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg>
+                São Francisco do Sul
+            </div>
+            <h1 class="text-3xl md:text-5xl font-extrabold leading-tight mb-3">Brinquedos que transformam <span class="text-yellow-300">sua festa</span></h1>
+            <h2 class="text-blue-50 mb-10 max-w-lg mx-auto text-sm md:text-base font-normal opacity-90">Você escolhe, a gente entrega e monta. Simples assim</h2>
+            <div class="flex flex-col items-center justify-center gap-4">
+                <button onclick="window.location.href='calendario.html'" class="bg-white text-blue-600 font-extrabold py-4 px-8 rounded-full shadow-2xl active:scale-95 transition-all transform hover:scale-105 text-xs md:text-sm uppercase tracking-wider flex items-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="18" x="5" y="3" rx="2"/><line x1="8" x2="16" y1="7" y2="7"/><path d="M16 11h.01"/><path d="M12 11h.01"/><path d="M8 11h.01"/><path d="M12 15h.01"/><path d="M8 15h.01"/><path d="M12 19h.01"/><path d="M8 19h.01"/></svg>
+                    Fazer Orçamento / Reservar
+                </button>
+                <p class="text-blue-100/60 text-[10px] font-black uppercase tracking-[0.2em] -mt-1 drop-shadow-sm">É SIMPLES!</p>
+            </div>
+        </section>
+
+        <!-- CATÁLOGO -->
+        <section class="mt-8 pb-4"> 
+            <h3 class="section-header-premium">Nossos brinquedos</h3>
+            <div class="infinite-slider-container">
+                <div id="infinite-catalog" class="infinite-slider-track scrollbar-hide">
+                    <div class="slider-card" onclick="window.location.href='calendario.html'"><img src="https://www.dropbox.com/scl/fi/178cc2igiy3y5wchnseum/minibaby.webp?rlkey=7svoyh1p0tggjsjehqhaegfpt&st=9zacigwz&raw=1"><div class="card-overlay"><span class="card-title brand-font">Mini Baby Inflável</span></div></div>
+                    <div class="slider-card" onclick="window.location.href='calendario.html'"><img src="https://www.dropbox.com/scl/fi/ajfbj633cif6lpuqblzrw/aero.webp?rlkey=hw3hlemgizrnj4ta2fkrcs1ep&st=33j7lib0&raw=1"><div class="card-overlay"><span class="card-title brand-font">Air Hockey</span></div></div>
+                    <div class="slider-card" onclick="window.location.href='calendario.html'"><img src="https://www.dropbox.com/scl/fi/el5jqaoyod5ukwwzaxihx/camap.webp?rlkey=y1zvmsi9cdtsbh3gtb3091a4x&st=bpwuda61&raw=1"><div class="card-overlay"><span class="card-title brand-font">Pula Pula Pequeno</span></div></div>
+                    <div class="slider-card" onclick="window.location.href='calendario.html'"><img src="https://www.dropbox.com/scl/fi/2xwplyqsnbhndgwde2scg/camam.webp?rlkey=41hiqdgiwnxzvmllf0owgckx8&st=g35vk0oj&raw=1"><div class="card-overlay"><span class="card-title brand-font">Pula Pula Médio</span></div></div>
+                    <div class="slider-card" onclick="window.location.href='calendario.html'"><img src="https://www.dropbox.com/scl/fi/zn1npqidyhre44o7v1nwr/castelinho.webp?rlkey=8765usqe385cii48inuz99e5j&st=5q2xu57k&raw=1"><div class="card-overlay"><span class="card-title brand-font">Castelinho</span></div></div>
+                    <div class="slider-card" onclick="window.location.href='calendario.html'"><img src="https://www.dropbox.com/scl/fi/pr90on1ea81nq30lzpxr8/piscina.webp?rlkey=mp5a9b4yfk5v0tyqt75g0ij2j&st=gp4p2onk&raw=1"><div class="card-overlay"><span class="card-title brand-font">Piscina Bolinhas</span></div></div>
+                    <div class="slider-card" onclick="window.location.href='calendario.html'"><img src="https://www.dropbox.com/scl/fi/fttgp8j0mjdhw22rwgr3i/areababy.webp?rlkey=028cvlshetwv4w7dm3aydbzwj&st=7kmq57d2&raw=1"><div class="card-overlay"><span class="card-title brand-font">Área Baby</span></div></div>
+                    <div class="slider-card" onclick="window.location.href='calendario.html'"><img src="https://www.dropbox.com/scl/fi/vqjds36sx0wvhjuxurc4l/escorregobol.webp?rlkey=qxk7tzac8xod1fdzrwr8u508m&st=59u3k5x9&raw=1"><div class="card-overlay"><span class="card-title brand-font">Escorrega Bolinha</span></div></div>
+                    <div class="slider-card" onclick="window.location.href='calendario.html'"><img src="https://www.dropbox.com/scl/fi/a673dgh39ak497b6h9e2t/tobogam.webp?rlkey=byhi3k1tklmum2sfq9fyor2rb&st=rz9ming4&raw=1"><div class="card-overlay"><span class="card-title brand-font">Tobogã Médio</span></div></div>
+                    <div class="slider-card" onclick="window.location.href='calendario.html'"><img src="https://www.dropbox.com/scl/fi/iceod32yym2tttljajh8e/futebol.webp?rlkey=qttzkj74om9j8uyov770cvkdn&st=10wsk8x8&raw=1"><div class="card-overlay"><span class="card-title brand-font">Futebol Sabão</span></div></div>
+                    <div class="slider-card" onclick="window.location.href='calendario.html'"><img src="https://www.dropbox.com/scl/fi/bx7605s0ls33k02y74t4j/pebolim.webp?rlkey=409zdmagm2yj6ao6g4mfhfquj&st=j6elwlyz&raw=1"><div class="card-overlay"><span class="card-title brand-font">Pebolim</span></div></div>
+                    <div class="slider-card" onclick="window.location.href='calendario.html'"><img src="https://www.dropbox.com/scl/fi/3ulqvdy513l94frbqa99p/pingpong.webp?rlkey=zwzys2yjemczin4ebi3c22jq8&st=w8pcvikq&raw=1"><div class="card-overlay"><span class="card-title brand-font">Ping Pong</span></div></div>
+                    <div class="slider-card" onclick="window.location.href='calendario.html'"><img src="https://www.dropbox.com/scl/fi/zpcyj8a466fhms7vqwcr6/mesas.webp?rlkey=8ca2hbxbnvxbftagrprq7scj7&st=bb24hbti&raw=1"><div class="card-overlay"><span class="card-title brand-font">Jogos de Mesa</span></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTAGEM REGRESSIVA -->
+        <section class="mt-8 px-5 mb-10"> 
+            <h3 class="section-header-premium">Promoção</h3>
+            <div class="promo-card rounded-[2.2rem] p-6 relative overflow-hidden flex flex-col md:flex-row items-center gap-6">
+                <div class="w-24 h-24 flex-shrink-0 relative">
+                    <div class="w-full h-full rounded-2xl overflow-hidden border-2 border-white/20 shadow-inner">
+                        <img src="https://www.dropbox.com/scl/fi/zn1npqidyhre44o7v1nwr/castelinho.webp?rlkey=8765usqe385cii48inuz99e5j&st=5q2xu57k&raw=1" alt="Castelinho" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <div class="flex-grow text-center md:text-left">
+                    <h2 class="text-xl font-extrabold brand-font text-white leading-tight uppercase tracking-tight mb-2">Castelinho</h2>
+                    <div class="flex flex-col md:flex-row items-center md:items-center gap-2 md:gap-4 mb-5">
+                        <span class="text-yellow-400 font-black text-4xl tracking-tighter drop-shadow-lg">R$ 180,00</span>
+                        <div class="savings-tag">Economize R$ 30,00</div>
+                    </div>
+                    <div class="flex gap-2.5 justify-center md:justify-start">
+                        <div class="flex flex-col items-center"><div id="days" class="countdown-box">00</div><span class="text-[7px] uppercase font-bold mt-1.5 text-white tracking-widest">Dias</span></div>
+                        <div class="flex flex-col items-center"><div id="hours" class="countdown-box">00</div><span class="text-[7px] uppercase font-bold mt-1.5 text-white tracking-widest">Horas</span></div>
+                        <div class="flex flex-col items-center"><div id="minutes" class="countdown-box">00</div><span class="text-[7px] uppercase font-bold mt-1.5 text-white tracking-widest">Mins</span></div>
+                        <div class="flex flex-col items-center"><div id="seconds" class="countdown-box text-white">00</div><span class="text-[7px] uppercase font-bold mt-1.5 text-white tracking-widest">Segs</span></div>
+                    </div>
+                </div>
+                <div class="w-full md:w-auto text-center">
+                    <button onclick="openPromoModal()" class="w-full md:px-10 bg-yellow-400 hover:bg-yellow-300 text-blue-900 font-black py-4 rounded-2xl shadow-xl active:scale-95 transition-all text-sm uppercase tracking-widest block mb-2">Pegar promoção</button>
+                    <p class="text-[9px] text-blue-100/60 font-medium uppercase tracking-tighter">válido até o tempo expirar</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRESENÇA -->
+        <section class="mt-8 px-6 mb-10"> 
+            <h3 class="section-header-premium">Presença em São Chico</h3>
+            <div class="trust-container">
+                <div class="experience-counter-box">
+                    <div class="text-white/80 text-[11px] font-bold uppercase tracking-[0.3em] mb-2">Aluguéis Realizados</div>
+                    <div class="text-7xl font-black text-yellow-400 brand-font tracking-tighter mb-2">524</div>
+                    <div class="flex items-center justify-center gap-2">
+                        <div class="h-px w-8 bg-white/30"></div>
+                        <span class="text-blue-100 text-[10px] font-black uppercase tracking-widest">desde 2024</span>
+                        <div class="h-px w-8 bg-white/30"></div>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6 text-center">Top 3 bairros mais alugados:</p>
+                    <div class="space-y-4" id="neighborhood-ranking">
+                        <div class="neighborhood-entry-premium active-bairro" onclick="setActiveBairro(this)">
+                            <div class="flex items-center">
+                                <div class="rank-number-box">01</div>
+                                <span class="text-sm font-black text-slate-800 uppercase tracking-tight">Rocio Grande</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-xl font-black text-blue-600 brand-font">66</span>
+                                <span class="block text-[8px] font-bold text-slate-400 uppercase">Locações</span>
+                            </div>
+                        </div>
+                        <div class="neighborhood-entry-premium" onclick="setActiveBairro(this)">
+                            <div class="flex items-center">
+                                <div class="rank-number-box">02</div>
+                                <span class="text-sm font-black text-slate-800 uppercase tracking-tight">Ubatuba</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-xl font-black text-blue-600 brand-font">63</span>
+                                <span class="block text-[8px] font-bold text-slate-400 uppercase">Locações</span>
+                            </div>
+                        </div>
+                        <div class="neighborhood-entry-premium" onclick="setActiveBairro(this)">
+                            <div class="flex items-center">
+                                <div class="rank-number-box">03</div>
+                                <span class="text-sm font-black text-slate-800 uppercase tracking-tight">Ervino</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-xl font-black text-blue-600 brand-font">43</span>
+                                <span class="block text-[8px] font-bold text-slate-400 uppercase">Locações</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AVALIAÇÕES -->
+        <section class="mt-8 px-6 mb-10"> 
+            <h3 class="section-header-premium">Avaliações</h3>
+            <div class="premium-card-wrapper !px-0">
+                <div class="iframe-embed-container" style="height: 300px;">
+                    <iframe src="https://widget.taggbox.com/310470?website=1" style="width:100%;height:100%;overflow:hidden;border:none;"></iframe>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTATO -->
+        <section class="mt-8 px-6 mb-10"> 
+            <h3 class="section-header-premium">Contato</h3>
+            <div class="map-wrapper">
+                <div class="map-iframe-container" style="border-radius: 2rem; overflow: hidden; height: 250px; border: 1px solid #e2e8f0; margin-bottom: 25px;">
+                    <iframe 
+                        width="100%" 
+                        height="100%" 
+                        frameborder="0" 
+                        scrolling="no" 
+                        marginheight="0" 
+                        marginwidth="0" 
+                        src="https://maps.google.com/maps?q=Encanto%20Festas%20-%20São%20Francisco%20do%20Sul&t=&z=15&ie=UTF8&iwloc=&output=embed">
+                    </iframe>
+                </div>
+
+                <div class="contact-luxury-list">
+                    <a href="https://instagram.com/encantofestas.sc" target="_blank" class="contact-item">
+                        <div class="icon-circle"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div>
+                        <span class="contact-text">Encanto Festas - São Chico</span>
+                    </a>
+                    <a href="https://facebook.com/encantofestas.sc" target="_blank" class="contact-item">
+                        <div class="icon-circle"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></div>
+                        <span class="contact-text">Encanto Festas</span>
+                    </a>
+                    <a href="mailto:encantofestas.sfs@gmail.com" class="contact-item">
+                        <div class="icon-circle"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+                        <span class="contact-text">encantofestas.sfs@gmail.com</span>
+                    </a>
+                    <a href="https://cnpj.biz/57545647000116" target="_blank" class="contact-item">
+                        <div class="icon-circle"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10"/><path d="M7 12h10"/><path d="M7 16h6"/></svg></div>
+                        <div><span class="contact-text">57.545.647/0001-16</span><span class="cnpj-tag">CNPJ Validado</span></div>
+                    </a>
+                    <a href="https://wa.me/5547992277324" target="_blank" class="contact-item">
+                        <div class="icon-circle"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg></div>
+                        <span class="contact-text">(47) 99227-7324</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="mt-8 px-6 mb-40"> 
+            <h3 class="section-header-premium">Possíveis perguntas</h3>
+            <div class="space-y-3">
+                <div class="faq-item-luxury">
+                    <button onclick="toggleFaq(this)" class="faq-btn">
+                        <span>Qual o período de locação?</span>
+                        <svg class="w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="faq-content">
+                        <div class="faq-content-inner">
+                            O tempo garantido é o que você selecionar no agendamento (padrão até 6h). Se precisar de mais tempo, há uma pequena taxa. Em alguns casos, o tempo pode chegar a 24 horas pelo mesmo valor, mas isso não é garantido, apenas se colocado no formulário de reserva.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item-luxury">
+                    <button onclick="toggleFaq(this)" class="faq-btn">
+                        <span>Qual o horário de entrega?</span>
+                        <svg class="w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="faq-content">
+                        <div class="faq-content-inner">
+                            Começamos as rotas às 09h30! Normalmente entregamos de 1 a 2 horas antes da festa começar para deixar tudo perfeito. Em alguns casos especiais, podemos até levar um dia antes! 🚚💨
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item-luxury">
+                    <button onclick="toggleFaq(this)" class="faq-btn">
+                        <span>Quais bairros vocês atendem?</span>
+                        <svg class="w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="faq-content">
+                        <div class="faq-content-inner">
+                            Atendemos todos os bairros de São Francisco do Sul, exceto Vila da Glória. Não entregamos atualmente em Araquari ou Joinville, mas temos planos de expandir nossa base!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item-luxury">
+                    <button onclick="toggleFaq(this)" class="faq-btn">
+                        <span>Quais as formas de pagamento?</span>
+                        <svg class="w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="faq-content">
+                        <div class="faq-content-inner">
+                            Aceitamos Pix, Cartão de Crédito ou Dinheiro. Lembre-se: os R$ 25 da reserva são pagos antecipadamente para garantir sua data, e o restante do valor é pago no dia da montagem, após a entrega dos brinquedos.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item-luxury">
+                    <button onclick="toggleFaq(this)" class="faq-btn">
+                        <span>Os brinquedos são higienizados?</span>
+                        <svg class="w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="faq-content">
+                        <div class="faq-content-inner">
+                            Realizamos o melhor esforço possível na manutenção e limpeza. Geralmente os brinquedos vêm de outra locação no mesmo dia, por isso priorizamos a agilidade na montagem, mantendo sempre o padrão de qualidade necessário.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- DUPLICATE TAGS START (KEEPING AS ORDERED) -->
+    <div id="notifModal" class="modal-view hidden flex flex-col">
+        <div class="px-5 py-3 border-b border-white/10 flex justify-between items-center bg-blue-900/40 backdrop-blur-xl">
+            <div class="flex items-center gap-4">
+                <button id="closeNotif" class="p-2 text-white/70 hover:text-white transition-colors bg-white/10 rounded-lg outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <h2 class="text-lg font-bold brand-font text-white">Notificações</h2>
+            </div>
+            <button id="markAllRead" class="text-[10px] font-bold uppercase tracking-widest text-blue-200 hover:text-white transition-colors outline-none">Limpar Tudo</button>
+        </div>
+        <div id="notifContainer" class="flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar pb-10"></div>
+    </div>
+    <!-- DUPLICATE TAGS END -->
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        try { const app = initializeApp(firebaseConfig); const auth = getAuth(app); signInAnonymously(auth); } catch(e) { console.warn("Firebase offline"); }
+
+        function toggleScroll(lock) {
+            if (lock) {
+                document.body.classList.add('modal-active');
+            } else {
+                document.body.classList.remove('modal-active');
+            }
+        }
+
+        /* --- ROLETA INTERATIVA --- */
+        let isDragging = false, startAngle = 0, currentRotation = 0, lastTimestamp = 0, lastAngle = 0, velocity = 0, isSpinning = false;
+        const wheel = document.getElementById('wheel'), dragArea = document.getElementById('wheel-drag-area');
+
+        function getAngle(x, y) {
+            const rect = dragArea.getBoundingClientRect();
+            return Math.atan2(y - (rect.top + rect.height / 2), x - (rect.left + rect.width / 2)) * (180 / Math.PI);
+        }
+
+        function handleStart(e) {
+            if (isSpinning) return;
+            isDragging = true;
+            const pos = e.touches ? e.touches[0] : e;
+            startAngle = getAngle(pos.clientX, pos.clientY) - currentRotation;
+            lastTimestamp = Date.now(); lastAngle = currentRotation;
+            wheel.style.transition = 'none';
+        }
+
+        function handleMove(e) {
+            if (!isDragging) return;
+            const pos = e.touches ? e.touches[0] : e;
+            currentRotation = getAngle(pos.clientX, pos.clientY) - startAngle;
+            wheel.style.transform = `rotate(${currentRotation}deg)`;
+            const now = Date.now(), dt = now - lastTimestamp;
+            if (dt > 0) { velocity = (currentRotation - lastAngle) / dt; lastTimestamp = now; lastAngle = currentRotation; }
+        }
+
+        function handleEnd() {
+            if (!isDragging) return;
+            isDragging = false;
+            if (Math.abs(velocity) > 0.5) triggerSpin(Math.abs(velocity));
+        }
+
+        function triggerSpin(initialVelocity) {
+            if (isSpinning) return;
+            isSpinning = true;
+            document.getElementById('spin-btn').disabled = true;
+            document.getElementById('spin-btn').style.opacity = "0.5";
+            const prizeIndex = calculatePrize();
+            const extraSpins = 5 + Math.floor(initialVelocity * 5);
+            const targetRotation = currentRotation + (extraSpins * 360) + (360 - (currentRotation % 360)) + (360 - (prizeIndex * (360/prizes.length))) - (180/prizes.length);
+            wheel.style.transition = 'transform 8s cubic-bezier(0.1, 0, 0.1, 1)';
+            wheel.style.transform = `rotate(${targetRotation}deg)`;
+            currentRotation = targetRotation;
+            setTimeout(() => {
+                isSpinning = false;
+                const prize = prizes[prizeIndex];
+                if (prize.code === "RETRY") {
+                    document.getElementById('spin-btn').disabled = false;
+                    document.getElementById('spin-btn').style.opacity = "1";
+                } else if (prize.code) showWinPopup(prize);
+                else closeRoulette();
+            }, 8200);
+        }
+
+        const prizes = [ 
+            { label: "NADA", color: "#475569", prob: 0.25, code: null }, 
+            { label: "5% OFF", color: "#3b82f6", prob: 0.30, code: "FIVEHUND" }, 
+            { label: "GIRAR +", color: "#1e293b", prob: 0.20, code: "RETRY" }, 
+            { label: "10% OFF", color: "#2563eb", prob: 0.15, code: "DEZZOFF" }, 
+            { label: "FRETE VIP", color: "#10b981", prob: 0.09, code: "MEUCLUB" }, 
+            { label: "30% OFF", color: "#FACC15", prob: 0.01, code: "MEGAPROMO30" } 
+        ];
+
+        function calculatePrize() {
+            let rand = Math.random(), cumulative = 0;
+            for(let i=0; i<prizes.length; i++) {
+                cumulative += prizes[i].prob;
+                if(rand <= cumulative) return i;
+            }
+            return 0;
+        }
+
+        dragArea.addEventListener('mousedown', handleStart);
+        window.addEventListener('mousemove', handleMove);
+        window.addEventListener('mouseup', handleEnd);
+        dragArea.addEventListener('touchstart', handleStart, {passive: false});
+        window.addEventListener('touchmove', handleMove, {passive: false});
+        window.addEventListener('touchend', handleEnd);
+
+        function drawWheel() {
+            const container = document.getElementById('wheel-segments'); if(!container) return;
+            const sliceDeg = 360 / prizes.length;
+            prizes.forEach((p, i) => {
+                const angle = i * sliceDeg, rStart = (angle - 90) * Math.PI / 180, rEnd = (angle + sliceDeg - 90) * Math.PI / 180;
+                const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                path.setAttribute("d", `M 50 50 L ${50 + 50 * Math.cos(rStart)} ${50 + 50 * Math.sin(rStart)} A 50 50 0 0 1 ${50 + 50 * Math.cos(rEnd)} ${50 + 50 * Math.sin(rEnd)} Z`);
+                path.setAttribute("fill", p.color); container.appendChild(path);
+                
+                const textAngle = angle + (sliceDeg / 2); 
+                const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                const textDist = 32; 
+                const tx = 50 + textDist * Math.cos((textAngle - 90) * Math.PI / 180); 
+                const ty = 50 + textDist * Math.sin((textAngle - 90) * Math.PI / 180);
+                
+                text.setAttribute("x", tx); text.setAttribute("y", ty); text.setAttribute("class", "prize-text"); text.setAttribute("text-anchor", "middle"); text.setAttribute("dominant-baseline", "middle");
+                text.setAttribute("transform", `rotate(${textAngle}, ${tx}, ${ty}) rotate(90, ${tx}, ${ty})`);
+                text.textContent = "   " + p.label; container.appendChild(text);
+            });
+        }
+
+        function startCountdown() {
+            const targetDate = new Date('2026-01-31T23:59:59').getTime();
+            function update() {
+                const now = new Date().getTime(), diff = targetDate - now;
+                if (diff <= 0) return;
+                const d = Math.floor(diff / 86400000).toString().padStart(2, '0'),
+                      h = Math.floor((diff % 86400000) / 3600000).toString().padStart(2, '0'),
+                      m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0'),
+                      s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
+                const map = {days: d, 'modal-days': d, hours: h, 'modal-hours': h, minutes: m, 'modal-mins': m, seconds: s, 'modal-segs': s};
+                for (let id in map) { const el = document.getElementById(id); if(el) el.innerText = map[id]; }
+            }
+            setInterval(update, 1000); update();
+        }
+
+        window.setActiveBairro = (element) => {
+            document.querySelectorAll('.neighborhood-entry-premium').forEach(item => item.classList.remove('active-bairro'));
+            element.classList.add('active-bairro');
+        };
+
+        window.toggleFaq = (btn) => {
+            const content = btn.nextElementSibling, isOpen = content.style.maxHeight !== '0px' && content.style.maxHeight !== '';
+            document.querySelectorAll('.faq-item-luxury').forEach(i => {
+                i.classList.remove('faq-active');
+                i.querySelector('.faq-content').style.maxHeight = '0px';
+                i.querySelector('.faq-btn svg').style.transform = 'rotate(0deg)';
+            });
+            if (!isOpen) {
+                btn.parentElement.classList.add('faq-active');
+                content.style.maxHeight = content.scrollHeight + 'px';
+                btn.querySelector('svg').style.transform = 'rotate(180deg)';
+            }
+        };
+
+        window.openPromoModal = () => { document.getElementById('promo-modal-overlay').style.display = 'flex'; toggleScroll(true); };
+        window.closePromoModal = () => { document.getElementById('promo-modal-overlay').style.display = 'none'; toggleScroll(false); };
+        window.copyPromoCoupon = () => {
+            const text = document.getElementById('coupon-code').innerText;
+            const el = document.createElement('textarea'); el.value = text; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
+            document.getElementById('copy-status').innerText = "COPIADO! ✅";
+            setTimeout(() => { document.getElementById('copy-status').innerText = "Toque para copiar"; }, 2000);
+        };
+        window.spinWheel = () => { if(!isSpinning) triggerSpin(2); };
+        window.closeRoulette = () => { document.getElementById('roulette-overlay').style.display = 'none'; toggleScroll(false); sessionStorage.setItem('encanto_roulette_clean', 'true'); };
+        
+        function showWinPopup(prize) {
+            document.getElementById('roulette-modal').innerHTML = `<div class="py-4 text-center"><div class="text-6xl mb-6">🎈</div><h3 class="text-3xl font-black text-white brand-font mb-2 uppercase">GANHOU!</h3><p class="text-blue-100 font-bold mb-6">${prize.label}</p><div class="bg-white/10 border-2 border-white/20 border-dashed rounded-2xl p-6 mb-8"><span id="win-coupon-code" class="text-3xl font-black text-yellow-400 tracking-widest uppercase">${prize.code}</span></div><button onclick="copyWinCoupon('win-coupon-code', this)" class="w-full bg-yellow-400 text-slate-900 font-black py-4 rounded-2xl shadow-xl text-sm mb-3">Copiar Cupom</button><button onclick="closeRoulette()" class="text-white/50 text-[10px] font-bold uppercase">Sair</button></div>`;
+        }
+        window.copyWinCoupon = (id, btn) => { const el = document.createElement('textarea'); el.value = document.getElementById(id).innerText; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el); btn.innerText = "COPIADO! ✅"; setTimeout(closeRoulette, 1000); };
+
+        /* --- CARROSSEL INFINITO AJUSTADO --- */
+        function setupSlider() {
+            const track = document.getElementById('infinite-catalog'); 
+            if (!track) return;
+            
+            // Clonamos os itens para criar o loop visual
+            const items = Array.from(track.children);
+            items.forEach(item => track.appendChild(item.cloneNode(true)));
+            items.forEach(item => track.appendChild(item.cloneNode(true))); // Triplicamos para garantir cobertura
+            
+            let isPaused = false;
+            let scrollSpeed = 0.9; // Velocidade solicitada
+            
+            // Largura de um conjunto completo de itens
+            let singleSetWidth = 0;
+            items.forEach(item => {
+                singleSetWidth += item.offsetWidth + 12; // Largura + Gap
+            });
+
+            function animate() {
+                if (!isPaused) {
+                    track.scrollLeft += scrollSpeed;
+                    
+                    // Se o scroll passar do final do primeiro set, reseta para o início
+                    // Mantendo a fluidez
+                    if (track.scrollLeft >= singleSetWidth) {
+                        track.scrollLeft -= singleSetWidth;
+                    }
+                }
+                requestAnimationFrame(animate);
+            }
+
+            // Pausa ao tocar/interagir
+            track.addEventListener('touchstart', () => isPaused = true);
+            track.addEventListener('touchend', () => setTimeout(() => isPaused = false, 1500));
+            track.addEventListener('mousedown', () => isPaused = true);
+            track.addEventListener('mouseup', () => isPaused = false);
+
+            animate();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => { 
+            setupSlider(); drawWheel(); startCountdown(); 
+            if(!sessionStorage.getItem('encanto_roulette_clean')) { 
+                setTimeout(() => { document.getElementById('roulette-overlay').style.display = 'flex'; toggleScroll(true); }, 1200); 
+            } 
+        });
+    </script>
+    <!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Encanto Festas - Navegação</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: transparent;
+            -webkit-tap-highlight-color: transparent;
+            scroll-behavior: smooth;
+        }
+        h1, h2, h3, h4, .brand-font {
+            font-family: 'Baloo 2', cursive;
+        }
+        .min-h-screen-safe {
+            min-height: 100vh;
+            min-height: 100dvh;
+        }
+        
+        /* Cores de Marca */
+        .bg-primary { background-color: #2563EB; }
+        .text-primary { color: #2563EB; }
+        .bg-secondary { background-color: #FACC15; }
+        .text-secondary { color: #CA8A04; }
+        
+        /* Animação "Vai e Volta" (Bounce) Profissional - Sem Forwards para resetar sempre */
+        @keyframes bounce-click {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.85); }
+            100% { transform: scale(1); }
+        }
+
+        .click-bounce:active {
+            animation: bounce-click 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Garantir que o link mude de cor e anime corretamente */
+        .nav-item {
+            transition: color 0.2s ease;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .nav-item:active {
+            color: #2563EB !important;
+        }
+
+        .floating-fab {
+            box-shadow: 0 8px 25px rgba(250, 204, 21, 0.4);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        #bottom-nav {
+            padding-bottom: env(safe-area-inset-bottom);
+            height: calc(4.5rem + env(safe-area-inset-bottom));
+            /* Garantia de visibilidade em PC/Tablet com sombra superior */
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+
+        /* Popup Slide */
+        #custom-popup {
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+        body.popup-open #custom-popup {
+            transform: translateY(0);
+        }
+        .popup-overlay {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        body.popup-open .popup-overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .menu-card {
+            transition: transform 0.1s ease, background-color 0.2s ease;
+        }
+    </style>
+</head>
+<body class="text-gray-800 min-h-screen-safe flex flex-col">
+
+    <!-- [LOCK: COFRE DE ÍCONES] -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="icon-house" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        </symbol>
+        <symbol id="icon-handshake" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/>
+        </symbol>
+        <symbol id="icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/><path d="M12 5v14"/>
+        </symbol>
+        <symbol id="icon-book-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>
+        </symbol>
+        <symbol id="icon-user-round" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/>
+        </symbol>
+        <symbol id="icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/>
+        </symbol>
+        <symbol id="icon-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 12 20 22 4 22 4 12"/><rect width="20" height="5" x="2" y="7"/><line x1="12" x2="12" y1="22" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+        </symbol>
+        <symbol id="icon-whatsapp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+        </symbol>
+        <symbol id="icon-school" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2v-5"/>
+        </symbol>
+        <symbol id="icon-tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42l-8.704-8.704Z"/><line x1="7" x2="7.01" y1="7" y2="7"/>
+        </symbol>
+        <symbol id="icon-layout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="3" x2="21" y1="9" y2="9"/><line x1="9" x2="9" y1="21" y2="9"/>
+        </symbol>
+        <symbol id="icon-more" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
+        </symbol>
+    </svg>
+    <!-- [/LOCK] -->
+
+    <main class="flex-grow w-full">
+        <!-- Área vazia para foco no footer -->
+    </main>
+
+    <div class="popup-overlay fixed inset-0 bg-black/60 z-[90]" onclick="togglePopup()"></div>
+
+    <div id="custom-popup" class="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-[3rem] shadow-2xl h-[72vh] overflow-y-auto">
+        <div class="sticky top-0 bg-white pt-5 pb-3 z-10" onclick="togglePopup()">
+            <div class="w-16 h-1.5 bg-gray-200 rounded-full mx-auto cursor-pointer active:bg-gray-300 transition-colors"></div>
+        </div>
+        <div id="popup-content-area" class="px-8 pb-12">
+            <!-- Conteúdo carregado via Script -->
+        </div>
+    </div>
+
+    <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 w-full bg-white border-t border-gray-100 z-[80] flex items-start">
+        <div class="grid grid-cols-5 w-full h-full max-w-7xl mx-auto">
+            <!-- Início (Ativo e Não Clicável) -->
+            <a href="javascript:void(0)" class="nav-item flex flex-col items-center justify-center text-primary pointer-events-none cursor-default">
+                <svg class="w-6 h-6"><use href="#icon-house"></use></svg>
+                <span class="text-[10px] font-semibold mt-1">Início</span>
+            </a>
+            
+            <!-- Parceiros -->
+            <a href="parceiros.html" class="nav-item click-bounce flex flex-col items-center justify-center text-gray-400">
+                <svg class="w-6 h-6"><use href="#icon-handshake"></use></svg>
+                <span class="text-[10px] font-semibold mt-1">Parceiros</span>
+            </a>
+
+            <!-- Botão Central (Gera o Popup de Itens) -->
+            <div class="relative flex justify-center">
+                <button onclick="togglePopup()" class="floating-fab click-bounce absolute -top-8 bg-secondary text-blue-900 w-16 h-16 rounded-full flex items-center justify-center border-4 border-white">
+                    <svg class="w-9 h-9"><use href="#icon-plus"></use></svg>
+                </button>
+            </div>
+
+            <!-- Catálogo -->
+            <a href="catalogo.html" class="nav-item click-bounce flex flex-col items-center justify-center text-gray-400">
+                <svg class="w-6 h-6"><use href="#icon-book-open"></use></svg>
+                <span class="text-[10px] font-semibold mt-1">Catálogo</span>
+            </a>
+
+            <!-- Perfil -->
+            <a href="perfil.html" class="nav-item click-bounce flex flex-col items-center justify-center text-gray-400">
+                <svg class="w-6 h-6"><use href="#icon-user-round"></use></svg>
+                <span class="text-[10px] font-semibold mt-1">Perfil</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        const POPUP_CONTENT = `
+            <div class="text-center mb-6">
+                <h2 class="text-xl font-extrabold brand-font text-primary">Ações Rápidas</h2>
+                <p class="text-gray-400 text-xs">O que deseja fazer agora?</p>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <!-- Fazer Reserva -->
+                <button onclick="window.location.href='calendario.html'" class="menu-card click-bounce p-4 bg-blue-50 rounded-[2rem] border border-blue-100 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-lg shadow-blue-200 mb-2">
+                        <svg class="w-6 h-6 text-white"><use href="#icon-calendar"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-blue-900">Fazer Reserva</span>
+                </button>
+
+                <!-- Encanto Escola -->
+                <button onclick="window.location.href='escola.html'" class="menu-card click-bounce p-4 bg-purple-50 rounded-[2rem] border border-purple-100 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center shadow-lg shadow-purple-200 mb-2">
+                        <svg class="w-6 h-6 text-white"><use href="#icon-school"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-purple-900">Encanto Escola</span>
+                </button>
+
+                <!-- Brinquedos Usados -->
+                <button onclick="window.location.href='usados.html'" class="menu-card click-bounce p-4 bg-orange-50 rounded-[2rem] border border-orange-100 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-orange-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-orange-200 mb-2">
+                        <svg class="w-6 h-6 text-white"><use href="#icon-tag"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-orange-900 text-center leading-tight">Brinquedos Usados</span>
+                </button>
+
+                <!-- Criar Site -->
+                <button onclick="window.location.href='site.html'" class="menu-card click-bounce p-4 bg-slate-50 rounded-[2rem] border border-slate-200 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-slate-700 text-white rounded-full flex items-center justify-center shadow-lg shadow-slate-300 mb-2">
+                        <svg class="w-6 h-6 text-white"><use href="#icon-layout"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-slate-900">Criar Site</span>
+                </button>
+
+                <!-- Convide e Ganhe -->
+                <button onclick="window.location.href='convide.html'" class="menu-card click-bounce p-4 bg-yellow-50 rounded-[2rem] border border-yellow-100 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-secondary text-blue-900 rounded-full flex items-center justify-center shadow-lg shadow-yellow-200 mb-2">
+                        <svg class="w-6 h-6"><use href="#icon-gift"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-yellow-900 text-center leading-tight">Convide Ganhe</span>
+                </button>
+
+                <!-- WhatsApp -->
+                <button onclick="window.location.href='https://wa.me/5547992277324?text=Olá!%20Gostaria%20de%20falar%20sobre%20as%20festas.'" class="menu-card click-bounce p-4 bg-green-50 rounded-[2rem] border border-green-100 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-green-200 mb-2">
+                        <svg class="w-6 h-6 text-white"><use href="#icon-whatsapp"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-green-900 text-center">WhatsApp</span>
+                </button>
+            </div>
+
+            <!-- Botão Outros (Centralizado e Menor) -->
+            <div class="mt-6 flex justify-center">
+                <button onclick="window.location.href='outros.html'" class="menu-card click-bounce py-3 px-10 bg-gray-50 rounded-full border border-gray-100 flex items-center gap-2 shadow-sm">
+                    <svg class="w-4 h-4 text-gray-500"><use href="#icon-more"></use></svg>
+                    <span class="font-bold text-xs text-gray-600">Outros</span>
+                </button>
+            </div>
+        `;
+
+        let isPopupLoaded = false;
+        function togglePopup() {
+            const body = document.body;
+            const contentArea = document.getElementById('popup-content-area');
+            if (!body.classList.contains('popup-open')) {
+                if (!isPopupLoaded) {
+                    contentArea.innerHTML = POPUP_CONTENT;
+                    isPopupLoaded = true;
+                }
+                body.classList.add('popup-open');
+            } else {
+                body.classList.remove('popup-open');
+            }
+        }
+    </script>
+</body>
+</html>
+</body>
+</html>
