@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Clube de Vantagens - Encanto Festas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        html, body { overflow-x: hidden; width: 100%; font-family: 'Inter', sans-serif; background-color: #f8fafc; -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
+        h1, h2, h3, h4, .brand-font { font-family: 'Baloo 2', cursive; }
+        .min-h-screen-safe { min-height: 100vh; min-height: 100dvh; }
+        .bg-primary { background-color: #2563EB; }
+        .text-primary { color: #2563EB; }
+        .bg-secondary { background-color: #FACC15; }
+        
+        body.modal-open { overflow: hidden; touch-action: none; }
+        
+        /* Notificações */
+        #notification-panel { z-index: 100; transition: transform 0.3s ease-out; position: fixed; top: 0; right: 0; bottom: 0; width: 100vw; max-width: 100vw; height: 100dvh; background-color: #2563EB; pointer-events: none; transform: translateX(100%); }
+        #notification-panel.open { pointer-events: auto; transform: translateX(0); }
+        
+        /* Animações Clube */
+        .modal-enter { animation: modalFadeIn 0.3s ease-out forwards; }
+        @keyframes modalFadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .progress-bar-fill { transition: width 1s ease-in-out; }
+        .animated-stripes { background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.4) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0.4) 75%, transparent 75%, transparent); background-size: 30px 30px; animation: moveStripes 1s linear infinite; width: 100%; height: 100%; }
+        @keyframes moveStripes { 0% { background-position: 0 0; } 100% { background-position: 30px 0; } }
+        input:disabled { background-color: #f3f4f6; color: #9ca3af; cursor: not-allowed; }
+
+        /* Animação Confete Flutuante */
+        @keyframes floatConfetti {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(5deg); }
+        }
+        .confetti-float { animation: floatConfetti 3s ease-in-out infinite; }
+        
+        .history-scroll::-webkit-scrollbar { width: 4px; }
+        .history-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    </style>
+</head>
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- Configuração da cor da barra do browser (Chrome, Safari, Samsung Internet, etc) -->
+    <meta name="theme-color" content="#2563eb">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="msapplication-navbutton-color" content="#2563eb">
+
+    <title>Encanto Festas - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-blue: #2563eb;
+            --deep-blue: #1e3a8a;
+            --marketing-gold: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            --marketing-glow: 0 0 20px rgba(245, 158, 11, 0.5);
+        }
+
+        html, body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        h1, h2, h3, h4, .brand-font {
+            font-family: 'Baloo 2', cursive;
+            line-height: 1.2;
+        }
+        
+        .glass-header {
+            background: #2563eb; 
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .item-card {
+            transition: transform 0.25s ease-out, opacity 0.25s ease-out;
+            animation: fadeIn 0.4s ease-out forwards;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            will-change: transform, opacity;
+            user-select: none;
+            touch-action: pan-y; 
+        }
+
+        @keyframes fadeIn {
+            from { transform: translateY(8px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .dismissing {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease !important;
+            transform: translateX(120%) !important;
+            opacity: 0 !important;
+            pointer-events: none;
+        }
+
+        .modal-view {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(100%);
+            background: linear-gradient(180deg, #2563eb 0%, #1e3a8a 100%);
+            background-attachment: fixed;
+            visibility: hidden;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+        }
+        .modal-view.active {
+            transform: translateY(0%);
+            visibility: visible;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .line-clamp-msg {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .item-card.expanded .line-clamp-msg {
+            -webkit-line-clamp: unset;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cabeçalho Fixo -->
+    <header id="mainHeader" class="fixed top-0 left-0 right-0 w-full glass-header z-[50] h-16">
+        <div class="max-w-xl mx-auto px-3 h-full flex justify-between items-center">
+            
+            <!-- Logo e Identidade -->
+            <a href="index.html" class="flex items-center gap-2 active:scale-95 transition-transform outline-none text-decoration-none group">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdX7GkygoIKwK06MzeweiE0GPt5I1rsz808w&s" 
+                    class="w-10 h-10 rounded-full border-2 border-yellow-400 shadow-sm transition-transform group-hover:rotate-12"
+                    alt="Logo Encanto Festas">
+                
+                <div class="inline-flex flex-col items-start leading-none -mt-1.5 ml-0.5">
+                    <div class="text-xl font-bold brand-font tracking-tight">
+                        <span class="text-white">Encanto</span><span class="text-yellow-400">Festas</span>
+                    </div>
+                    <span class="text-[7.2px] font-black text-white/90 uppercase -mt-0.5 tracking-[0.15em] w-full text-justify ml-[2px]" style="text-align-last: justify;">
+                        LOCAÇÃO DE BRINQUEDOS
+                    </span>
+                </div>
+            </a>
+            
+            <div class="flex items-center gap-2">
+                <!-- Apenas Botão de Notificações -->
+                <button id="notifBtn" class="relative p-2.5 bg-white/10 rounded-xl text-white hover:bg-white/20 transition-all active:scale-90 flex items-center justify-center outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                    </svg>
+                    <span id="notifBadge" class="hidden absolute top-2 right-2 w-2.5 h-2.5 bg-yellow-400 rounded-full border-2 border-blue-600 animate-pulse"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MODAL DE NOTIFICAÇÕES -->
+    <div id="notifModal" class="modal-view hidden flex flex-col">
+        <div class="px-5 py-3 border-b border-white/10 flex justify-between items-center bg-blue-900/40 backdrop-blur-xl">
+            <div class="flex items-center gap-4">
+                <button id="closeNotif" class="p-2 text-white/70 hover:text-white transition-colors bg-white/10 rounded-lg outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <h2 class="text-lg font-bold brand-font text-white">Notificações</h2>
+            </div>
+            <button id="markAllRead" class="text-[10px] font-bold uppercase tracking-widest text-blue-200 hover:text-white transition-colors outline-none">Limpar Tudo</button>
+        </div>
+        <div id="notifContainer" class="flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar pb-10"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, updateDoc, arrayUnion, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const fbConfigRaw = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const NOTIF_URL = 'notificacoes.json';
+
+        let db, auth, user;
+        let readIds = JSON.parse(localStorage.getItem('encanto_read_ids') || '[]').map(id => Number(id)); 
+        let rawNotifications = [];
+
+        const getEl = (id) => document.getElementById(id);
+
+        const init = async () => {
+            fetchNotifications();
+
+            if (fbConfigRaw) {
+                try {
+                    const firebaseConfig = JSON.parse(fbConfigRaw);
+                    const app = initializeApp(firebaseConfig);
+                    auth = getAuth(app);
+                    db = getFirestore(app);
+                    
+                    // Auth FIRST
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+
+                    onAuthStateChanged(auth, u => { 
+                        if (u) { 
+                            user = u; 
+                            setupPersistenceListener(); 
+                        } 
+                    });
+                } catch (e) { 
+                    console.warn("Firebase Offline ou Erro de Configuração"); 
+                }
+            }
+        };
+
+        const setupPersistenceListener = () => {
+            if (!user || !db) return;
+            const stateRef = doc(db, 'artifacts', appId, 'users', user.uid, 'notification_data', 'state');
+            onSnapshot(stateRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const cloudIds = (docSnap.data().readIds || []).map(id => Number(id));
+                    readIds = [...new Set([...readIds, ...cloudIds])];
+                    localStorage.setItem('encanto_read_ids', JSON.stringify(readIds));
+                    updateNotifUI();
+                }
+            }, (error) => {
+                console.error("Erro ao ouvir notificações em tempo real:", error);
+            });
+        };
+
+        async function fetchNotifications() {
+            try {
+                const response = await fetch(`${NOTIF_URL}?t=${new Date().getTime()}`);
+                if (response.ok) {
+                    rawNotifications = await response.json();
+                }
+            } catch (e) {
+                rawNotifications = [{ id: 101, titulo: "Bem-vindo! 🎈", mensagem: "Confira as novidades no seu painel.", tipo: "info", data: new Date().toISOString() }];
+            }
+            updateNotifUI();
+        }
+
+        function updateNotifUI() {
+            const active = rawNotifications.filter(n => !readIds.includes(Number(n.id)));
+            active.sort((a, b) => new Date(b.data) - new Date(a.data));
+            const badge = getEl('notifBadge');
+            if (badge) badge.classList.toggle('hidden', active.length === 0);
+            renderNotifs(active);
+        }
+
+        function renderNotifs(list) {
+            const container = getEl('notifContainer');
+            if (!container) return;
+
+            if (list.length === 0) {
+                container.innerHTML = `<div class="text-center py-20 opacity-20 text-white brand-font text-xl">Tudo em dia!</div>`;
+                return;
+            }
+            container.innerHTML = '';
+            list.forEach(n => {
+                const card = document.createElement('div');
+                card.className = "item-card p-4 rounded-[1.5rem] text-white shadow-lg cursor-pointer transition-all";
+                card.innerHTML = `
+                    <div class="flex gap-3">
+                        <div class="w-10 h-10 shrink-0 rounded-xl bg-white/10 flex items-center justify-center text-xl shadow-inner pointer-events-none">
+                            ${n.tipo === 'alerta' ? '⚡' : '✨'}
+                        </div>
+                        <div class="flex-1 min-w-0 pointer-events-none">
+                            <h3 class="font-bold text-sm leading-tight mb-1 text-white">${n.titulo}</h3>
+                            <p class="text-[13px] text-blue-50/80 mb-2 leading-relaxed line-clamp-msg">${n.mensagem}</p>
+                            <button class="mark-btn text-[10px] font-bold text-blue-300 hover:text-white uppercase transition-colors pointer-events-auto">Marcar como lido</button>
+                        </div>
+                    </div>
+                `;
+                card.onclick = (e) => {
+                    if (e.target.classList.contains('mark-btn')) {
+                        e.stopPropagation(); 
+                        card.classList.add('dismissing'); 
+                        setTimeout(() => persistReadId(n.id), 450); 
+                        return;
+                    }
+                    const msgPara = card.querySelector('.line-clamp-msg');
+                    if (msgPara) {
+                        const isTruncated = msgPara.scrollHeight > msgPara.clientHeight;
+                        if (isTruncated && !card.classList.contains('expanded')) { 
+                            card.classList.add('expanded'); 
+                        } else if (n.link) {
+                            window.location.href = n.link;
+                        }
+                    }
+                };
+                container.appendChild(card);
+            });
+        }
+
+        async function persistReadId(id) {
+            const nid = Number(id);
+            if (!readIds.includes(nid)) { 
+                readIds.push(nid); 
+                localStorage.setItem('encanto_read_ids', JSON.stringify(readIds)); 
+            }
+            updateNotifUI();
+            
+            if (user && db) {
+                const stateRef = doc(db, 'artifacts', appId, 'users', user.uid, 'notification_data', 'state');
+                try { 
+                    await updateDoc(stateRef, { readIds: arrayUnion(nid) }); 
+                } catch (e) { 
+                    await setDoc(stateRef, { readIds }); 
+                }
+            }
+        }
+
+        async function markAllNotificationsAsRead() {
+            const newIds = rawNotifications.map(n => Number(n.id));
+            readIds = [...new Set([...readIds, ...newIds])];
+            localStorage.setItem('encanto_read_ids', JSON.stringify(readIds));
+            updateNotifUI();
+            
+            if (user && db) {
+                const stateRef = doc(db, 'artifacts', appId, 'users', user.uid, 'notification_data', 'state');
+                try { 
+                    await updateDoc(stateRef, { readIds: readIds }); 
+                } catch (e) { 
+                    await setDoc(stateRef, { readIds: readIds }); 
+                }
+            }
+        }
+
+        const setupUIListeners = () => {
+            const btnNotif = getEl('notifBtn');
+            const btnCloseNotif = getEl('closeNotif');
+            const btnMarkAll = getEl('markAllRead');
+            const modalNotif = getEl('notifModal');
+
+            if (btnNotif && modalNotif) {
+                btnNotif.onclick = () => { 
+                    modalNotif.classList.remove('hidden'); 
+                    setTimeout(() => modalNotif.classList.add('active'), 10); 
+                };
+            }
+
+            if (btnCloseNotif && modalNotif) {
+                btnCloseNotif.onclick = () => { 
+                    modalNotif.classList.remove('active'); 
+                    setTimeout(() => modalNotif.classList.add('hidden'), 400); 
+                };
+            }
+
+            if (btnMarkAll) {
+                btnMarkAll.onclick = () => markAllNotificationsAsRead();
+            }
+        };
+
+        setupUIListeners();
+        init();
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- Configuração da cor da barra do browser (Chrome, Safari, Samsung Internet, etc) -->
+    <meta name="theme-color" content="#2563eb">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="msapplication-navbutton-color" content="#2563eb">
+
+    <title>Encanto Festas - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-blue: #2563eb;
+            --deep-blue: #1e3a8a;
+            --marketing-gold: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            --marketing-glow: 0 0 20px rgba(245, 158, 11, 0.5);
+        }
+
+        html, body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        h1, h2, h3, h4, .brand-font {
+            font-family: 'Baloo 2', cursive;
+            line-height: 1.2;
+        }
+        
+        .glass-header {
+            background: #2563eb; 
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .item-card {
+            transition: transform 0.25s ease-out, opacity 0.25s ease-out;
+            animation: fadeIn 0.4s ease-out forwards;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            will-change: transform, opacity;
+            user-select: none;
+            touch-action: pan-y; 
+        }
+
+        @keyframes fadeIn {
+            from { transform: translateY(8px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .dismissing {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease !important;
+            transform: translateX(120%) !important;
+            opacity: 0 !important;
+            pointer-events: none;
+        }
+
+        .modal-view {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(100%);
+            background: linear-gradient(180deg, #2563eb 0%, #1e3a8a 100%);
+            background-attachment: fixed;
+            visibility: hidden;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+        }
+        .modal-view.active {
+            transform: translateY(0%);
+            visibility: visible;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .line-clamp-msg {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .item-card.expanded .line-clamp-msg {
+            -webkit-line-clamp: unset;
+        }
+    </style>
+
+
+    <!-- Painel de Notificações permanece para funcionalidade -->
+    <div id="notification-overlay" onclick="toggleNotificationPanel()" class="hidden fixed inset-0 bg-black bg-opacity-30 z-[80]"></div>
+    <div id="notification-panel">
+        <div class="h-full flex flex-col">
+            <div class="bg-blue-700 border-b border-blue-800 p-4 flex-none flex justify-between items-center z-10"><h3 class="text-xl font-bold brand-font text-white">Notificações</h3><button onclick="toggleNotificationPanel()" class="text-blue-200 hover:text-white p-1"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg></button></div>
+            <div class="flex-grow overflow-y-auto relative"><ul id="notification-list" class="p-4 space-y-3 pb-24"></ul><div id="loading-notifications" class="p-4 text-center hidden"><div class="animate-spin inline-block w-6 h-6 border-4 border-blue-300 border-t-transparent rounded-full"></div><p class="text-sm text-blue-200 mt-2">Carregando...</p></div></div>
+            <div class="p-2 border-t border-blue-800 bg-blue-700 text-center flex-none w-full" style="padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));"><button id="mark-all-button" onclick="markAllAsRead()" class="text-white font-semibold text-xs uppercase tracking-wide hover:text-blue-200 hover:underline disabled:opacity-50">Marcar todas como lidas</button></div>
+        </div>
+    </div>
+
+    <div id="loadingScreen" class="fixed inset-0 z-40 bg-white flex flex-col items-center justify-center transition-opacity duration-500">
+        <div class="relative mb-4">
+            <svg class="animate-spin h-12 w-12 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-10" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"></circle><path class="opacity-90" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+        </div>
+        <div class="text-blue-600 font-medium text-sm animate-pulse tracking-widest uppercase">Carregando...</div>
+    </div>
+
+    <!-- Conteúdo principal com padding reduzido no topo para subir a secção (pt-24) -->
+    <main class="flex-grow w-full pt-24 pb-48 flex flex-col items-center relative z-0">
+        
+        <!-- Auth View -->
+        <section id="authView" class="hidden w-full max-w-md mx-auto px-4 fade-in min-h-[60vh] flex-col justify-center">
+            <div class="text-center mb-8 mt-4">
+                <h1 class="text-3xl font-extrabold text-blue-600 tracking-tight brand-font">Acesse sua Conta</h1>
+                <p class="text-gray-500 font-medium text-sm mt-1">Seus Pontos, Prêmios e Benefícios Exclusivos</p>
+            </div>
+
+            <div class="bg-white rounded-2xl p-1 shadow-sm border border-gray-100">
+                <div class="flex p-1 bg-gray-100 rounded-xl mb-6 border border-gray-200">
+                    <button onclick="switchAuthTab('login')" id="tabLogin" class="flex-1 py-2.5 text-sm font-bold rounded-lg shadow-sm bg-white text-blue-700 transition-all">Entrar</button>
+                    <button onclick="switchAuthTab('register')" id="tabRegister" class="flex-1 py-2.5 text-sm font-bold rounded-lg text-gray-500 hover:text-gray-700 transition-all">Cadastrar</button>
+                </div>
+
+                <form id="loginForm" class="space-y-4" onsubmit="handleAuthAction(event, 'login')">
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-gray-500 uppercase ml-1">Email</label>
+                        <input type="email" id="loginEmail" class="w-full px-4 py-3.5 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" placeholder="seu@email.com" required>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="flex justify-between items-center ml-1"><label class="text-xs font-bold text-gray-500 uppercase">Senha</label></div>
+                        <div class="relative">
+                            <input type="password" id="loginPassword" class="w-full px-4 py-3.5 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" placeholder="••••••••" required>
+                            <button type="button" onclick="togglePassword('loginPassword', this)" class="absolute right-3 top-3.5 text-gray-400 hover:text-blue-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center px-1">
+                        <label class="flex items-center cursor-pointer"><input type="checkbox" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"><span class="ml-2 text-xs text-gray-600 font-medium">Lembrar</span></label>
+                        <button type="button" onclick="handleForgotPassword()" class="text-xs font-bold text-blue-600 hover:text-blue-800">Esqueceu a senha?</button>
+                    </div>
+                    <button type="submit" id="btnLoginSubmit" class="w-full py-3.5 bg-primary hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg shadow-blue-200 transform transition active:scale-[0.98]">Entrar</button>
+                </form>
+
+                <form id="registerForm" class="space-y-4 hidden" onsubmit="handleAuthAction(event, 'register')">
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-gray-500 uppercase ml-1">Nome</label>
+                        <input type="text" id="regName" oninput="forceTwoWords(this)" maxlength="18" class="w-full px-4 py-3.5 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition-all shadow-sm" placeholder="Seu nome" required>
+                    </div>
+                    <div class="space-y-1"><label class="text-xs font-bold text-gray-500 uppercase ml-1">Email</label><input type="email" id="regEmail" class="w-full px-4 py-3.5 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition-all shadow-sm" placeholder="seu@email.com" required></div>
+                    <div class="space-y-1"><label class="text-xs font-bold text-gray-500 uppercase ml-1">Senha</label><div class="relative"><input type="password" id="regPassword" class="w-full px-4 py-3.5 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition-all shadow-sm" placeholder="6 dígitos ou mais" required><button type="button" onclick="togglePassword('regPassword', this)" class="absolute right-3 top-3.5 text-gray-400 hover:text-blue-600 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button></div></div>
+                    <button type="submit" id="btnRegSubmit" class="w-full py-3.5 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg shadow-green-200 transform transition active:scale-[0.98]">Criar Conta</button>
+                </form>
+
+                <div class="relative my-6">
+                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-200"></div></div>
+                    <div class="relative flex justify-center text-xs uppercase"><span class="bg-white px-3 text-gray-400 font-bold">Ou entre com</span></div>
+                </div>
+
+                <button onclick="handleGoogleLogin()" class="w-full py-3 bg-white border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 transition active:scale-[0.98] flex items-center justify-center gap-3 shadow-sm group">
+                    <svg class="w-5 h-5 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.766 12.2764C23.766 11.4607 23.6999 10.6406 23.5588 9.83807H12.24V14.4591H18.7217C18.4528 15.9494 17.5885 17.2678 16.323 18.1056V21.1039H20.19C22.4608 19.0139 23.766 15.9274 23.766 12.2764Z" fill="#4285F4"/><path d="M12.2401 24.0008C15.4766 24.0008 18.2059 22.9382 20.1945 21.1039L16.3275 18.1055C15.2517 18.8375 13.8627 19.252 12.2445 19.252C9.11388 19.252 6.45946 17.1399 5.50705 14.3003H1.5166V17.3912L5.50253 14.3003Z" fill="#34A853"/><path d="M12.2401 4.74966C13.9509 4.7232 15.6044 5.36697 16.8434 6.54867L20.2695 3.12262C18.1001 1.0855 15.2208 -0.034466 12.2401 0.000808666C7.7029 0.000808666 3.55371 2.55822 1.5166 6.61481L5.50264 9.70575C6.45064 6.86173 9.10947 4.74966 12.2401 4.74966Z" fill="#EA4335"/></svg>
+                    Google
+                </button>
+            </div>
+        </section>
+
+        <!-- Profile View -->
+        <section id="profileView" class="hidden w-full max-w-lg mx-auto px-0 fade-in flex-col items-center">
+            
+            <button onclick="openLogoutModal()" class="absolute top-4 left-4 z-30 bg-white/30 backdrop-blur-md p-2 rounded-full text-white hover:bg-white hover:text-red-600 transition shadow-lg border border-white/40 group"><svg class="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg></button>
+            <button onclick="openRewardsModal()" class="absolute top-4 right-4 z-30 bg-white/30 backdrop-blur-md p-2.5 rounded-full text-white hover:bg-white hover:text-indigo-600 transition shadow-lg border border-white/40 animate-pulse hover:animate-none group"><svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path></svg><span id="rewardsNotificationBadge" class="absolute -top-0.5 -right-0.5 flex h-3 w-3"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span></span></button>
+
+            <div class="h-44 w-full relative shrink-0 overflow-hidden bg-gradient-to-br from-blue-600 to-indigo-700">
+                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+                <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+                <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/20 rounded-full blur-3xl transform translate-x-10 -translate-y-10"></div>
+                
+                <!-- Confetes e elementos decorativos -->
+                <div class="absolute top-6 left-[10%] w-2 h-2 bg-yellow-300 rounded-full opacity-80 animate-bounce" style="animation-duration: 3s;"></div>
+                <div class="absolute top-10 left-[15%] w-1.5 h-3 bg-pink-300 rotate-45 opacity-70 confetti-float"></div>
+                <div class="absolute top-4 right-[20%] w-2.5 h-2.5 bg-blue-300 rounded-sm rotate-12 opacity-80 confetti-float" style="animation-delay: 1s;"></div>
+                <div class="absolute bottom-12 right-[10%] w-2 h-2 bg-white rounded-full opacity-40 animate-pulse"></div>
+            </div>
+
+            <div class="relative z-10 flex flex-col items-center -mt-16 w-full px-4">
+                <div class="relative group cursor-pointer pointer-events-auto mb-3" onclick="openAvatarModal()">
+                    <div class="w-32 h-32 rounded-full p-[3px] bg-white shadow-2xl relative z-10">
+                        <div class="w-full h-full rounded-full bg-gray-50 p-[2px] relative overflow-hidden ring-1 ring-gray-100">
+                            <div id="mainAvatarLoader" class="absolute inset-0 z-20 flex items-center justify-center bg-white/90 hidden"><svg class="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg></div>
+                            <img id="avatarImage" src="https://avatar.iran.liara.run/public" alt="Avatar" class="w-full h-full rounded-full object-cover bg-white hover:scale-105 transition-transform duration-500">
+                        </div>
+                    </div>
+                    <button class="absolute bottom-1 right-1 p-2 bg-blue-600 rounded-full shadow-lg border-2 border-white text-white hover:bg-blue-700 active:scale-95 transition-all z-30">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                    </button>
+                </div>
+                
+                <div class="text-center mt-1 mb-6">
+                    <h1 class="text-2xl font-extrabold text-gray-800 leading-tight brand-font" id="userNameDisplay">Carregando...</h1>
+                    <p class="text-xs text-gray-500 font-medium tracking-wide mt-1" id="userEmailDisplay">...</p>
+                    <button onclick="openProfileEditModal()" class="mt-3 px-5 py-1.5 bg-white border border-gray-200 text-gray-600 text-[10px] font-bold uppercase tracking-wider rounded-full hover:bg-gray-50 hover:text-blue-600 hover:border-blue-200 active:scale-[0.98] transition-all inline-flex items-center gap-2 shadow-sm group">
+                        <svg class="w-3 h-3 text-gray-400 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                        Editar Perfil
+                    </button>
+                </div>
+                
+                <!-- Status Card -->
+                <div class="w-full bg-white rounded-2xl p-5 shadow-lg shadow-blue-900/5 border border-gray-100 mb-6 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-yellow-100 to-transparent rounded-bl-full opacity-50"></div>
+                    <div class="flex justify-between items-end mb-2 px-1 relative z-10">
+                        <span id="userLevelBadge" class="px-2.5 py-0.5 bg-gradient-to-r from-blue-600 to-blue-500 text-white text-[10px] font-bold uppercase rounded-md tracking-wider shadow-sm">Nível 1</span>
+                        <span class="text-xs font-bold text-gray-400" id="xpDisplay">0 / 500 XP</span>
+                    </div>
+                    <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden mb-6 relative shadow-inner">
+                        <div id="xpBarFill" class="progress-bar-fill h-full bg-gradient-to-r from-blue-400 to-primary w-0 rounded-full relative overflow-hidden"><div class="absolute inset-0 w-full h-full animated-stripes"></div></div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4 relative z-10">
+                        <div class="flex flex-col items-center">
+                            <span class="text-2xl font-black text-gray-800 leading-none brand-font" id="partyCountDisplay">0</span>
+                            <span class="text-[9px] font-bold text-gray-400 uppercase mt-1 tracking-wider">Festas</span>
+                        </div>
+                        <div class="flex flex-col items-center border-x border-gray-100">
+                            <span class="text-2xl font-black text-primary leading-none brand-font" id="userPointsDisplay">0</span>
+                            <span class="text-[9px] font-bold text-gray-400 uppercase mt-1 tracking-wider">Pontos</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <span class="text-2xl font-black text-green-600 leading-none brand-font" id="userBalanceDisplay">0,00</span>
+                            <div class="flex items-center gap-1 mt-1">
+                                <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                                <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Saldo</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full mb-4">
+                    <div class="flex justify-between items-center mb-4 px-1">
+                        <h3 class="text-lg font-bold brand-font text-gray-800 flex items-center gap-2">
+                            Histórico
+                            <div class="h-1 w-1 bg-gray-300 rounded-full"></div>
+                            <span class="text-xs font-normal text-gray-400 font-sans" id="historyCountLabel">0</span>
+                        </h3>
+                        <button onclick="openFilterModal()" class="text-xs font-semibold text-primary bg-white hover:bg-blue-50 px-3 py-1.5 rounded-full border border-gray-200 hover:border-blue-200 transition flex items-center gap-1 shadow-sm">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                            Filtro
+                        </button>
+                    </div>
+                    <div class="space-y-0 w-full min-h-[100px]" id="historyList"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modais e scripts -->
+    <div id="logoutModal" class="fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 transition-opacity"><div class="bg-white rounded-3xl shadow-2xl p-6 w-full max-w-xs modal-enter text-center"><div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg></div><h3 class="text-xl font-bold text-gray-800 mb-2">Sair da Conta</h3><p class="text-sm text-gray-500 mb-6">Tem certeza que deseja sair do aplicativo?</p><div class="flex gap-3"><button onclick="closeLogoutModal()" class="flex-1 py-2.5 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition">Cancelar</button><button onclick="confirmLogout()" class="flex-1 py-2.5 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition shadow-lg shadow-red-200">Sair</button></div></div></div>
+    
+    <div id="dialogModal" class="fixed inset-0 z-[80] bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 transition-opacity"><div class="bg-white rounded-3xl shadow-2xl p-6 w-full max-w-xs modal-enter text-center relative overflow-hidden"><div id="dialogIconContainer" class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors"></div><h3 id="dialogTitle" class="text-xl font-bold text-gray-800 mb-2">Titulo</h3><p id="dialogMessage" class="text-sm text-gray-500 mb-6">Mensagem</p><div id="dialogButtons" class="flex gap-3 justify-center"></div></div></div>
+
+    <div id="rewardsModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 transition-opacity"><div class="bg-white rounded-3xl shadow-2xl w-full max-w-sm modal-enter overflow-hidden flex flex-col max-h-[85vh]"><div class="p-6 bg-gradient-to-r from-blue-600 to-indigo-600 relative shrink-0"><button onclick="closeRewardsModal()" class="absolute top-4 right-4 text-white/80 hover:text-white bg-white/10 p-1 rounded-full hover:bg-white/20 transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button><div class="flex items-center gap-3"><div class="bg-white/20 p-2 rounded-xl backdrop-blur-sm"><svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path></svg></div><div><h2 class="text-white text-lg font-bold">Loja de Pontos</h2><p class="text-white/80 text-xs">Troque seus pontos por benefícios</p></div></div><div class="mt-4 bg-white/10 rounded-xl p-3 flex justify-between items-center backdrop-blur-sm border border-white/10"><span class="text-white/90 text-sm font-medium">Seus Pontos:</span><span class="text-white text-xl font-bold" id="modalUserPoints">0</span></div></div><div class="flex-1 overflow-y-auto p-4 space-y-3 bg-white history-scroll overscroll-contain" id="rewardsList"></div></div></div>
+    
+    <div id="filterModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 transition-opacity"><div class="bg-white rounded-3xl shadow-2xl p-6 w-full max-w-sm modal-enter relative"><div class="flex justify-between items-center mb-6"><h2 class="text-xl font-bold text-gray-800">Filtrar Histórico</h2><button onclick="closeFilterModal()" class="text-gray-400 hover:text-gray-600 p-1"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button></div><div class="space-y-4"><h3 class="text-sm font-bold text-gray-500 uppercase tracking-wide">Por Bairro</h3><div id="filterOptionsContainer" class="space-y-2 max-h-48 overflow-y-auto overscroll-contain"></div></div><div class="flex gap-3 mt-8 pt-4 border-t border-gray-100"><button onclick="resetFilters()" class="flex-1 px-4 py-3 bg-white border border-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition">Limpar</button><button onclick="applyFilters()" class="flex-1 px-4 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-200 transition">Aplicar</button></div></div></div>
+    
+    <div id="imageModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 transition-opacity"><div class="bg-white rounded-3xl shadow-2xl p-6 w-full max-w-md modal-enter relative overflow-hidden"><div class="text-center mb-6"><h2 class="text-xl font-bold text-gray-800">Alterar Foto</h2><p class="text-sm text-gray-500">Escolha um avatar ou envie sua foto</p></div><div class="flex justify-center mb-8"><div class="relative w-48 h-48 rounded-full p-1 border-2 border-dashed border-blue-200 hover:border-blue-400 cursor-pointer group" onclick="document.getElementById('photoUploadInput').click()"><div id="modalAvatarLoader" class="absolute inset-0 z-20 flex items-center justify-center rounded-full bg-black/20 hidden"><svg class="animate-spin h-10 w-10 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg></div><img id="modalAvatarImage" src="https://avatar.iran.liara.run/public" class="w-full h-full rounded-full object-cover bg-gray-50"><div class="absolute inset-0 rounded-full flex flex-col items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity text-white text-xs font-bold uppercase"><span>Enviar Foto</span></div></div></div><div class="grid grid-cols-2 gap-3 mb-6"><button onclick="generateMale()" class="gender-button py-3 rounded-xl bg-blue-50 text-blue-700 text-sm font-bold shadow-sm hover:bg-blue-100 transition-colors" data-type="male">Masculino</button><button onclick="generateFemale()" class="gender-button py-3 rounded-xl bg-pink-50 text-pink-700 text-sm font-bold shadow-sm hover:bg-pink-100 transition-colors" data-type="female">Feminino</button></div><div class="flex justify-end border-t pt-4"><button onclick="saveAvatarAndClose()" id="btnSaveAvatar" class="px-6 py-2 bg-gray-800 text-white rounded-xl font-medium active:scale-95 transition">Concluir</button></div></div></div>
+    
+    <div id="profileEditModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md modal-enter max-h-[90vh] flex flex-col overflow-hidden">
+            <div class="flex justify-between items-center p-5 border-b border-gray-100 shrink-0 bg-white z-10"><h2 class="text-lg font-bold text-gray-800">Editar Perfil</h2><button onclick="closeProfileEditModal()" class="p-2 bg-gray-50 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button></div>
+            <div class="p-6 overflow-y-auto"><div class="space-y-5"><div class="space-y-1"><label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">Nome Completo</label><input type="text" id="editName" oninput="forceTwoWords(this)" maxlength="18" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Seu nome"></div><div class="space-y-1"><label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">WhatsApp / Telefone</label><input type="tel" id="editPhone" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="(xx) xxxxx-xxxx" maxlength="15" oninput="formatPhone(this)"></div><div class="space-y-1"><label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">Email</label><div class="relative"><input type="email" id="editEmail" class="w-full pl-4 pr-10 py-3 rounded-xl bg-gray-100 text-gray-500 border border-gray-200 cursor-not-allowed select-none" disabled><div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg></div></div></div><div class="py-2"><div class="h-px bg-gray-100"></div></div><h3 class="text-sm font-bold text-blue-600 uppercase tracking-wide">Endereço</h3><div class="space-y-1"><label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">Bairro</label><div class="relative"><select id="editNeighborhood" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 focus:bg-white focus:ring-2 focus:ring-blue-500 transition-all outline-none appearance-none"><option value="">Selecione...</option><option value="Acaraí">Acaraí</option><option value="Água Branca">Água Branca</option><option value="Capri">Capri</option><option value="Centro - Sfs">Centro - Sfs</option><option value="Centro Histórico">Centro Histórico</option><option value="Enseada">Enseada</option><option value="Ervino">Ervino</option><option value="Iperoba">Iperoba</option><option value="Itaguaçu">Itaguaçu</option><option value="Laranjeiras">Laranjeiras</option><option value="Majorca">Majorca</option><option value="Miranda">Miranda</option><option value="Morro Grande">Morro Grande</option><option value="Paulas">Paulas</option><option value="Praia Grande">Praia Grande</option><option value="Reta">Reta</option><option value="Ribeira">Ribeira</option><option value="Rocio Grande">Rocio Grande</option><option value="Rocio Pequeno">Rocio Pequeno</option><option value="Sandra Regina">Sandra Regina</option><option value="Tapera">Tapera</option><option value="Ubatuba">Ubatuba</option><option value="Vila da Glória">Vila da Glória</option></select><div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500"><svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></div></div></div><div class="grid grid-cols-3 gap-3"><div class="col-span-2 space-y-1"><label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">Rua</label><input type="text" id="editStreet" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 focus:bg-white focus:ring-2 focus:ring-blue-500 transition-all outline-none" placeholder="Nome da rua"></div><div class="space-y-1"><label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">Nº</label><div class="relative"><input type="text" id="editHouseNumber" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 focus:bg-white focus:ring-2 focus:ring-blue-500 transition-all outline-none" placeholder="123"></div><div class="flex items-center mt-1.5 ml-1"><input type="checkbox" id="noNumberCheckbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" onchange="toggleHouseNumber()"><label for="noNumberCheckbox" class="ml-1.5 text-xs text-gray-500 font-medium cursor-pointer">Sem número (S/N)</label></div></div></div></div></div>
+            <div class="p-5 border-t border-gray-100 bg-gray-50 shrink-0 z-10 rounded-b-3xl"><div class="flex gap-3"><button onclick="closeProfileEditModal()" class="flex-1 px-4 py-3.5 bg-white border border-gray-200 font-bold text-gray-700 rounded-xl hover:bg-gray-100 active:scale-95 transition shadow-sm">Cancelar</button><button onclick="saveProfileChanges()" class="flex-1 px-4 py-3.5 bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 active:scale-95 transition">Salvar</button></div></div>
+        </div>
+    </div>
+    
+    <div id="cropperModal" class="fixed inset-0 z-[60] bg-zinc-900 hidden flex-col justify-center p-0 md:p-6 transition-opacity duration-300"><div class="w-full max-w-2xl mx-auto flex flex-col h-full md:h-auto md:max-h-[90vh] bg-zinc-900 rounded-2xl overflow-hidden relative"><div class="flex justify-between items-center p-4 z-10 bg-zinc-900"><h3 class="text-lg font-bold text-white">Ajustar</h3><button onclick="closeCropper()" class="text-zinc-400 hover:text-white">✕</button></div><div class="flex-1 bg-black relative flex items-center justify-center overflow-hidden"><img id="imageToCrop" class="max-w-full max-h-full block"></div><div class="p-6 bg-zinc-900 flex justify-between items-center gap-4 border-t border-zinc-800"><button onclick="closeCropper()" class="flex-1 px-6 py-3.5 rounded-xl font-semibold text-zinc-300 border border-zinc-700">Cancelar</button><button onclick="cropImage()" class="flex-1 px-6 py-3.5 bg-blue-600 text-white font-bold rounded-xl shadow-lg">Salvar Foto</button></div></div></div>
+
+    <input type="file" id="photoUploadInput" class="hidden" accept="image/*" onchange="handleFileSelect(this)">
+
+    <script>
+        // Dialog UI e Helpers
+        let currentDialogCallback = null;
+        function showDialog({ title, message, type = 'info', onConfirm = null }) {
+            const iconContainer = document.getElementById('dialogIconContainer');
+            const titleEl = document.getElementById('dialogTitle');
+            const msgEl = document.getElementById('dialogMessage');
+            const btnsContainer = document.getElementById('dialogButtons');
+            titleEl.textContent = title;
+            msgEl.textContent = message;
+            btnsContainer.innerHTML = '';
+            currentDialogCallback = onConfirm;
+            let iconHtml = '', iconBg = '', iconColor = '';
+            if (type === 'confirm') {
+                iconBg = 'bg-blue-100'; iconColor = 'text-blue-600';
+                iconHtml = '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
+                btnsContainer.innerHTML = `<button onclick="closeDialog()" class="flex-1 py-3 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition active:scale-95">Entendi</button><button onclick="confirmDialogAction()" class="flex-1 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-200 transition active:scale-95">Editar Perfil</button>`;
+            } else if (type === 'success') {
+                iconBg = 'bg-green-100'; iconColor = 'text-green-600';
+                iconHtml = '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>';
+                btnsContainer.innerHTML = `<button onclick="closeDialog()" class="w-full py-3 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 shadow-lg shadow-blue-200 transition active:scale-95">Entendi!</button>`;
+            } else if (type === 'error') {
+                iconBg = 'bg-red-100'; iconColor = 'text-red-600';
+                iconHtml = '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
+                btnsContainer.innerHTML = `<button onclick="closeDialog()" class="w-full py-3 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 shadow-lg shadow-blue-200 transition active:scale-95">Fechar</button>`;
+            } else if (type === 'simple_confirm') {
+                iconBg = 'bg-blue-100'; iconColor = 'text-blue-600';
+                iconHtml = '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
+                btnsContainer.innerHTML = `<button onclick="closeDialog()" class="flex-1 py-3 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition active:scale-95">Cancelar</button><button onclick="confirmDialogAction()" class="flex-1 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-200 transition active:scale-95">Confirmar</button>`;
+            }
+            iconContainer.className = `w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${iconBg} ${iconColor}`;
+            iconContainer.innerHTML = iconHtml;
+            toggleModal('dialogModal', true);
+        }
+        function closeDialog() { toggleModal('dialogModal', false); currentDialogCallback = null; }
+        function confirmDialogAction() { if (currentDialogCallback) currentDialogCallback(); closeDialog(); }
+        window.showDialog = showDialog; window.closeDialog = closeDialog; window.confirmDialogAction = confirmDialogAction;
+
+        function switchAuthTab(tab) {
+            const loginForm = document.getElementById('loginForm'); const registerForm = document.getElementById('registerForm');
+            const btnLogin = document.getElementById('tabLogin'); const btnRegister = document.getElementById('tabRegister');
+            if(tab === 'login') {
+                loginForm.classList.remove('hidden'); registerForm.classList.add('hidden');
+                btnLogin.classList.add('bg-white', 'text-blue-700', 'shadow-sm'); btnLogin.classList.remove('text-blue-200', 'hover:text-white');
+                btnRegister.classList.remove('bg-white', 'text-blue-700', 'shadow-sm'); btnRegister.classList.add('text-blue-200', 'hover:text-white');
+            } else {
+                loginForm.classList.add('hidden'); registerForm.classList.remove('hidden');
+                btnRegister.classList.add('bg-white', 'text-blue-700', 'shadow-sm'); btnRegister.classList.remove('text-blue-200', 'hover:text-white');
+                btnLogin.classList.remove('bg-white', 'text-blue-700', 'shadow-sm'); btnLogin.classList.add('text-blue-200', 'hover:text-white');
+            }
+        }
+        function forceTwoWords(el) { let val = el.value; const parts = val.split(' '); if (parts.length > 2) { el.value = parts.slice(0, 2).join(' '); } }
+        function formatPhone(input) { let v = input.value.replace(/\D/g,''); v = v.replace(/^(\d{2})(\d)/g,"($1) $2"); v = v.replace(/(\d)(\d{4})$/,"$1-$2"); input.value = v; }
+        function toggleHouseNumber() { const chk = document.getElementById('noNumberCheckbox'); const inp = document.getElementById('editHouseNumber'); if (chk.checked) { inp.value = "S/N"; inp.disabled = true; inp.classList.add('bg-gray-100', 'text-gray-500'); } else { inp.value = ""; inp.disabled = false; inp.classList.remove('bg-gray-100', 'text-gray-500'); inp.focus(); } }
+        function togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId); const icon = btn.querySelector('svg');
+            if (input.type === "password") { input.type = "text"; icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>'; btn.classList.add('text-blue-600'); } 
+            else { input.type = "password"; icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>'; btn.classList.remove('text-blue-600'); }
+        }
+        function openLogoutModal() { toggleModal('logoutModal', true); }
+        function closeLogoutModal() { toggleModal('logoutModal', false); }
+        function toggleModal(id, show) {
+            const el = document.getElementById(id); if(!el) return;
+            if(show) { el.classList.remove('hidden'); el.classList.add('flex'); document.body.classList.add('modal-open'); }
+            else { el.classList.add('hidden'); el.classList.remove('flex'); document.body.classList.remove('modal-open'); }
+        }
+        function closeCropper() { toggleModal('cropperModal', false); }
+        function closeRewardsModal() { toggleModal('rewardsModal', false); }
+        function closeFilterModal() { toggleModal('filterModal', false); }
+        function closeProfileEditModal() { toggleModal('profileEditModal', false); }
+        
+        // Notifications Logic
+        let isPanelOpen = false;
+        window.toggleNotificationPanel = function() {
+            const panel = document.getElementById('notification-panel'); const overlay = document.getElementById('notification-overlay');
+            isPanelOpen = !isPanelOpen;
+            if (isPanelOpen) { panel.classList.add('open'); overlay.classList.remove('hidden'); document.body.classList.add('overflow-hidden'); } 
+            else { panel.classList.remove('open'); overlay.classList.add('hidden'); document.body.classList.remove('overflow-hidden'); }
+        }
+        
+        window.switchAuthTab = switchAuthTab; window.forceTwoWords = forceTwoWords; window.formatPhone = formatPhone; window.toggleHouseNumber = toggleHouseNumber; window.togglePassword = togglePassword; window.openLogoutModal = openLogoutModal; window.closeLogoutModal = closeLogoutModal; window.toggleModal = toggleModal; window.closeCropper = closeCropper; window.closeRewardsModal = closeRewardsModal; window.closeFilterModal = closeFilterModal; window.closeProfileEditModal = closeProfileEditModal;
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut, updateProfile, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, onSnapshot, increment, collection, addDoc, writeBatch } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+        const firebaseConfig = { apiKey: "AIzaSyBmwK8KwklpVfPEalJfOfjCB6OSFsidz6Q", authDomain: "encanto-festas-8c123.firebaseapp.com", projectId: "encanto-festas-8c123", storageBucket: "encanto-festas-8c123.firebasestorage.app", messagingSenderId: "371905779100", appId: "1:371905779100:web:48e5d1ba0820547177a459", measurementId: "G-WD1MC40GL4" };
+
+        const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app); const googleProvider = new GoogleAuthProvider();
+        let currentUser = null; let userData = {};
+        let activeFilter = null;
+        let cropper = null;
+
+        onAuthStateChanged(auth, async (user) => {
+            const loading = document.getElementById('loadingScreen');
+            const authView = document.getElementById('authView');
+            const profile = document.getElementById('profileView');
+            if (user) {
+                currentUser = user;
+                onSnapshot(doc(db, "users", user.uid), async (docSnap) => {
+                    if (docSnap.exists()) {
+                        userData = docSnap.data();
+                        if (!userData.history) { 
+                             const emptySlots = Array.from({length: 20}, () => ({ date: "", neighborhood: "", value: 0, discount: 0 })); 
+                             await updateDoc(doc(db, "users", user.uid), { history: emptySlots }); 
+                        }
+                        if (!userData.stats) { 
+                            await updateDoc(doc(db, "users", user.uid), { 
+                                "stats.parties": 0, "stats.points": 0, "stats.balance": 0.00 
+                            }); 
+                        }
+                        window.userData = userData; 
+                        loading.classList.add('opacity-0', 'pointer-events-none');
+                        authView.classList.add('hidden');
+                        profile.classList.remove('hidden');
+                        profile.classList.add('flex');
+                        initUI(); 
+                    } else { 
+                        await createDefaultUserDoc(user); 
+                    }
+                });
+            } else {
+                currentUser = null; window.userData = null;
+                loading.classList.add('opacity-0', 'pointer-events-none');
+                profile.classList.add('hidden'); profile.classList.remove('flex');
+                authView.classList.remove('hidden');
+            }
+        });
+
+        async function createDefaultUserDoc(user, nameOverride = "") {
+            try {
+                const userRef = doc(db, "users", user.uid);
+                const docSnap = await getDoc(userRef);
+                if (docSnap.exists()) return; 
+                const emptyHistory = Array.from({length: 20}, () => ({ date: "", neighborhood: "", value: 0, discount: 0 }));
+                const initialData = { 
+                    name: nameOverride || user.displayName || "Novo Usuário", 
+                    email: user.email, phone: "", avatar: "https://avatar.iran.liara.run/public", 
+                    address: { neighborhood: "", street: "", number: "" }, 
+                    stats: { parties: 0, points: 0, balance: 0.00 }, 
+                    history: emptyHistory 
+                };
+                await setDoc(userRef, initialData);
+            } catch (error) { console.error("Erro criar doc:", error); }
+        }
+
+        window.handleGoogleLogin = async () => { try { await signInWithPopup(auth, googleProvider); } catch (error) { console.error("Erro Google:", error); } };
+
+        window.handleAuthAction = async function(e, type) {
+            e.preventDefault();
+            const email = type === 'login' ? document.getElementById('loginEmail').value : document.getElementById('regEmail').value;
+            const pass = type === 'login' ? document.getElementById('loginPassword').value : document.getElementById('regPassword').value;
+            const btn = type === 'login' ? document.getElementById('btnLoginSubmit') : document.getElementById('btnRegSubmit');
+            const originalText = btn.textContent;
+            if (type === 'register' && pass.length < 6) { window.showDialog({ title: "Senha Curta", message: "Mínimo 6 caracteres.", type: "error" }); return; }
+            try {
+                btn.classList.add('opacity-50', 'cursor-not-allowed'); btn.textContent = "Processando...";
+                if (type === 'login') { await signInWithEmailAndPassword(auth, email, pass); } 
+                else {
+                    const name = document.getElementById('regName').value;
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+                    await updateProfile(userCredential.user, { displayName: name });
+                    await createDefaultUserDoc(userCredential.user, name);
+                }
+            } catch (error) {
+                console.error("Erro Auth:", error);
+                window.showDialog({ title: "Atenção", message: "Verifique seus dados.", type: "error" });
+                btn.classList.remove('opacity-50', 'cursor-not-allowed'); btn.textContent = originalText;
+            }
+        };
+
+        window.confirmLogout = async () => { window.closeLogoutModal(); await signOut(auth); };
+
+        window.saveProfileChanges = async () => {
+            if(!currentUser) return;
+            try {
+                const userRef = doc(db, "users", currentUser.uid);
+                await updateDoc(userRef, { 
+                    name: document.getElementById('editName').value, 
+                    phone: document.getElementById('editPhone').value, 
+                    "address.neighborhood": document.getElementById('editNeighborhood').value, 
+                    "address.street": document.getElementById('editStreet').value, 
+                    "address.number": document.getElementById('editHouseNumber').value 
+                });
+                window.closeProfileEditModal();
+                window.showDialog({ title: "Sucesso", message: "Perfil atualizado!", type: "success" });
+            } catch (error) { window.showDialog({ title: "Erro", message: "Erro ao salvar.", type: "error" }); }
+        };
+
+        // --- Rewards Data & Management ---
+        const rewardsData = [
+            { id: 'shipping_free', title: 'Frete Grátis', desc: 'Raio 10km da loja', cost: 100, type: 'shipping', iconColor: 'text-green-600', bgColor: 'bg-green-100', icon: '<path d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"></path>' },
+            { id: 'balance_15', title: 'Vale R$ 15,00', desc: 'Crédito para próxima locação', cost: 500, type: 'balance_15', iconColor: 'text-blue-600', bgColor: 'bg-blue-100', textIcon: 'R$' },
+            { id: 'balance_50', title: 'Vale R$ 50,00', desc: 'Crédito para locação acima R$200', cost: 1200, type: 'balance_50', iconColor: 'text-purple-600', bgColor: 'bg-purple-100', textIcon: 'R$' },
+            { id: 'surprise_kit', title: 'Kit Surpresa', desc: 'Retire um brinde físico na loja', cost: 2000, type: 'physical', iconColor: 'text-yellow-600', bgColor: 'bg-yellow-100', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>' }
+        ];
+
+        window.redeemReward = (cost, type, title) => {
+            if(!currentUser) return;
+            const points = userData?.stats?.points || 0;
+            if(points >= cost) {
+                window.showDialog({ title: 'Confirmar Troca', message: `Deseja trocar ${cost} pontos por "${title}"?`, type: 'simple_confirm', onConfirm: async () => {
+                    try {
+                        const userRef = doc(db, "users", currentUser.uid);
+                        let newBalance = userData.stats.balance || 0;
+                        if (type === 'balance_15') newBalance += 15.00;
+                        if (type === 'balance_50') newBalance += 50.00;
+                        
+                        await updateDoc(userRef, { 
+                            "stats.points": points - cost, 
+                            "stats.balance": newBalance 
+                        });
+                        
+                        await addDoc(collection(db, "resgates"), { 
+                            cliente_nome: userData.name, 
+                            cliente_email: userData.email, 
+                            item: title, 
+                            custo: cost, 
+                            status: "Aprovado",
+                            data: new Date().toLocaleString('pt-BR') 
+                        });
+                        
+                        window.closeRewardsModal();
+                        window.showDialog({ title: 'Sucesso!', message: 'Seu benefício foi resgatado com sucesso.', type: 'success' });
+                    } catch(e) { 
+                        window.showDialog({ title: 'Erro', message: 'Falha ao processar resgate.', type: 'error' }); 
+                    }
+                }});
+            } else { 
+                window.showDialog({ title: 'Pontos Insuficientes', message: `Você precisa de mais ${cost - points} pontos para este prêmio.`, type: 'error' }); 
+            }
+        };
+
+        function renderRewards() {
+            const list = document.getElementById('rewardsList');
+            const userPoints = userData?.stats?.points || 0;
+            document.getElementById('modalUserPoints').textContent = userPoints;
+            
+            list.innerHTML = rewardsData.map(item => `
+                <div class="flex items-center gap-4 p-4 rounded-2xl border border-gray-100 hover:border-blue-100 hover:bg-blue-50/30 transition group">
+                    <div class="w-12 h-12 ${item.bgColor} rounded-xl flex items-center justify-center shrink-0 shadow-sm">
+                        ${item.icon ? `<svg class="w-6 h-6 ${item.iconColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24">${item.icon}</svg>` : `<span class="text-lg font-bold ${item.iconColor}">${item.textIcon}</span>`}
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="text-sm font-bold text-gray-800">${item.title}</h4>
+                        <p class="text-[10px] text-gray-500">${item.desc}</p>
+                    </div>
+                    <div class="text-right">
+                        <button onclick="redeemReward(${item.cost}, '${item.type}', '${item.title}')" class="px-3 py-1.5 ${userPoints >= item.cost ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-400 cursor-not-allowed'} text-[10px] font-bold rounded-lg transition active:scale-95 shadow-sm">
+                            ${item.cost} pts
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // --- Profile UI Logic ---
+        window.openProfileEditModal = () => {
+            document.getElementById('editName').value = userData.name || "";
+            document.getElementById('editPhone').value = userData.phone || "";
+            document.getElementById('editEmail').value = userData.email || "";
+            document.getElementById('editNeighborhood').value = userData.address?.neighborhood || "";
+            document.getElementById('editStreet').value = userData.address?.street || "";
+            document.getElementById('editHouseNumber').value = userData.address?.number || "";
+            
+            const noNumChk = document.getElementById('noNumberCheckbox');
+            if (userData.address?.number === "S/N") {
+                noNumChk.checked = true;
+                document.getElementById('editHouseNumber').disabled = true;
+                document.getElementById('editHouseNumber').classList.add('bg-gray-100', 'text-gray-500');
+            } else {
+                noNumChk.checked = false;
+                document.getElementById('editHouseNumber').disabled = false;
+                document.getElementById('editHouseNumber').classList.remove('bg-gray-100', 'text-gray-500');
+            }
+            
+            toggleModal('profileEditModal', true);
+        };
+
+        window.openRewardsModal = () => {
+            renderRewards();
+            toggleModal('rewardsModal', true);
+        };
+
+        // --- Filter Management ---
+        window.openFilterModal = () => {
+            const history = userData?.history || [];
+            const uniqueNeighborhoods = [...new Set(history.filter(i => i.neighborhood).map(i => i.neighborhood))];
+            const container = document.getElementById('filterOptionsContainer');
+            
+            if (uniqueNeighborhoods.length === 0) {
+                container.innerHTML = '<p class="text-xs text-gray-400 text-center py-4">Nenhum bairro encontrado no histórico.</p>';
+            } else {
+                container.innerHTML = uniqueNeighborhoods.map(nb => `
+                    <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:bg-gray-50 cursor-pointer transition">
+                        <input type="radio" name="neighborhoodFilter" value="${nb}" ${activeFilter === nb ? 'checked' : ''} class="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500">
+                        <span class="text-sm font-medium text-gray-700">${nb}</span>
+                    </label>
+                `).join('');
+            }
+            toggleModal('filterModal', true);
+        };
+
+        window.applyFilters = () => {
+            const selected = document.querySelector('input[name="neighborhoodFilter"]:checked');
+            activeFilter = selected ? selected.value : null;
+            renderHistory();
+            window.closeFilterModal();
+        };
+
+        window.resetFilters = () => {
+            activeFilter = null;
+            renderHistory();
+            window.closeFilterModal();
+        };
+
+        // --- Avatar Management ---
+        window.openAvatarModal = () => {
+            document.getElementById('modalAvatarImage').src = userData.avatar || document.getElementById('avatarImage').src;
+            toggleModal('imageModal', true);
+        };
+
+        window.generateMale = () => {
+            const seed = Math.floor(Math.random() * 50);
+            const url = `https://avatar.iran.liara.run/public/boy?username=${seed}`;
+            document.getElementById('modalAvatarImage').src = url;
+        };
+
+        window.generateFemale = () => {
+            const seed = Math.floor(Math.random() * 50);
+            const url = `https://avatar.iran.liara.run/public/girl?username=${seed}`;
+            document.getElementById('modalAvatarImage').src = url;
+        };
+
+        window.handleFileSelect = (input) => {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    document.getElementById('imageToCrop').src = e.target.result;
+                    toggleModal('cropperModal', true);
+                    if (cropper) cropper.destroy();
+                    const image = document.getElementById('imageToCrop');
+                    cropper = new Cropper(image, {
+                        aspectRatio: 1,
+                        viewMode: 1,
+                        guides: false,
+                        center: true,
+                        highlight: false,
+                        cropBoxMovable: true,
+                        cropBoxResizable: false,
+                        toggleDragModeOnDblclick: false,
+                    });
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        };
+
+        window.cropImage = () => {
+            const canvas = cropper.getCroppedCanvas({ width: 400, height: 400 });
+            document.getElementById('modalAvatarImage').src = canvas.toDataURL('image/jpeg', 0.8);
+            window.closeCropper();
+        };
+
+        window.saveAvatarAndClose = async () => {
+            if(!currentUser) return;
+            const btn = document.getElementById('btnSaveAvatar');
+            btn.textContent = "Salvando...";
+            btn.disabled = true;
+            try {
+                const avatarUrl = document.getElementById('modalAvatarImage').src;
+                await updateDoc(doc(db, "users", currentUser.uid), { avatar: avatarUrl });
+                document.getElementById('avatarImage').src = avatarUrl;
+                toggleModal('imageModal', false);
+                window.showDialog({ title: "Sucesso", message: "Sua foto de perfil foi atualizada!", type: "success" });
+            } catch (e) {
+                window.showDialog({ title: "Erro", message: "Falha ao salvar avatar.", type: "error" });
+            } finally {
+                btn.textContent = "Concluir";
+                btn.disabled = false;
+            }
+        };
+
+        // --- UI Rendering ---
+        function renderHistory() {
+            const list = document.getElementById('historyList');
+            list.innerHTML = '';
+            
+            let filledHistory = (window.userData?.history || []).filter(item => item.date && item.date.trim() !== "");
+            
+            if (activeFilter) {
+                filledHistory = filledHistory.filter(item => item.neighborhood === activeFilter);
+            }
+
+            document.getElementById('historyCountLabel').textContent = filledHistory.length;
+            
+            if (filledHistory.length === 0) {
+                list.innerHTML = `
+                    <div class="text-center py-10 fade-in">
+                        <div class="bg-gray-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <p class="text-sm font-medium text-gray-400">Nenhum histórico encontrado.</p>
+                        ${activeFilter ? '<button onclick="resetFilters()" class="text-xs text-blue-600 font-bold mt-2">Limpar filtro</button>' : ''}
+                    </div>
+                `;
+                return;
+            }
+            
+            filledHistory.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'flex justify-between items-center py-4 border-b border-gray-100 fade-in';
+                div.style.animationDelay = `${index * 50}ms`;
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
+                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">${item.date}</p>
+                            <p class="text-sm font-bold text-gray-800">${item.neighborhood}</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm font-black text-gray-800">R$ ${item.value.toFixed(2)}</p>
+                        ${item.discount > 0 ? `<p class="text-[9px] font-bold text-green-600">-${item.discount}% OFF</p>` : ''}
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function initUI() {
+            const data = window.userData || {};
+            const stats = data.stats || { points: 0, balance: 0, parties: 0 };
+            
+            document.getElementById('userNameDisplay').textContent = data.name || "Usuário";
+            document.getElementById('userEmailDisplay').textContent = data.email || "";
+            document.getElementById('userPointsDisplay').textContent = stats.points;
+            document.getElementById('userBalanceDisplay').textContent = stats.balance.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+            document.getElementById('partyCountDisplay').textContent = stats.parties;
+            
+            if (data.avatar) {
+                document.getElementById('avatarImage').src = data.avatar;
+            }
+            
+            // Lógica de XP e Nível
+            const xp = stats.points % 500;
+            const level = Math.floor(stats.points / 500) + 1;
+            const xpPercent = (xp / 500) * 100;
+            
+            document.getElementById('userLevelBadge').textContent = `Nível ${level}`;
+            document.getElementById('xpDisplay').textContent = `${xp} / 500 XP`;
+            document.getElementById('xpBarFill').style.width = `${xpPercent}%`;
+            
+            // Badge de Notificação
+            const badge = document.getElementById('rewardsNotificationBadge');
+            if (stats.points >= 100) {
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+            
+            renderHistory();
+        }
+    </script>
+</body>
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Encanto Festas - Navegação</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Fundo transparente e remoção de margens para integração no site */
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: transparent;
+            -webkit-tap-highlight-color: transparent;
+        }
+        h1, h2, h3, h4, .brand-font {
+            font-family: 'Baloo 2', cursive;
+        }
+        
+        /* Cores de Marca */
+        .bg-primary { background-color: #2563EB; }
+        .text-primary { color: #2563EB; }
+        .bg-secondary { background-color: #FACC15; }
+        .text-secondary { color: #CA8A04; }
+        
+        /* Animação "Vai e Volta" (Bounce) */
+        @keyframes bounce-click {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.85); }
+            100% { transform: scale(1); }
+        }
+
+        .click-bounce:active {
+            animation: bounce-click 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .floating-fab {
+            box-shadow: 0 8px 25px rgba(250, 204, 21, 0.4);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        #bottom-nav {
+            padding-bottom: env(safe-area-inset-bottom);
+            height: calc(4.5rem + env(safe-area-inset-bottom));
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+            background-color: white;
+        }
+
+        /* Popup Slide */
+        #custom-popup {
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+        body.popup-open #custom-popup {
+            transform: translateY(0);
+        }
+        .popup-overlay {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        body.popup-open .popup-overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .menu-card {
+            transition: transform 0.1s ease, background-color 0.2s ease;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- [LOCK: COFRE DE ÍCONES] -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="icon-house" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        </symbol>
+        <symbol id="icon-handshake" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/>
+        </symbol>
+        <symbol id="icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/><path d="M12 5v14"/>
+        </symbol>
+        <symbol id="icon-book-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>
+        </symbol>
+        <symbol id="icon-user-round" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/>
+        </symbol>
+        <symbol id="icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/>
+        </symbol>
+        <symbol id="icon-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 12 20 22 4 22 4 12"/><rect width="20" height="5" x="2" y="7"/><line x1="12" x2="12" y1="22" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+        </symbol>
+        <symbol id="icon-whatsapp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 .7A2 2 0 0 1 22 16.92z"/>
+        </symbol>
+        <symbol id="icon-school" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2v-5"/>
+        </symbol>
+        <symbol id="icon-tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42l-8.704-8.704Z"/><line x1="7" x2="7.01" y1="7" y2="7"/>
+        </symbol>
+        <symbol id="icon-layout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="3" x2="21" y1="9" y2="9"/><line x1="9" x2="9" y1="21" y2="9"/>
+        </symbol>
+        <symbol id="icon-more" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
+        </symbol>
+    </svg>
+    <!-- [/LOCK] -->
+
+    <div class="popup-overlay fixed inset-0 bg-black/60 z-[90]" onclick="togglePopup()"></div>
+
+    <div id="custom-popup" class="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-[3rem] shadow-2xl h-[72vh] overflow-y-auto">
+        <div class="sticky top-0 bg-white pt-5 pb-3 z-10" onclick="togglePopup()">
+            <div class="w-16 h-1.5 bg-gray-200 rounded-full mx-auto cursor-pointer active:bg-gray-300 transition-colors"></div>
+        </div>
+        <div id="popup-content-area" class="px-8 pb-12">
+            <!-- Conteúdo carregado via Script -->
+        </div>
+    </div>
+
+    <!-- FOOTER FIXO -->
+    <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 w-full z-[80] flex items-start">
+        <div class="grid grid-cols-5 w-full h-full max-w-7xl mx-auto">
+            <!-- Início -->
+            <a href="index.html" class="click-bounce flex flex-col items-center justify-center text-gray-400">
+                <svg class="w-6 h-6"><use href="#icon-house"></use></svg>
+                <span class="text-[10px] font-semibold mt-1">Início</span>
+            </a>
+            
+            <!-- Parceiros -->
+            <a href="parceiros.html" class="click-bounce flex flex-col items-center justify-center text-gray-400">
+                <svg class="w-6 h-6"><use href="#icon-handshake"></use></svg>
+                <span class="text-[10px] font-semibold mt-1">Parceiros</span>
+            </a>
+
+            <!-- Botão Central -->
+            <div class="relative flex justify-center">
+                <button onclick="togglePopup()" class="floating-fab click-bounce absolute -top-8 bg-secondary text-blue-900 w-16 h-16 rounded-full flex items-center justify-center border-4 border-white">
+                    <svg class="w-9 h-9"><use href="#icon-plus"></use></svg>
+                </button>
+            </div>
+
+            <!-- Catálogo -->
+            <a href="catalogo.html" class="click-bounce flex flex-col items-center justify-center text-gray-400">
+                <svg class="w-6 h-6"><use href="#icon-book-open"></use></svg>
+                <span class="text-[10px] font-semibold mt-1">Catálogo</span>
+            </a>
+
+            <!-- Perfil (Ativo e Não Clicável) -->
+            <a href="javascript:void(0)" class="flex flex-col items-center justify-center text-primary pointer-events-none cursor-default">
+                <svg class="w-6 h-6"><use href="#icon-user-round"></use></svg>
+                <span class="text-[10px] font-semibold mt-1">Perfil</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        const POPUP_CONTENT = `
+            <div class="text-center mb-6">
+                <h2 class="text-xl font-extrabold brand-font text-primary">Ações Rápidas</h2>
+                <p class="text-gray-400 text-xs">O que deseja fazer agora?</p>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <!-- Fazer Reserva -->
+                <button onclick="window.location.href='calendario.html'" class="menu-card click-bounce p-4 bg-blue-50 rounded-[2rem] border border-blue-100 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-lg shadow-blue-200 mb-2">
+                        <svg class="w-6 h-6 text-white"><use href="#icon-calendar"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-blue-900">Fazer Reserva</span>
+                </button>
+
+                <!-- Encanto Escola -->
+                <button onclick="window.location.href='escola.html'" class="menu-card click-bounce p-4 bg-purple-50 rounded-[2rem] border border-purple-100 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center shadow-lg shadow-purple-200 mb-2">
+                        <svg class="w-6 h-6 text-white"><use href="#icon-school"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-purple-900">Encanto Escola</span>
+                </button>
+
+                <!-- Brinquedos Usados -->
+                <button onclick="window.location.href='usados.html'" class="menu-card click-bounce p-4 bg-orange-50 rounded-[2rem] border border-orange-100 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-orange-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-orange-200 mb-2">
+                        <svg class="w-6 h-6 text-white"><use href="#icon-tag"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-orange-900 text-center leading-tight">Brinquedos Usados</span>
+                </button>
+
+                <!-- Criar Site -->
+                <button onclick="window.location.href='site.html'" class="menu-card click-bounce p-4 bg-slate-50 rounded-[2rem] border border-slate-200 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-slate-700 text-white rounded-full flex items-center justify-center shadow-lg shadow-slate-300 mb-2">
+                        <svg class="w-6 h-6 text-white"><use href="#icon-layout"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-slate-900">Criar Site</span>
+                </button>
+
+                <!-- Convide e Ganhe -->
+                <button onclick="window.location.href='convide.html'" class="menu-card click-bounce p-4 bg-yellow-50 rounded-[2rem] border border-yellow-100 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-secondary text-blue-900 rounded-full flex items-center justify-center shadow-lg shadow-yellow-200 mb-2">
+                        <svg class="w-6 h-6"><use href="#icon-gift"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-yellow-900 text-center leading-tight">Convide Ganhe</span>
+                </button>
+
+                <!-- WhatsApp -->
+                <button onclick="window.location.href='https://wa.me/5547992277324?text=Olá!'" class="menu-card click-bounce p-4 bg-green-50 rounded-[2rem] border border-green-100 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-green-200 mb-2">
+                        <svg class="w-6 h-6 text-white"><use href="#icon-whatsapp"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-green-900 text-center">WhatsApp</span>
+                </button>
+            </div>
+
+            <!-- Botão Outros -->
+            <div class="mt-6 flex justify-center">
+                <button onclick="window.location.href='outros.html'" class="menu-card click-bounce py-3 px-10 bg-gray-50 rounded-full border border-gray-100 flex items-center gap-2 shadow-sm">
+                    <svg class="w-4 h-4 text-gray-500"><use href="#icon-more"></use></svg>
+                    <span class="font-bold text-xs text-gray-600">Outros</span>
+                </button>
+            </div>
+        `;
+
+        let isPopupLoaded = false;
+        function togglePopup() {
+            const body = document.body;
+            const contentArea = document.getElementById('popup-content-area');
+            if (!body.classList.contains('popup-open')) {
+                if (!isPopupLoaded) {
+                    contentArea.innerHTML = POPUP_CONTENT;
+                    isPopupLoaded = true;
+                }
+                body.classList.add('popup-open');
+            } else {
+                body.classList.remove('popup-open');
+            }
+        }
+    </script>
+</body>
+</html>
+</html>
