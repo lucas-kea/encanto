@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Catálogo - Encanto Festas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            -webkit-tap-highlight-color: transparent;
+            scroll-behavior: smooth;
+        }
+        h1, h2, h3, h4, .brand-font {
+            font-family: 'Baloo 2', cursive;
+        }
+        .min-h-screen-safe {
+            min-height: 100vh;
+            min-height: 100dvh;
+        }
+        .bg-primary { background-color: #2563EB; }
+        .text-primary { color: #2563EB; }
+        .bg-secondary { background-color: #FACC15; }
+        .text-secondary { color: #CA8A04; }
+        
+        /* Animações */
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        .slide-up { animation: slideUp 0.5s ease-out forwards; }
+        .pop-in { animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+        /* Painel de Notificações */
+        #notification-panel {
+            z-index: 100;
+            transition: transform 0.3s ease-out;
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 100vw;
+            max-width: 100vw;
+            height: 100dvh;
+            background-color: #2563EB;
+        }
+        
+        #notification-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Estilo Específico do Catálogo */
+        .catalog-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .catalog-card:active {
+            transform: scale(0.98);
+        }
+        
+        /* Skeleton Loading Animation */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Modal de Detalhes */
+        #product-modal-overlay {
+            backdrop-filter: blur(4px);
+        }
+        .spec-item {
+            background-color: #f1f5f9;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #475569;
+        }
+        .spec-icon {
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-bottom: 0.25rem;
+            color: #2563EB;
+        }
+        .safety-box {
+            border: 1px dashed #ef4444;
+            background-color: #fef2f2;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            font-size: 0.75rem;
+            color: #991b1b;
+        }
+    </style>
+</head>
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- Configuração da cor da barra do browser (Chrome, Safari, Samsung Internet, etc) -->
+    <meta name="theme-color" content="#2563eb">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="msapplication-navbutton-color" content="#2563eb">
+
+    <title>Encanto Festas - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-blue: #2563eb;
+            --deep-blue: #1e3a8a;
+            --marketing-gold: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            --marketing-glow: 0 0 20px rgba(245, 158, 11, 0.5);
+        }
+
+        html, body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        h1, h2, h3, h4, .brand-font {
+            font-family: 'Baloo 2', cursive;
+            line-height: 1.2;
+        }
+        
+        .glass-header {
+            background: #2563eb; 
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .item-card {
+            transition: transform 0.25s ease-out, opacity 0.25s ease-out;
+            animation: fadeIn 0.4s ease-out forwards;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            will-change: transform, opacity;
+            user-select: none;
+            touch-action: pan-y; 
+        }
+
+        @keyframes fadeIn {
+            from { transform: translateY(8px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .dismissing {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease !important;
+            transform: translateX(120%) !important;
+            opacity: 0 !important;
+            pointer-events: none;
+        }
+
+        .modal-view {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(100%);
+            background: linear-gradient(180deg, #2563eb 0%, #1e3a8a 100%);
+            background-attachment: fixed;
+            visibility: hidden;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+        }
+        .modal-view.active {
+            transform: translateY(0%);
+            visibility: visible;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .line-clamp-msg {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .item-card.expanded .line-clamp-msg {
+            -webkit-line-clamp: unset;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cabeçalho Fixo -->
+    <header id="mainHeader" class="fixed top-0 left-0 right-0 w-full glass-header z-[50] h-16">
+        <div class="max-w-xl mx-auto px-3 h-full flex justify-between items-center">
+            
+            <!-- Logo e Identidade -->
+            <a href="index.html" class="flex items-center gap-2 active:scale-95 transition-transform outline-none text-decoration-none group">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdX7GkygoIKwK06MzeweiE0GPt5I1rsz808w&s" 
+                    class="w-10 h-10 rounded-full border-2 border-yellow-400 shadow-sm transition-transform group-hover:rotate-12"
+                    alt="Logo Encanto Festas">
+                
+                <div class="inline-flex flex-col items-start leading-none -mt-1.5 ml-0.5">
+                    <div class="text-xl font-bold brand-font tracking-tight">
+                        <span class="text-white">Encanto</span><span class="text-yellow-400">Festas</span>
+                    </div>
+                    <span class="text-[7.2px] font-black text-white/90 uppercase -mt-0.5 tracking-[0.15em] w-full text-justify ml-[2px]" style="text-align-last: justify;">
+                        LOCAÇÃO DE BRINQUEDOS
+                    </span>
+                </div>
+            </a>
+            
+            <div class="flex items-center gap-2">
+                <!-- Apenas Botão de Notificações -->
+                <button id="notifBtn" class="relative p-2.5 bg-white/10 rounded-xl text-white hover:bg-white/20 transition-all active:scale-90 flex items-center justify-center outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                    </svg>
+                    <span id="notifBadge" class="hidden absolute top-2 right-2 w-2.5 h-2.5 bg-yellow-400 rounded-full border-2 border-blue-600 animate-pulse"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MODAL DE NOTIFICAÇÕES -->
+    <div id="notifModal" class="modal-view hidden flex flex-col">
+        <div class="px-5 py-3 border-b border-white/10 flex justify-between items-center bg-blue-900/40 backdrop-blur-xl">
+            <div class="flex items-center gap-4">
+                <button id="closeNotif" class="p-2 text-white/70 hover:text-white transition-colors bg-white/10 rounded-lg outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <h2 class="text-lg font-bold brand-font text-white">Notificações</h2>
+            </div>
+            <button id="markAllRead" class="text-[10px] font-bold uppercase tracking-widest text-blue-200 hover:text-white transition-colors outline-none">Limpar Tudo</button>
+        </div>
+        <div id="notifContainer" class="flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar pb-10"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, updateDoc, arrayUnion, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const fbConfigRaw = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const NOTIF_URL = 'notificacoes.json';
+
+        let db, auth, user;
+        let readIds = JSON.parse(localStorage.getItem('encanto_read_ids') || '[]').map(id => Number(id)); 
+        let rawNotifications = [];
+
+        const getEl = (id) => document.getElementById(id);
+
+        const init = async () => {
+            fetchNotifications();
+
+            if (fbConfigRaw) {
+                try {
+                    const firebaseConfig = JSON.parse(fbConfigRaw);
+                    const app = initializeApp(firebaseConfig);
+                    auth = getAuth(app);
+                    db = getFirestore(app);
+                    
+                    // Auth FIRST
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+
+                    onAuthStateChanged(auth, u => { 
+                        if (u) { 
+                            user = u; 
+                            setupPersistenceListener(); 
+                        } 
+                    });
+                } catch (e) { 
+                    console.warn("Firebase Offline ou Erro de Configuração"); 
+                }
+            }
+        };
+
+        const setupPersistenceListener = () => {
+            if (!user || !db) return;
+            const stateRef = doc(db, 'artifacts', appId, 'users', user.uid, 'notification_data', 'state');
+            onSnapshot(stateRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const cloudIds = (docSnap.data().readIds || []).map(id => Number(id));
+                    readIds = [...new Set([...readIds, ...cloudIds])];
+                    localStorage.setItem('encanto_read_ids', JSON.stringify(readIds));
+                    updateNotifUI();
+                }
+            }, (error) => {
+                console.error("Erro ao ouvir notificações em tempo real:", error);
+            });
+        };
+
+        async function fetchNotifications() {
+            try {
+                const response = await fetch(`${NOTIF_URL}?t=${new Date().getTime()}`);
+                if (response.ok) {
+                    rawNotifications = await response.json();
+                }
+            } catch (e) {
+                rawNotifications = [{ id: 101, titulo: "Bem-vindo! 🎈", mensagem: "Confira as novidades no seu painel.", tipo: "info", data: new Date().toISOString() }];
+            }
+            updateNotifUI();
+        }
+
+        function updateNotifUI() {
+            const active = rawNotifications.filter(n => !readIds.includes(Number(n.id)));
+            active.sort((a, b) => new Date(b.data) - new Date(a.data));
+            const badge = getEl('notifBadge');
+            if (badge) badge.classList.toggle('hidden', active.length === 0);
+            renderNotifs(active);
+        }
+
+        function renderNotifs(list) {
+            const container = getEl('notifContainer');
+            if (!container) return;
+
+            if (list.length === 0) {
+                container.innerHTML = `<div class="text-center py-20 opacity-20 text-white brand-font text-xl">Tudo em dia!</div>`;
+                return;
+            }
+            container.innerHTML = '';
+            list.forEach(n => {
+                const card = document.createElement('div');
+                card.className = "item-card p-4 rounded-[1.5rem] text-white shadow-lg cursor-pointer transition-all";
+                card.innerHTML = `
+                    <div class="flex gap-3">
+                        <div class="w-10 h-10 shrink-0 rounded-xl bg-white/10 flex items-center justify-center text-xl shadow-inner pointer-events-none">
+                            ${n.tipo === 'alerta' ? '⚡' : '✨'}
+                        </div>
+                        <div class="flex-1 min-w-0 pointer-events-none">
+                            <h3 class="font-bold text-sm leading-tight mb-1 text-white">${n.titulo}</h3>
+                            <p class="text-[13px] text-blue-50/80 mb-2 leading-relaxed line-clamp-msg">${n.mensagem}</p>
+                            <button class="mark-btn text-[10px] font-bold text-blue-300 hover:text-white uppercase transition-colors pointer-events-auto">Marcar como lido</button>
+                        </div>
+                    </div>
+                `;
+                card.onclick = (e) => {
+                    if (e.target.classList.contains('mark-btn')) {
+                        e.stopPropagation(); 
+                        card.classList.add('dismissing'); 
+                        setTimeout(() => persistReadId(n.id), 450); 
+                        return;
+                    }
+                    const msgPara = card.querySelector('.line-clamp-msg');
+                    if (msgPara) {
+                        const isTruncated = msgPara.scrollHeight > msgPara.clientHeight;
+                        if (isTruncated && !card.classList.contains('expanded')) { 
+                            card.classList.add('expanded'); 
+                        } else if (n.link) {
+                            window.location.href = n.link;
+                        }
+                    }
+                };
+                container.appendChild(card);
+            });
+        }
+
+        async function persistReadId(id) {
+            const nid = Number(id);
+            if (!readIds.includes(nid)) { 
+                readIds.push(nid); 
+                localStorage.setItem('encanto_read_ids', JSON.stringify(readIds)); 
+            }
+            updateNotifUI();
+            
+            if (user && db) {
+                const stateRef = doc(db, 'artifacts', appId, 'users', user.uid, 'notification_data', 'state');
+                try { 
+                    await updateDoc(stateRef, { readIds: arrayUnion(nid) }); 
+                } catch (e) { 
+                    await setDoc(stateRef, { readIds }); 
+                }
+            }
+        }
+
+        async function markAllNotificationsAsRead() {
+            const newIds = rawNotifications.map(n => Number(n.id));
+            readIds = [...new Set([...readIds, ...newIds])];
+            localStorage.setItem('encanto_read_ids', JSON.stringify(readIds));
+            updateNotifUI();
+            
+            if (user && db) {
+                const stateRef = doc(db, 'artifacts', appId, 'users', user.uid, 'notification_data', 'state');
+                try { 
+                    await updateDoc(stateRef, { readIds: readIds }); 
+                } catch (e) { 
+                    await setDoc(stateRef, { readIds: readIds }); 
+                }
+            }
+        }
+
+        const setupUIListeners = () => {
+            const btnNotif = getEl('notifBtn');
+            const btnCloseNotif = getEl('closeNotif');
+            const btnMarkAll = getEl('markAllRead');
+            const modalNotif = getEl('notifModal');
+
+            if (btnNotif && modalNotif) {
+                btnNotif.onclick = () => { 
+                    modalNotif.classList.remove('hidden'); 
+                    setTimeout(() => modalNotif.classList.add('active'), 10); 
+                };
+            }
+
+            if (btnCloseNotif && modalNotif) {
+                btnCloseNotif.onclick = () => { 
+                    modalNotif.classList.remove('active'); 
+                    setTimeout(() => modalNotif.classList.add('hidden'), 400); 
+                };
+            }
+
+            if (btnMarkAll) {
+                btnMarkAll.onclick = () => markAllNotificationsAsRead();
+            }
+        };
+
+        setupUIListeners();
+        init();
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+    <!-- MODAL DE NOTIFICAÇÕES -->
+    <div id="notifModal" class="modal-view hidden flex flex-col">
+        <div class="px-5 py-3 border-b border-white/10 flex justify-between items-center bg-blue-900/40 backdrop-blur-xl">
+            <div class="flex items-center gap-4">
+                <button id="closeNotif" class="p-2 text-white/70 hover:text-white transition-colors bg-white/10 rounded-lg outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <h2 class="text-lg font-bold brand-font text-white">Notificações</h2>
+            </div>
+            <button id="markAllRead" class="text-[10px] font-bold uppercase tracking-widest text-blue-200 hover:text-white transition-colors outline-none">Limpar Tudo</button>
+        </div>
+        <div id="notifContainer" class="flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar pb-10"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, updateDoc, arrayUnion, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const fbConfigRaw = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const NOTIF_URL = 'notificacoes.json';
+
+        let db, auth, user;
+        let readIds = JSON.parse(localStorage.getItem('encanto_read_ids') || '[]').map(id => Number(id)); 
+        let rawNotifications = [];
+
+        const getEl = (id) => document.getElementById(id);
+
+        const init = async () => {
+            fetchNotifications();
+
+            if (fbConfigRaw) {
+                try {
+                    const firebaseConfig = JSON.parse(fbConfigRaw);
+                    const app = initializeApp(firebaseConfig);
+                    auth = getAuth(app);
+                    db = getFirestore(app);
+                    
+                    // Auth FIRST
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+
+                    onAuthStateChanged(auth, u => { 
+                        if (u) { 
+                            user = u; 
+                            setupPersistenceListener(); 
+                        } 
+                    });
+                } catch (e) { 
+                    console.warn("Firebase Offline ou Erro de Configuração"); 
+                }
+            }
+        };
+
+        const setupPersistenceListener = () => {
+            if (!user || !db) return;
+            const stateRef = doc(db, 'artifacts', appId, 'users', user.uid, 'notification_data', 'state');
+            onSnapshot(stateRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const cloudIds = (docSnap.data().readIds || []).map(id => Number(id));
+                    readIds = [...new Set([...readIds, ...cloudIds])];
+                    localStorage.setItem('encanto_read_ids', JSON.stringify(readIds));
+                    updateNotifUI();
+                }
+            }, (error) => {
+                console.error("Erro ao ouvir notificações em tempo real:", error);
+            });
+        };
+
+        async function fetchNotifications() {
+            try {
+                const response = await fetch(`${NOTIF_URL}?t=${new Date().getTime()}`);
+                if (response.ok) {
+                    rawNotifications = await response.json();
+                }
+            } catch (e) {
+                rawNotifications = [{ id: 101, titulo: "Bem-vindo! 🎈", mensagem: "Confira as novidades no seu painel.", tipo: "info", data: new Date().toISOString() }];
+            }
+            updateNotifUI();
+        }
+
+        function updateNotifUI() {
+            const active = rawNotifications.filter(n => !readIds.includes(Number(n.id)));
+            active.sort((a, b) => new Date(b.data) - new Date(a.data));
+            const badge = getEl('notifBadge');
+            if (badge) badge.classList.toggle('hidden', active.length === 0);
+            renderNotifs(active);
+        }
+
+        function renderNotifs(list) {
+            const container = getEl('notifContainer');
+            if (!container) return;
+
+            if (list.length === 0) {
+                container.innerHTML = `<div class="text-center py-20 opacity-20 text-white brand-font text-xl">Tudo em dia!</div>`;
+                return;
+            }
+            container.innerHTML = '';
+            list.forEach(n => {
+                const card = document.createElement('div');
+                card.className = "item-card p-4 rounded-[1.5rem] text-white shadow-lg cursor-pointer transition-all";
+                card.innerHTML = `
+                    <div class="flex gap-3">
+                        <div class="w-10 h-10 shrink-0 rounded-xl bg-white/10 flex items-center justify-center text-xl shadow-inner pointer-events-none">
+                            ${n.tipo === 'alerta' ? '⚡' : '✨'}
+                        </div>
+                        <div class="flex-1 min-w-0 pointer-events-none">
+                            <h3 class="font-bold text-sm leading-tight mb-1 text-white">${n.titulo}</h3>
+                            <p class="text-[13px] text-blue-50/80 mb-2 leading-relaxed line-clamp-msg">${n.mensagem}</p>
+                            <button class="mark-btn text-[10px] font-bold text-blue-300 hover:text-white uppercase transition-colors pointer-events-auto">Marcar como lido</button>
+                        </div>
+                    </div>
+                `;
+                card.onclick = (e) => {
+                    if (e.target.classList.contains('mark-btn')) {
+                        e.stopPropagation(); 
+                        card.classList.add('dismissing'); 
+                        setTimeout(() => persistReadId(n.id), 450); 
+                        return;
+                    }
+                    const msgPara = card.querySelector('.line-clamp-msg');
+                    if (msgPara) {
+                        const isTruncated = msgPara.scrollHeight > msgPara.clientHeight;
+                        if (isTruncated && !card.classList.contains('expanded')) { 
+                            card.classList.add('expanded'); 
+                        } else if (n.link) {
+                            window.location.href = n.link;
+                        }
+                    }
+                };
+                container.appendChild(card);
+            });
+        }
+
+        async function persistReadId(id) {
+            const nid = Number(id);
+            if (!readIds.includes(nid)) { 
+                readIds.push(nid); 
+                localStorage.setItem('encanto_read_ids', JSON.stringify(readIds)); 
+            }
+            updateNotifUI();
+            
+            if (user && db) {
+                const stateRef = doc(db, 'artifacts', appId, 'users', user.uid, 'notification_data', 'state');
+                try { 
+                    await updateDoc(stateRef, { readIds: arrayUnion(nid) }); 
+                } catch (e) { 
+                    await setDoc(stateRef, { readIds }); 
+                }
+            }
+        }
+
+        async function markAllNotificationsAsRead() {
+            const newIds = rawNotifications.map(n => Number(n.id));
+            readIds = [...new Set([...readIds, ...newIds])];
+            localStorage.setItem('encanto_read_ids', JSON.stringify(readIds));
+            updateNotifUI();
+            
+            if (user && db) {
+                const stateRef = doc(db, 'artifacts', appId, 'users', user.uid, 'notification_data', 'state');
+                try { 
+                    await updateDoc(stateRef, { readIds: readIds }); 
+                } catch (e) { 
+                    await setDoc(stateRef, { readIds: readIds }); 
+                }
+            }
+        }
+
+        const setupUIListeners = () => {
+            const btnNotif = getEl('notifBtn');
+            const btnCloseNotif = getEl('closeNotif');
+            const btnMarkAll = getEl('markAllRead');
+            const modalNotif = getEl('notifModal');
+
+            if (btnNotif && modalNotif) {
+                btnNotif.onclick = () => { 
+                    modalNotif.classList.remove('hidden'); 
+                    setTimeout(() => modalNotif.classList.add('active'), 10); 
+                };
+            }
+
+            if (btnCloseNotif && modalNotif) {
+                btnCloseNotif.onclick = () => { 
+                    modalNotif.classList.remove('active'); 
+                    setTimeout(() => modalNotif.classList.add('hidden'), 400); 
+                };
+            }
+
+            if (btnMarkAll) {
+                btnMarkAll.onclick = () => markAllNotificationsAsRead();
+            }
+        };
+
+        setupUIListeners();
+        init();
+    </script>
+</body>
+</html>
+<body class="text-gray-700 min-h-screen-safe flex flex-col bg-slate-50">
+
+    <!-- PAINEL DE NOTIFICAÇÕES (Oculto) -->
+    <div id="notification-overlay" onclick="toggleNotificationPanel()" class="hidden fixed inset-0 bg-black bg-opacity-30 z-[80]"></div>
+    <div id="notification-panel" class="transform translate-x-full">
+        <div id="notification-content">
+            <div class="bg-blue-700 border-b border-blue-800 p-4 flex-none flex justify-between items-center z-10">
+                <h3 class="text-xl font-bold brand-font text-white">Notificações</h3>
+                <button onclick="toggleNotificationPanel()" class="text-blue-200 hover:text-white p-1">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="flex-grow overflow-y-auto relative">
+                <ul id="notification-list" class="p-4 space-y-3 pb-24"></ul>
+            </div>
+            <div class="p-2 border-t border-blue-800 bg-blue-700 text-center flex-none w-full" style="padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));">
+                   <button id="mark-all-button" onclick="markAllAsRead()" class="text-white font-semibold text-xs uppercase tracking-wide hover:text-blue-200 hover:underline transition opacity-100 pointer-events-auto active:scale-95 py-1">
+                       Marcar todas como lidas
+                   </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE DETALHES DO PRODUTO (Oculto) -->
+    <div id="product-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+        <div id="product-modal-overlay" class="absolute inset-0 bg-black bg-opacity-60" onclick="closeDetails()"></div>
+        <div class="bg-white rounded-3xl w-full max-w-lg max-h-[90vh] overflow-y-auto relative z-10 shadow-2xl pop-in flex flex-col">
+            
+            <button onclick="closeDetails()" class="absolute top-3 right-3 z-20 bg-white/80 rounded-full p-2 text-gray-500 hover:text-red-500 transition shadow-sm backdrop-blur-sm">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+
+            <div class="relative h-56 bg-gray-100 flex-shrink-0">
+                <img id="modal-img" src="" alt="Produto" class="w-full h-full object-cover rounded-t-3xl">
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 pt-12">
+                    <h2 id="modal-title" class="text-2xl font-bold text-white brand-font leading-tight">Nome do Produto</h2>
+                </div>
+            </div>
+
+            <div class="p-5 space-y-5">
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="spec-item">
+                        <svg class="spec-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
+                        <span class="font-bold text-gray-700">Tamanho</span>
+                        <span id="modal-measure">-</span>
+                    </div>
+                    <div class="spec-item">
+                        <svg class="spec-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        <span class="font-bold text-gray-700">Capacidade</span>
+                        <span id="modal-capacity">-</span>
+                    </div>
+                    <div class="spec-item">
+                        <svg class="spec-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"></path></svg>
+                        <span class="font-bold text-gray-700">Peso Máx.</span>
+                        <span id="modal-weight">-</span>
+                    </div>
+                    <div class="spec-item">
+                        <svg class="spec-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span class="font-bold text-gray-700">Idade Máx.</span>
+                        <span id="modal-age">-</span>
+                    </div>
+                    <div class="spec-item">
+                        <svg id="icon-power" class="spec-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        <span class="font-bold text-gray-700">Tomada</span>
+                        <span id="modal-power">-</span>
+                    </div>
+                    <div class="spec-item">
+                        <svg id="icon-water" class="spec-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                        <span class="font-bold text-gray-700">Pode Molhar?</span>
+                        <span id="modal-water">-</span>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 rounded-lg p-3 text-sm text-blue-800 flex items-start gap-2 border border-blue-100">
+                    <svg class="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                    <div>
+                        <span class="font-bold block mb-0.5">Mobilidade:</span>
+                        <span id="modal-movable">Verifique se o local de montagem é definitivo.</span>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="font-bold text-gray-800 text-sm uppercase tracking-wide flex items-center gap-2">
+                        <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        Regras de Uso & Segurança
+                    </h4>
+                    <div class="safety-box">
+                        <ul class="list-disc list-inside space-y-1 mb-2" id="safety-rules-list"></ul>
+                        <div class="mt-2 pt-2 border-t border-red-200 text-center font-bold">
+                            ⚠️ Taxa de Reparo (Mau Uso): <span id="modal-repair">R$ 25,00 - R$ 300,00</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-3 flex items-center gap-3">
+                        <div class="bg-emerald-100 p-2 rounded-full flex-shrink-0 text-emerald-600">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <div class="text-sm text-emerald-700">
+                            <span class="block font-bold text-emerald-800">Proteção Opcional:</span>
+                            Adicione o <strong>Seguro Quebra</strong> por <span class="font-bold text-lg">R$ 10,00</span> e evite o risco de pagar taxas de reparo!
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="window.location.href='calendario.html'" class="w-full bg-secondary text-blue-900 font-bold py-3 rounded-xl text-lg hover:bg-yellow-300 transition-colors shadow-md flex items-center justify-center gap-2 group transform active:scale-95">
+                    <span>Reservar Agora</span>
+                    <svg class="w-5 h-5 transform group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTEÚDO PRINCIPAL: CATÁLOGO (Espaçamento superior ajustado para pt-20 para descer um pouco) -->
+    <main class="flex-grow w-full pt-20 pb-32 px-4 max-w-7xl mx-auto">
+        
+        <div class="text-center mb-6 mt-4 fade-in">
+            <h2 class="text-2xl md:text-3xl font-bold brand-font text-blue-900">Os Nossos Itens</h2>
+            <p class="text-sm text-gray-500">Saiba mais detalhes sobre cada um</p>
+        </div>
+
+        <div id="catalog-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-4 min-h-[300px]">
+            <!-- Skeletons renderizados dinamicamente pelo JS -->
+            <div class="catalog-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-64">
+                <div class="h-40 w-full skeleton"></div>
+                <div class="p-3 flex flex-col gap-2">
+                    <div class="h-4 w-3/4 skeleton rounded"></div>
+                    <div class="h-3 w-1/2 skeleton rounded"></div>
+                    <div class="mt-auto h-8 w-full skeleton rounded-xl"></div>
+                </div>
+            </div>
+            <div class="catalog-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-64">
+                <div class="h-40 w-full skeleton"></div>
+                <div class="p-3 flex flex-col gap-2">
+                    <div class="h-4 w-3/4 skeleton rounded"></div>
+                    <div class="h-3 w-1/2 skeleton rounded"></div>
+                    <div class="mt-auto h-8 w-full skeleton rounded-xl"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="catalog-error" class="hidden text-center py-10 text-gray-400">
+            <svg class="w-12 h-12 mx-auto mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <p>Não foi possível carregar os itens de momento.</p>
+        </div>
+
+        <div class="mt-8 mb-6 fade-in">
+            <h3 class="text-lg font-bold brand-font text-gray-400 mb-3 border-b border-gray-200 pb-2">Itens não disponíveis</h3>
+            <ul id="discontinued-list" class="space-y-2 opacity-60"></ul>
+        </div>
+
+        <div class="mt-8 mb-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl p-6 text-center text-white relative overflow-hidden shadow-lg slide-up" style="animation-delay: 0.7s;">
+            <div class="relative z-10">
+                <h3 class="text-xl font-bold brand-font mb-2 leading-tight">Quer Fechar 6 ou mais ITENS POR UM PREÇO ACESSÍVEL?</h3>
+                <p class="text-green-100 text-sm mb-4">Vamos fazer um orçamento personalizado para o seu evento!</p>
+                <a href="https://wa.me/5547992277324?text=Olá! Gostaria de fazer um orçamento de um combo com mais de 6 itens." target="_blank" class="inline-flex items-center gap-2 bg-white text-green-700 px-6 py-2.5 rounded-full font-bold shadow-md hover:bg-green-50 transition transform hover:scale-105">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.017-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                    Chamar no WhatsApp
+                </a>
+            </div>
+            <div class="absolute top-0 right-0 -mr-4 -mt-4 w-24 h-24 bg-white opacity-10 rounded-full"></div>
+            <div class="absolute bottom-0 left-0 -ml-4 -mb-4 w-16 h-16 bg-green-400 opacity-20 rounded-full"></div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        setLogLevel('silent');
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+
+        let app, db, auth;
+        let userId = null;
+        let isPanelOpen = false;
+        let readNotificationsIds = new Set(JSON.parse(localStorage.getItem('encanto_read_ids') || '[]'));
+        let notificationsData = [];
+        let catalogData = []; 
+
+        const FALLBACK_CATALOG = [
+            { "id": 6, "name": "Mini Baby Inflável", "price": 220, "measure": "Padrão", "needsPower": true, "ageRating": 6, "image": "https://raw.githubusercontent.com/encantofestas/site/a720b1e6ac30fc028c9396ed923e43d0436a8b5c/minibaby.webp", "weightLimit": "50kg", "maxKids": "2", "waterAllowed": false, "movable": true, "badge": "Novo" },
+            { "id": 11, "name": "Air Hockey", "price": 200, "measure": "Padrão", "needsPower": true, "ageRating": "L", "image": "https://raw.githubusercontent.com/encantofestas/site/f0ea7af4a6e04cd75b86a553e57b76b013d87efc/aero.webp", "weightLimit": "N/A", "maxKids": "2", "waterAllowed": false, "movable": true, "badge": "Novo" },
+            { "id": 1, "name": "Cama Elástica Pequena", "price": 170, "measure": "2,44m", "needsPower": false, "ageRating": 14, "image": "https://raw.githubusercontent.com/encantofestas/site/78939e16b69f2e4811df38913e62da278996635e/camap.webp", "weightLimit": "120kg", "maxKids": "3", "waterAllowed": true, "movable": true },
+            { "id": 2, "name": "Cama Elástica Média", "price": 190, "measure": "3,05m", "needsPower": false, "ageRating": 14, "image": "https://raw.githubusercontent.com/encantofestas/site/78939e16b69f2e4811df38913e62da278996635e/camam.webp", "weightLimit": "150kg", "maxKids": "4", "waterAllowed": true, "movable": true },
+            { "id": 3, "name": "Castelinho Pula Pula", "price": 210, "measure": "3m", "needsPower": true, "ageRating": 14, "image": "https://raw.githubusercontent.com/encantofestas/site/78939e16b69f2e4811df38913e62da278996635e/castelinho.webp", "weightLimit": "120kg", "maxKids": "3", "waterAllowed": true, "movable": true },
+            { "id": 4, "name": "Piscina de Bolinhas", "price": 160, "measure": "1,5m / 2m", "needsPower": false, "ageRating": "L", "image": "https://raw.githubusercontent.com/encantofestas/site/78939e16b69f2e4811df38913e62da278996635e/piscina.webp", "weightLimit": "N/A", "maxKids": "4", "waterAllowed": false, "movable": false },
+            { "id": 5, "name": "Área Baby", "price": 110, "measure": "Variável", "needsPower": false, "ageRating": 6, "image": "https://raw.githubusercontent.com/encantofestas/site/f0ea7af4a6e04cd75b86a553e57b76b013d87efc/areababy.webp", "weightLimit": "30kg", "maxKids": "5", "waterAllowed": true, "movable": true },
+            { "id": 7, "name": "Escorrega com Bolinha", "price": 400, "measure": "Padrão", "needsPower": true, "ageRating": 14, "image": "https://raw.githubusercontent.com/encantofestas/site/78939e16b69f2e4811df38913e62da278996635e/escorregobol.webp", "weightLimit": "80kg", "maxKids": "3", "waterAllowed": false, "movable": "Dificuldade" },
+            { "id": 8, "name": "Tobogã Médio", "price": 400, "measure": "5 x 3m", "needsPower": true, "ageRating": 14, "image": "https://raw.githubusercontent.com/encantofestas/site/78939e16b69f2e4811df38913e62da278996635e/tobogam.webp", "weightLimit": "100kg", "maxKids": "1 (descida)", "waterAllowed": true, "movable": "Dificuldade" },
+            { "id": 9, "name": "Futebol de Sabão", "price": 600, "measure": "8 x 4m", "needsPower": true, "ageRating": 14, "image": "https://raw.githubusercontent.com/encantofestas/site/78939e16b69f2e4811df38913e62da278996635e/futebol.webp", "weightLimit": "300kg", "maxKids": "8", "waterAllowed": true, "movable": "Dificuldade" },
+            { "id": 10, "name": "Pebolim", "price": 200, "measure": "Padrão", "needsPower": false, "ageRating": "L", "image": "https://raw.githubusercontent.com/encantofestas/site/78939e16b69f2e4811df38913e62da278996635e/pebolim.webp", "weightLimit": "N/A", "maxKids": "4", "waterAllowed": false, "movable": true },
+            { "id": 12, "name": "Ping Pong", "price": 200, "measure": "Padrão Oficial", "needsPower": false, "ageRating": "L", "image": "https://raw.githubusercontent.com/encantofestas/site/78939e16b69f2e4811df38913e62da278996635e/pingpong.webp", "weightLimit": "N/A", "maxKids": "2", "waterAllowed": false, "movable": true },
+            { "id": 13, "name": "Jogos de Mesa", "price": 15, "measure": "Padrão", "needsPower": false, "ageRating": "L", "image": "https://raw.githubusercontent.com/encantofestas/site/78939e16b69f2e4811df38913e62da278996635e/mesas.webp", "weightLimit": "N/A", "maxKids": "4", "waterAllowed": true, "movable": true }
+        ];
+        
+        const DISCONTINUED_ITEMS = [
+            "Touro Mecânico (Em breve)", 
+            "Guerra de Cotonetes", 
+            "Tobogã Gigante com Piscina",
+            "Giroscópio Humano",
+            "Parede de Escalada Inflável",
+            "Bumper Cars (Carrinhos de Bate-bate)",
+            "Fliperama Retrô",
+            "Simulador de Corrida VR"
+        ];
+        
+        function getRepairLimit(itemName) {
+            const lowerName = itemName.toLowerCase();
+            if (lowerName.includes('mesa') || lowerName.includes('área baby') || lowerName.includes('mini baby')) {
+                return 'R$ 25,00 - R$ 100,00';
+            }
+            return 'R$ 25,00 - R$ 300,00';
+        }
+
+        async function fetchCatalog() {
+            try {
+                const response = await fetch('calendario.json');
+                if (!response.ok) throw new Error();
+                const data = await response.json();
+                catalogData = data.map(item => ({...item, repairLimit: getRepairLimit(item.name || item.nome)}));
+            } catch (error) {
+                catalogData = FALLBACK_CATALOG.map(item => ({...item, repairLimit: getRepairLimit(item.name || item.nome)}));
+            }
+            
+            catalogData.sort((a, b) => {
+                const aIsNew = (a.badge || a.destaque)?.toLowerCase().includes('novo');
+                const bIsNew = (b.badge || b.destaque)?.toLowerCase().includes('novo');
+                return aIsNew && !bIsNew ? -1 : !aIsNew && bIsNew ? 1 : 0;
+            });
+
+            renderCatalog(catalogData);
+            renderDiscontinued();
+        }
+
+        function renderDiscontinued() {
+            const list = document.getElementById('discontinued-list');
+            list.innerHTML = DISCONTINUED_ITEMS.map(item => `<li class="text-sm flex items-center gap-2"><span class="w-1.5 h-1.5 bg-gray-300 rounded-full"></span>${item}</li>`).join('');
+        }
+        
+        function getSafetyRules(itemName) {
+            const lowerName = itemName.toLowerCase();
+            if (lowerName.includes('cama elástica') || lowerName.includes('pula pula') || lowerName.includes('castelinho')) {
+                return ['🚫 Não puxar as redes.', '🚫 Proibido dar mortal.', '🚫 Sem animais ou comida.'];
+            }
+            if (lowerName.includes('bolinha')) return ['🚫 Uso exclusivo infantil.', '🚫 Proibido molhar.'];
+            if (lowerName.includes('área baby') || lowerName.includes('mini baby')) return ['🚫 Uso até 6 anos.', '🚫 Sem objetos cortantes.'];
+            return ['🚫 Não subir no brinquedo.', '🚫 Não forçar o equipamento.'];
+        }
+
+        window.openDetails = function(itemJson) {
+            const item = JSON.parse(decodeURIComponent(itemJson));
+            const name = item.name || item.nome;
+            document.getElementById('modal-title').innerText = name;
+            document.getElementById('modal-img').src = item.image || item.imagem || 'https://placehold.co/400x300';
+            document.getElementById('modal-measure').innerText = item.measure || 'Padrão';
+            document.getElementById('modal-capacity').innerText = item.maxKids ? `${item.maxKids} Crianças` : 'Varia';
+            document.getElementById('modal-weight').innerText = item.weightLimit || 'N/A';
+            document.getElementById('modal-age').innerText = item.ageRating === 'L' ? 'Livre' : `${item.ageRating} Anos`;
+            
+            const powerEl = document.getElementById('modal-power');
+            powerEl.innerText = item.needsPower ? "Sim (Obrigatória)" : "Não precisa";
+            powerEl.className = item.needsPower ? "text-red-600" : "";
+
+            const waterEl = document.getElementById('modal-water');
+            waterEl.innerText = item.waterAllowed ? "Sim, permitido" : "Não (Proibido)";
+            waterEl.className = item.waterAllowed ? "text-blue-600" : "";
+
+            const movableEl = document.getElementById('modal-movable');
+            movableEl.innerText = item.movable === 'Dificuldade' ? "Pode ser movido com dificuldade." : item.movable ? "Pode ser movido com facilidade." : "NÃO pode ser movido.";
+            
+            document.getElementById('modal-repair').innerText = item.repairLimit;
+            document.getElementById('safety-rules-list').innerHTML = getSafetyRules(name).map(r => `<li>${r}</li>`).join('');
+            
+            document.getElementById('product-modal').classList.replace('hidden', 'flex');
+        }
+
+        window.closeDetails = () => document.getElementById('product-modal').classList.replace('flex', 'hidden');
+
+        function renderCatalog(items) {
+            const grid = document.getElementById('catalog-grid');
+            grid.innerHTML = items.map((item, index) => {
+                const itemStr = encodeURIComponent(JSON.stringify(item));
+                const isInactive = item.id === 14 || item.id === 15;
+                const badge = item.badge || item.destaque;
+                
+                return `
+                    <div class="catalog-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col slide-up" style="animation-delay: ${index * 0.1}s">
+                        <div class="h-40 w-full bg-gray-100 relative ${isInactive ? 'opacity-70' : 'cursor-pointer'}" ${isInactive ? '' : `onclick="openDetails('${itemStr}')"`}>
+                            <img src="${item.image || item.imagem}" class="w-full h-full object-cover">
+                            ${badge && !isInactive ? `<div class="absolute top-2 right-2 px-2 py-1 rounded-full text-[10px] font-bold shadow-sm bg-secondary text-blue-900">${badge}</div>` : ''}
+                        </div>
+                        <div class="p-3 flex flex-col flex-grow text-center">
+                            <h3 class="font-bold text-gray-800 brand-font text-sm truncate">${item.name || item.nome}</h3>
+                            <p class="text-[10px] text-gray-400 mb-3">${item.measure || 'Padrão'}</p>
+                            <button ${isInactive ? '' : `onclick="openDetails('${itemStr}')"`} class="mt-auto w-full border border-blue-200 text-blue-600 font-bold py-2 rounded-xl text-xs ${isInactive ? 'bg-gray-100 text-gray-400' : 'hover:bg-blue-50'}">
+                                ${isInactive ? 'Indisponível' : 'Detalhes'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        window.toggleNotificationPanel = function() {
+            const panel = document.getElementById('notification-panel'), overlay = document.getElementById('notification-overlay');
+            isPanelOpen = !isPanelOpen;
+            panel.classList.toggle('translate-x-full', !isPanelOpen);
+            overlay.classList.toggle('hidden', !isPanelOpen);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => { fetchCatalog(); initializeApp(firebaseConfig); });
+    </script>
+    <!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Encanto Festas - Catálogo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            -webkit-tap-highlight-color: transparent;
+            scroll-behavior: smooth;
+        }
+        h1, h2, h3, h4, .brand-font {
+            font-family: 'Baloo 2', cursive;
+        }
+        .min-h-screen-safe {
+            min-height: 100vh;
+            min-height: 100dvh;
+        }
+        
+        /* Cores de Marca */
+        .bg-primary { background-color: #2563EB; }
+        .text-primary { color: #2563EB; }
+        .bg-secondary { background-color: #FACC15; }
+        .text-secondary { color: #CA8A04; }
+        
+        /* Animação "Vai e Volta" (Bounce) Profissional */
+        @keyframes bounce-click {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.85); }
+            100% { transform: scale(1); }
+        }
+
+        .click-bounce:active {
+            animation: bounce-click 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-item {
+            transition: color 0.2s ease;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        
+        /* Estado Ativo/Selecionado */
+        .nav-item-active {
+            color: #2563EB !important;
+            pointer-events: none; /* Desativa cliques */
+            cursor: default;
+        }
+
+        .floating-fab {
+            box-shadow: 0 8px 25px rgba(250, 204, 21, 0.4);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        #bottom-nav {
+            padding-bottom: env(safe-area-inset-bottom);
+            height: calc(4.5rem + env(safe-area-inset-bottom));
+        }
+
+        /* Popup Slide */
+        #custom-popup {
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+        body.popup-open #custom-popup {
+            transform: translateY(0);
+        }
+        .popup-overlay {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        body.popup-open .popup-overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .menu-card {
+            transition: transform 0.1s ease, background-color 0.2s ease;
+        }
+    </style>
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Encanto Festas - Navegação</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: transparent;
+            -webkit-tap-highlight-color: transparent;
+            scroll-behavior: smooth;
+        }
+        h1, h2, h3, h4, .brand-font {
+            font-family: 'Baloo 2', cursive;
+        }
+        .min-h-screen-safe {
+            min-height: 100vh;
+            min-height: 100dvh;
+        }
+        
+        /* Cores de Marca */
+        .bg-primary { background-color: #2563EB; }
+        .text-primary { color: #2563EB; }
+        .bg-secondary { background-color: #FACC15; }
+        .text-secondary { color: #CA8A04; }
+        
+        /* Animação "Vai e Volta" (Bounce) Profissional - Sem Forwards para resetar sempre */
+        @keyframes bounce-click {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.85); }
+            100% { transform: scale(1); }
+        }
+
+        .click-bounce:active {
+            animation: bounce-click 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Garantir que o link mude de cor e anime corretamente */
+        .nav-item {
+            transition: color 0.2s ease;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .nav-item:active {
+            color: #2563EB !important;
+        }
+
+        .floating-fab {
+            box-shadow: 0 8px 25px rgba(250, 204, 21, 0.4);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        #bottom-nav {
+            padding-bottom: env(safe-area-inset-bottom);
+            height: calc(4.5rem + env(safe-area-inset-bottom));
+            /* Garantia de visibilidade em PC/Tablet com sombra superior */
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+
+        /* Popup Slide */
+        #custom-popup {
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+        body.popup-open #custom-popup {
+            transform: translateY(0);
+        }
+        .popup-overlay {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        body.popup-open .popup-overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .menu-card {
+            transition: transform 0.1s ease, background-color 0.2s ease;
+        }
+    </style>
+</head>
+<body class="text-gray-800 min-h-screen-safe flex flex-col">
+
+    <!-- [LOCK: COFRE DE ÍCONES] -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="icon-house" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        </symbol>
+        <symbol id="icon-handshake" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/>
+        </symbol>
+        <symbol id="icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/><path d="M12 5v14"/>
+        </symbol>
+        <symbol id="icon-book-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>
+        </symbol>
+        <symbol id="icon-user-round" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/>
+        </symbol>
+        <symbol id="icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/>
+        </symbol>
+        <symbol id="icon-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 12 20 22 4 22 4 12"/><rect width="20" height="5" x="2" y="7"/><line x1="12" x2="12" y1="22" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+        </symbol>
+        <symbol id="icon-whatsapp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+        </symbol>
+        <symbol id="icon-school" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2v-5"/>
+        </symbol>
+        <symbol id="icon-tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42l-8.704-8.704Z"/><line x1="7" x2="7.01" y1="7" y2="7"/>
+        </symbol>
+        <symbol id="icon-layout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="3" x2="21" y1="9" y2="9"/><line x1="9" x2="9" y1="21" y2="9"/>
+        </symbol>
+        <symbol id="icon-more" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
+        </symbol>
+    </svg>
+    <!-- [/LOCK] -->
+
+    <main class="flex-grow w-full">
+        <!-- Área vazia para foco no footer -->
+    </main>
+
+    <div class="popup-overlay fixed inset-0 bg-black/60 z-[90]" onclick="togglePopup()"></div>
+
+    <div id="custom-popup" class="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-[3rem] shadow-2xl h-[72vh] overflow-y-auto">
+        <div class="sticky top-0 bg-white pt-5 pb-3 z-10" onclick="togglePopup()">
+            <div class="w-16 h-1.5 bg-gray-200 rounded-full mx-auto cursor-pointer active:bg-gray-300 transition-colors"></div>
+        </div>
+        <div id="popup-content-area" class="px-8 pb-12">
+            <!-- Conteúdo carregado via Script -->
+        </div>
+    </div>
+
+    <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 w-full bg-white border-t border-gray-100 z-[80] flex items-start">
+        <div class="grid grid-cols-5 w-full h-full max-w-7xl mx-auto">
+            <!-- Início -->
+            <a href="index.html" class="nav-item click-bounce flex flex-col items-center justify-center text-gray-400">
+                <svg class="w-6 h-6"><use href="#icon-house"></use></svg>
+                <span class="text-[10px] font-semibold mt-1">Início</span>
+            </a>
+            
+            <!-- Parceiros -->
+            <a href="parceiros.html" class="nav-item click-bounce flex flex-col items-center justify-center text-gray-400">
+                <svg class="w-6 h-6"><use href="#icon-handshake"></use></svg>
+                <span class="text-[10px] font-semibold mt-1">Parceiros</span>
+            </a>
+
+            <!-- Botão Central (Gera o Popup de Itens) -->
+            <div class="relative flex justify-center">
+                <button onclick="togglePopup()" class="floating-fab click-bounce absolute -top-8 bg-secondary text-blue-900 w-16 h-16 rounded-full flex items-center justify-center border-4 border-white">
+                    <svg class="w-9 h-9"><use href="#icon-plus"></use></svg>
+                </button>
+            </div>
+
+            <!-- Catálogo (Ativo e Não Clicável) -->
+            <a href="javascript:void(0)" class="nav-item flex flex-col items-center justify-center text-primary pointer-events-none cursor-default">
+                <svg class="w-6 h-6"><use href="#icon-book-open"></use></svg>
+                <span class="text-[10px] font-semibold mt-1">Catálogo</span>
+            </a>
+
+            <!-- Perfil -->
+            <a href="perfil.html" class="nav-item click-bounce flex flex-col items-center justify-center text-gray-400">
+                <svg class="w-6 h-6"><use href="#icon-user-round"></use></svg>
+                <span class="text-[10px] font-semibold mt-1">Perfil</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        const POPUP_CONTENT = `
+            <div class="text-center mb-6">
+                <h2 class="text-xl font-extrabold brand-font text-primary">Ações Rápidas</h2>
+                <p class="text-gray-400 text-xs">O que deseja fazer agora?</p>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <!-- Fazer Reserva -->
+                <button onclick="window.location.href='calendario.html'" class="menu-card click-bounce p-4 bg-blue-50 rounded-[2rem] border border-blue-100 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-lg shadow-blue-200 mb-2">
+                        <svg class="w-6 h-6 text-white"><use href="#icon-calendar"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-blue-900">Fazer Reserva</span>
+                </button>
+
+                <!-- Encanto Escola -->
+                <button onclick="window.location.href='escola.html'" class="menu-card click-bounce p-4 bg-purple-50 rounded-[2rem] border border-purple-100 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center shadow-lg shadow-purple-200 mb-2">
+                        <svg class="w-6 h-6 text-white"><use href="#icon-school"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-purple-900">Encanto Escola</span>
+                </button>
+
+                <!-- Brinquedos Usados -->
+                <button onclick="window.location.href='usados.html'" class="menu-card click-bounce p-4 bg-orange-50 rounded-[2rem] border border-orange-100 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-orange-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-orange-200 mb-2">
+                        <svg class="w-6 h-6 text-white"><use href="#icon-tag"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-orange-900 text-center leading-tight">Brinquedos Usados</span>
+                </button>
+
+                <!-- Criar Site -->
+                <button onclick="window.location.href='site.html'" class="menu-card click-bounce p-4 bg-slate-50 rounded-[2rem] border border-slate-200 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-slate-700 text-white rounded-full flex items-center justify-center shadow-lg shadow-slate-300 mb-2">
+                        <svg class="w-6 h-6 text-white"><use href="#icon-layout"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-slate-900">Criar Site</span>
+                </button>
+
+                <!-- Convide e Ganhe -->
+                <button onclick="window.location.href='convide.html'" class="menu-card click-bounce p-4 bg-yellow-50 rounded-[2rem] border border-yellow-100 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-secondary text-blue-900 rounded-full flex items-center justify-center shadow-lg shadow-yellow-200 mb-2">
+                        <svg class="w-6 h-6"><use href="#icon-gift"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-yellow-900 text-center leading-tight">Convide Ganhe</span>
+                </button>
+
+                <!-- WhatsApp -->
+                <button onclick="window.location.href='https://wa.me/5547992277324?text=Olá!%20Gostaria%20de%20falar%20sobre%20as%20festas.'" class="menu-card click-bounce p-4 bg-green-50 rounded-[2rem] border border-green-100 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-green-200 mb-2">
+                        <svg class="w-6 h-6 text-white"><use href="#icon-whatsapp"></use></svg>
+                    </div>
+                    <span class="font-bold text-xs text-green-900 text-center">WhatsApp</span>
+                </button>
+            </div>
+
+            <!-- Botão Outros (Centralizado e Menor) -->
+            <div class="mt-6 flex justify-center">
+                <button onclick="window.location.href='outros.html'" class="menu-card click-bounce py-3 px-10 bg-gray-50 rounded-full border border-gray-100 flex items-center gap-2 shadow-sm">
+                    <svg class="w-4 h-4 text-gray-500"><use href="#icon-more"></use></svg>
+                    <span class="font-bold text-xs text-gray-600">Outros</span>
+                </button>
+            </div>
+        `;
+
+        let isPopupLoaded = false;
+        function togglePopup() {
+            const body = document.body;
+            const contentArea = document.getElementById('popup-content-area');
+            if (!body.classList.contains('popup-open')) {
+                if (!isPopupLoaded) {
+                    contentArea.innerHTML = POPUP_CONTENT;
+                    isPopupLoaded = true;
+                }
+                body.classList.add('popup-open');
+            } else {
+                body.classList.remove('popup-open');
+            }
+        }
+    </script>
+</body>
+</html>
+</body>
+</html>
