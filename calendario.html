@@ -138,7 +138,6 @@
             z-index: 5;
         }
 
-        /* Efeito de carregamento para fotos */
         .img-skeleton {
             background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
             background-size: 200% 100%;
@@ -190,30 +189,37 @@
 </head>
 <body class="pb-32 bg-slate-50">
 
-    <!-- Cabeçalho com espaço em branco para personalização futura -->
-    <header class="pt-48 pb-4 text-center bg-white border-b border-slate-50">
+    <header class="pt-24 pb-4 text-center bg-white border-b border-slate-50">
         <h1 class="text-2xl font-bold text-[#003399] tracking-tight">Escolha a data</h1>
     </header>
 
     <main class="px-5">
         <div class="bg-white rounded-[24px] p-6 shadow-sm border border-slate-100 mt-2">
-            <div class="flex justify-between items-center mb-6">
-                <button onclick="changeMonth(-1)" class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-50 text-[#003399]"><i class="fas fa-chevron-left"></i></button>
-                <h2 id="currentMonthLabel" class="font-bold text-[#003399] text-lg tracking-tight uppercase">Janeiro 2024</h2>
-                <button onclick="changeMonth(1)" class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-50 text-[#003399]"><i class="fas fa-chevron-right"></i></button>
+            <!-- Loader de Calendário -->
+            <div id="calendarLoader" class="hidden flex flex-col items-center py-10">
+                <div class="w-8 h-8 border-4 border-[#003399] border-t-transparent rounded-full animate-spin"></div>
+                <p class="text-[10px] font-bold text-slate-400 mt-4 uppercase">Carregando disponibilidade...</p>
             </div>
 
-            <div class="calendar-grid mb-6" id="calendarGrid"></div>
-
-            <div class="space-y-1 pt-4 border-t border-slate-50">
-                <div class="flex justify-between items-center text-[10px] uppercase font-bold tracking-wider mb-1">
-                    <span class="text-green-600">Muitos Brinquedos</span>
-                    <span class="text-red-500">Poucas Vagas</span>
+            <div id="calendarContent">
+                <div class="flex justify-between items-center mb-6">
+                    <button onclick="changeMonth(-1)" class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-50 text-[#003399]"><i class="fas fa-chevron-left"></i></button>
+                    <h2 id="currentMonthLabel" class="font-bold text-[#003399] text-lg tracking-tight uppercase">Janeiro 2024</h2>
+                    <button onclick="changeMonth(1)" class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-50 text-[#003399]"><i class="fas fa-chevron-right"></i></button>
                 </div>
-                <div class="availability-bar-container">
-                    <div id="availArrow" class="availability-arrow"><i class="fas fa-caret-down"></i></div>
-                    <div class="availability-bar">
-                        <div id="availFill" class="availability-fill" style="width: 0%"></div>
+
+                <div class="calendar-grid mb-6" id="calendarGrid"></div>
+
+                <div class="space-y-1 pt-4 border-t border-slate-50">
+                    <div class="flex justify-between items-center text-[10px] uppercase font-bold tracking-wider mb-1">
+                        <span class="text-green-600">Muitos Brinquedos</span>
+                        <span class="text-red-500">Poucas Vagas</span>
+                    </div>
+                    <div class="availability-bar-container">
+                        <div id="availArrow" class="availability-arrow"><i class="fas fa-caret-down"></i></div>
+                        <div class="availability-bar">
+                            <div id="availFill" class="availability-fill" style="width: 0%"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -299,10 +305,11 @@
     </div>
 
     <datalist id="sfs-streets">
-        <!-- Populado via script loadStreets() -->
+        <!-- Populado via script -->
     </datalist>
 
     <script>
+        // SUBSTITUA PELO NOVO URL DE IMPLEMENTAÇÃO (Deploy)
         const API_URL = "https://script.google.com/macros/s/AKfycbywjbNS1DKl7jElh0BfW3DuJE_dopbRPlUCn9n4ou8JgECGfE8M-CfAmCJLQdMkYeff/exec"; 
         
         let currentDate = new Date();
@@ -326,7 +333,6 @@
         let couponCode = "";
         let appliedDiscount = 0;
         
-        // Variáveis VAR para persistência
         var userName = "";
         var userZap = "";
         var userRua = "";
@@ -388,19 +394,40 @@
                 const streets = await response.json();
                 const datalist = document.getElementById('sfs-streets');
                 datalist.innerHTML = streets.map(s => `<option value="${s}">`).join('');
-            } catch (e) {
-                console.warn("Datalist indisponível.");
-            }
+            } catch (e) { console.warn("Datalist indisponível."); }
         }
 
         async function fetchData() {
             if (!API_URL) return;
+            const loader = document.getElementById('calendarLoader');
+            const content = document.getElementById('calendarContent');
+            
             try {
+                loader.classList.remove('hidden');
+                content.classList.add('opacity-30');
+                
                 const res = await fetch(API_URL);
+                if (!res.ok) throw new Error("A resposta da planilha não foi OK. Verifique a publicação do Script.");
+                
                 const data = await res.json();
                 sheetData = data;
                 renderCalendar();
-            } catch (e) { console.warn("Planilha offline"); }
+                
+                loader.classList.add('hidden');
+                content.classList.remove('opacity-30');
+            } catch (e) { 
+                console.error("Erro técnico:", e);
+                const grid = document.getElementById('calendarGrid');
+                if (grid) {
+                    grid.innerHTML = `<div class="col-span-7 p-6 text-center text-red-500 text-[10px] font-bold bg-red-50 rounded-2xl border border-red-100 uppercase tracking-tighter leading-relaxed">
+                        ⚠️ ERRO DE LIGAÇÃO COM A PLANILHA!<br><br>
+                        Motivo: ${e.message}<br><br>
+                        Certifique-se de que publicou o Script como 'Qualquer pessoa' e criou uma 'Nova Versão'.
+                    </div>`;
+                }
+                loader.classList.add('hidden');
+                content.classList.remove('opacity-30');
+            }
         }
 
         function changeMonth(dir) {
@@ -424,17 +451,24 @@
         }
 
         function getDayColorStyle(date) {
-            const dateStr = date.toLocaleDateString('pt-BR');
-            const dayBookings = (sheetData || []).filter(row => row['INICIO'] && row['INICIO'].includes(dateStr));
+            const d = String(date.getDate()).padStart(2, '0');
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const y = date.getFullYear();
+            const dateStr = `${d}/${m}/${y}`;
+            
+            const dayBookings = (sheetData || []).filter(row => {
+                if (!row['INICIO']) return false;
+                const entryDate = String(row['INICIO']).split(' ')[0].trim();
+                return entryDate === dateStr;
+            });
+
             let locadosNoDia = 0;
             dayBookings.forEach(b => locadosNoDia += parseInt(b['ITENS LOCADOS'] || 0));
             
             if (locadosNoDia === 0) return 'background-color: #059669; color: white;';
             
-            // Sensibilidade aumentada: se tiver pelo menos 1 locado, já muda visivelmente a cor
+            // Sensibilidade calibrada: quanto mais perto de totalEstoque, mais vermelho
             const ratio = Math.pow(Math.min(locadosNoDia / totalEstoque, 1), 0.7);
-            
-            // Interpolação de cor (Verde: 5, 150, 105 para Vermelho: 220, 38, 38)
             const r = Math.round(5 + (220 - 5) * ratio);
             const g = Math.round(150 + (38 - 150) * ratio);
             const b = Math.round(105 + (38 - 105) * ratio);
@@ -472,8 +506,17 @@
         }
 
         function updateAvailBar(date) {
-            const dateStr = date.toLocaleDateString('pt-BR');
-            const dayBookings = (sheetData || []).filter(row => row['INICIO'] && row['INICIO'].includes(dateStr));
+            const d = String(date.getDate()).padStart(2, '0');
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const y = date.getFullYear();
+            const dateStr = `${d}/${m}/${y}`;
+            
+            const dayBookings = (sheetData || []).filter(row => {
+                if (!row['INICIO']) return false;
+                const entryDate = String(row['INICIO']).split(' ')[0].trim();
+                return entryDate === dateStr;
+            });
+
             let locados = 0; dayBookings.forEach(b => locados += parseInt(b['ITENS LOCADOS'] || 0));
             const perc = Math.max(0, 100 - ((locados / totalEstoque) * 100));
             const arrow = document.getElementById('availArrow');
@@ -505,8 +548,12 @@
             const sort = document.getElementById('sortFilter').value;
             const ageF = document.getElementById('ageFilter').value;
             const mfNames = ["Tobogã Médio", "Futebol de Sabão", "Escorrega com Bolinhas"];
-            const dateStr = selectedDate ? selectedDate.toLocaleDateString('pt-BR') : "";
-            const isMfBooked = (sheetData || []).some(row => row['INICIO'] && row['INICIO'].includes(dateStr) && mfNames.some(n => row['BRINQUEDO'] && row['BRINQUEDO'].includes(n)));
+            const d = String(selectedDate.getDate()).padStart(2, '0');
+            const m = String(selectedDate.getMonth() + 1).padStart(2, '0');
+            const y = selectedDate.getFullYear();
+            const dateStr = `${d}/${m}/${y}`;
+            
+            const isMfBooked = (sheetData || []).some(row => row['INICIO'] && row['INICIO'].split(' ')[0] === dateStr && mfNames.some(n => row['BRINQUEDO'] && row['BRINQUEDO'].includes(n)));
             const cartHasMf = cart.some(c => c.motorForte);
             let toys = [...TOYS_DB];
             if (ageF !== 'all') toys = toys.filter(t => t.age === ageF.replace('-', ''));
@@ -600,7 +647,6 @@
             totalFinal += frete; totalFinal += (monitorsCount * monitorHours * 30); 
             if (insuranceEnabled) totalFinal += 14.90;
 
-            // Recálculo da economia: Valor base total - (Total Final sem taxas externas)
             window.windowTotalEconomizado = Math.max(0, rawBaseTotal - (totalFinal - frete - (monitorsCount * monitorHours * 30) - (insuranceEnabled ? 14.90 : 0)));
 
             const badge = document.getElementById('discountBadge');
@@ -646,7 +692,7 @@
                 socketStrings: cart.filter(i => i.power).map(toy => `${toy.name} = ${socketDistances[toy.id] || 2}m`).join("\n"),
                 couponCode: couponCode, insuranceEnabled: insuranceEnabled ? "Sim" : "Não",
                 needsInvoice: needsInvoice ? "Sim" : "Não", userCNPJ: window.userCNPJ, userCEP: window.userCEP,
-                toysFormattedList: cart.map(i => `x${i.qty} ${i.name}`).join("\n"), itensCount: cart.reduce((sum, i) => sum + i.qty, 0),
+                toysFormattedList: cart.map(i => `${i.qty}x ${i.name}`).join("\n"), itensCount: cart.reduce((sum, i) => sum + i.qty, 0),
                 total: document.getElementById('totalValueText').innerText
             };
             try { await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) }); } catch (e) {}
@@ -690,9 +736,9 @@
                         <i class="fas fa-lock text-blue-600 mt-1"></i>
                         <p class="text-[10px] text-blue-800 font-medium leading-relaxed">Suas informações são utilizadas apenas pelo site para agendamento e formalização segura da locação.</p>
                     </div>
-                    <div class="h-16"></div>`;
+                    <div class="h-32"></div>`;
             } else if (currentStep === 'address') {
-                container.innerHTML = `${h('Onde é a festa?')}<select id="userBairro" onchange="selectedBairro=this.value;updateSummary()" class="w-full p-5 bg-slate-50 rounded-2xl outline-none mb-4 text-sm font-medium"><option value="">selecione o bairro</option>${Object.keys(BAIRROS).map(b => `<option value="${b}" ${selectedBairro===b?'selected':''}>${b.toUpperCase()}</option>`).join('')}</select><input type="text" id="userRua" value="${window.userRua}" list="sfs-streets" placeholder="nome da rua" maxlength="35" oninput="formatStreet(this)" class="w-full p-5 bg-slate-50 rounded-2xl outline-none border-2 border-transparent focus:border-[#003399] transition-all text-sm mb-4"><div class="flex gap-3 items-center mb-6"><div class="w-20 shrink-0"><input type="text" id="userNum" value="${userSN ? '' : window.userNum}" placeholder="n°" ${userSN ? 'disabled' : ''} maxlength="4" oninput="this.value = this.value.replace(/\\D/g, ''); saveField('userNum', this.value)" class="w-full p-5 ${userSN ? 'bg-slate-200 text-slate-400' : 'bg-slate-50'} rounded-2xl outline-none text-sm border-2 border-transparent focus:border-[#003399] transition-all font-bold"></div><div class="flex items-center gap-2 px-4 py-3 bg-slate-50 rounded-full border-2 ${userSN ? 'border-[#003399]' : 'border-transparent'} cursor-pointer transition-all h-[64px]" onclick="toggleSN()"><div class="toggle-switch scale-75 shrink-0 ${userSN?'on':''}"><div class="toggle-knob"></div></div><span class="text-[9px] font-medium text-slate-600 uppercase tracking-tighter">sem número</span></div></div><input type="text" id="userDetails" value="${window.userDetails}" placeholder="detalhes da casa (cor, portão, etc)" maxlength="70" oninput="saveField('userDetails', this.value)" class="w-full p-5 bg-slate-50 rounded-2xl outline-none border-2 border-transparent focus:border-[#003399] transition-all text-sm mb-4"><textarea id="userObs" placeholder="observações adicionais" maxlength="140" oninput="saveField('userObs', this.value)" class="w-full p-5 bg-slate-50 rounded-2xl outline-none text-sm h-24 mb-4">${window.userObs}</textarea><div class="h-16"></div>`;
+                container.innerHTML = `${h('Onde é a festa?')}<select id="userBairro" onchange="selectedBairro=this.value;updateSummary()" class="w-full p-5 bg-slate-50 rounded-2xl outline-none mb-4 text-sm font-medium"><option value="">selecione o bairro</option>${Object.keys(BAIRROS).map(b => `<option value="${b}" ${selectedBairro===b?'selected':''}>${b.toUpperCase()}</option>`).join('')}</select><input type="text" id="userRua" value="${window.userRua}" list="sfs-streets" placeholder="nome da rua" maxlength="35" oninput="formatStreet(this)" class="w-full p-5 bg-slate-50 rounded-2xl outline-none border-2 border-transparent focus:border-[#003399] transition-all text-sm mb-4"><div class="flex gap-3 items-center mb-6"><div class="w-20 shrink-0"><input type="text" id="userNum" value="${userSN ? '' : window.userNum}" placeholder="n°" ${userSN ? 'disabled' : ''} maxlength="4" oninput="this.value = this.value.replace(/\\D/g, ''); saveField('userNum', this.value)" class="w-full p-5 ${userSN ? 'bg-slate-200 text-slate-400' : 'bg-slate-50'} rounded-2xl outline-none text-sm border-2 border-transparent focus:border-[#003399] transition-all font-bold"></div><div class="flex items-center gap-2 px-4 py-3 bg-slate-50 rounded-full border-2 ${userSN ? 'border-[#003399]' : 'border-transparent'} cursor-pointer transition-all h-[64px]" onclick="toggleSN()"><div class="toggle-switch scale-75 shrink-0 ${userSN?'on':''}"><div class="toggle-knob"></div></div><span class="text-[9px] font-medium text-slate-600 uppercase tracking-tighter">sem número</span></div></div><input type="text" id="userDetails" value="${window.userDetails}" placeholder="detalhes da casa (cor, portão, etc)" maxlength="70" oninput="saveField('userDetails', this.value)" class="w-full p-5 bg-slate-50 rounded-2xl outline-none border-2 border-transparent focus:border-[#003399] transition-all text-sm mb-4"><textarea id="userObs" placeholder="observações adicionais" maxlength="140" oninput="saveField('userObs', this.value)" class="w-full p-5 bg-slate-50 rounded-2xl outline-none text-sm h-24 mb-4">${window.userObs}</textarea><div class="h-32"></div>`;
             } else if (currentStep === 'party') {
                 const startH = parseInt(startTime.split(':')[0]);
                 let duration = (endTime === "BUSCAR NO OUTRO DIA (MANHÃ)") ? (22 - startH) + 1 : parseInt(endTime.split(':')[0]) - startH;
@@ -711,20 +757,20 @@
                 <div class="mt-6 flex flex-col items-center">
                     <div class="p-3 rounded-xl bg-blue-50 border border-blue-100 flex items-center gap-2"><i class="fas fa-gift text-blue-500 text-xs"></i><span class="text-[10px] font-bold text-blue-600 uppercase">6 horas inclusas no valor</span></div>
                     ${(duration > 6) ? `<p class="text-[10px] font-bold text-red-500 mt-4 text-center uppercase tracking-tight">Horário excedido! Acréscimo de R$ 5,00 por hora extra</p>` : ''}
-                </div><div class="h-16"></div>`;
+                </div><div class="h-32"></div>`;
             } else if (currentStep === 'details') {
                 container.innerHTML = `${h('Preferências')}<div class="p-6 bg-slate-50 rounded-[24px] mb-4"><p class="text-[10px] font-black text-slate-400 mb-4 uppercase tracking-widest">Monitores?</p><div class="flex gap-2">${[0,1,2].map(m => `<button onclick="monitorsCount=${m};updateSummary();renderForm()" class="flex-1 py-2 rounded-lg font-medium border-2 ${monitorsCount===m?'border-[#003399] bg-[#003399] text-white':'border-white bg-white text-slate-300'} text-xs">${m===0?'NÃO':m+' MONIT.'}</button>`).join('')}</div>${monitorsCount > 0 ? `<div class="mt-4"><label class="text-[10px] font-bold text-slate-400 ml-1 uppercase">Por quantas horas?</label><select onchange="monitorHours=parseInt(this.value);updateSummary()" class="w-full p-4 bg-white rounded-xl mt-1 text-sm font-bold border-2 border-slate-100">${[2,3,4,5,6,7,8].map(h => `<option value="${h}" ${monitorHours===h?'selected':''}>${h} HORAS</option>`).join('')}</select></div>` : ''}</div>
                 ${cart.some(i => i.id === 3) ? `<div class="p-6 bg-slate-50 rounded-[24px] mb-4"><p class="text-[10px] font-black text-slate-400 mb-4 uppercase tracking-widest text-center">Em caso de chuva, o local da piscina molha pelo menos um pouco?</p><div class="flex gap-2 mt-4">${["sim", "não"].map(opt => `<button onclick="piscinaCovered='${opt}';renderForm()" class="flex-1 py-1.5 rounded-lg font-medium border-2 ${piscinaCovered===opt?'border-[#003399] bg-[#003399] text-white':'border-white bg-white text-slate-300'} text-xs">${opt.toUpperCase()}</button>`).join('')}</div></div>` : ''}
-                ${cart.some(i => i.power) ? `<div class="mt-8 mb-4 ml-1">${likedLabel('Distância das tomadas (m)')}</div>${cart.filter(i => i.power).map(toy => `<div class="p-5 bg-slate-50 rounded-2xl mb-2 flex items-center justify-between"><p class="text-[10px] font-bold text-slate-400 uppercase leading-none">${toy.name}</p><input type="number" step="2" value="${socketDistances[toy.id] || 2}" oninput="socketDistances['${toy.id}']=this.value; saveField('socketDistances', socketDistances)" class="w-20 p-2 rounded-lg border-2 border-slate-200 text-center font-bold text-[#003399] text-sm"></div>`).join('')}` : ''}<div class="h-16"></div>`;
+                ${cart.some(i => i.power) ? `<div class="mt-8 mb-4 ml-1">${likedLabel('Distância das tomadas (m)')}</div>${cart.filter(i => i.power).map(toy => `<div class="p-5 bg-slate-50 rounded-2xl mb-2 flex items-center justify-between"><p class="text-[10px] font-bold text-slate-400 uppercase leading-none">${toy.name}</p><input type="number" step="2" value="${socketDistances[toy.id] || 2}" oninput="socketDistances['${toy.id}']=this.value; saveField('socketDistances', socketDistances)" class="w-20 p-2 rounded-lg border-2 border-slate-200 text-center font-bold text-[#003399] text-sm"></div>`).join('')}` : ''}<div class="h-32"></div>`;
             } else if (currentStep === 'summary') {
                 container.innerHTML = `${h('Finalizar Reserva')}<div class="space-y-4"><div class="p-5 bg-white border-2 border-slate-50 rounded-2xl flex flex-col gap-2">${likedLabel('Cupom de desconto?')}<input type="text" id="couponInput" value="${couponCode}" placeholder="digite aqui" oninput="applyCoupon(this.value)" class="p-3 bg-slate-50 rounded-xl outline-none font-bold text-[#003399]"></div>
                 <div class="p-6 bg-slate-50 rounded-[24px] mb-4">${likedLabel('Deseja emitir Nota Fiscal?')}<div class="flex gap-2 mb-4">${[{v:true,l:"SIM"},{v:false,l:"NÃO"}].map(opt => `<button onclick="needsInvoice=${opt.v};renderForm()" class="flex-1 py-3 rounded-xl font-medium border-2 ${needsInvoice===opt.v?'border-[#003399] bg-[#003399] text-white':'border-white bg-white text-slate-300'} text-xs">${opt.l}</button>`).join('')}</div>
                 ${needsInvoice ? `<div class="space-y-4 pt-2"><div>${likedLabel('CNPJ')}<input type="tel" id="userCNPJ" value="${window.userCNPJ}" placeholder="00.000.000/0000-00" oninput="maskCNPJ(this)" class="w-full p-4 bg-white rounded-xl outline-none text-sm font-bold"></div><div>${likedLabel('CEP')}<input type="tel" id="userCEP" value="${window.userCEP}" placeholder="00.000-000" oninput="maskCEP(this)" class="w-full p-4 bg-white rounded-xl outline-none text-sm font-bold"></div></div>` : ''}</div>
                 <div class="p-5 bg-green-50 rounded-[24px] border border-green-100 flex items-center justify-between shadow-sm" onclick="insuranceEnabled=!insuranceEnabled;updateSummary();renderForm()"><div class="flex-grow pr-4">
-                    <p class="text-[11px] font-bold text-green-800 uppercase tracking-tighter">Seguro Adicional Opcional - 14,90</p>
+                    <p class="text-[11px] font-bold text-green-800 uppercase tracking-tighter">Seguro Adicional - 14,90</p>
                     <p class="text-[9px] text-green-600 leading-tight mt-1 font-medium">Proteção total contra quebra ou rasgo acidental dos brinquedos, isentando você de taxas extras de reparo.</p>
                 </div><div class="toggle-switch scale-125 shrink-0 ${insuranceEnabled?'on':''}"><div class="toggle-knob"></div></div></div>
-                <div class="p-5 bg-slate-50 rounded-2xl"><p class="text-[10px] font-bold text-slate-400 mb-2 uppercase">Detalhes do pedido</p><div id="orderDetailList"></div></div></div><div class="h-16"></div>`;
+                <div class="p-5 bg-slate-50 rounded-2xl"><p class="text-[10px] font-bold text-slate-400 mb-2 uppercase">Detalhes do pedido</p><div id="orderDetailList"></div></div></div><div class="h-32"></div>`;
                 updateSummary();
             }
         }
