@@ -178,7 +178,8 @@
 </head>
 <body class="pb-32 bg-slate-50">
 
-    <header class="pt-40 pb-12 text-center bg-white border-b border-slate-50">
+    <!-- Reduzido pt-40 para pt-12 conforme solicitado para menos espaço -->
+    <header class="pt-12 pb-12 text-center bg-white border-b border-slate-50">
         <h1 class="text-2xl font-bold text-[#003399] tracking-tight">Escolha a data</h1>
     </header>
 
@@ -290,7 +291,8 @@
     </datalist>
 
     <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbz6dbVgc4kosG3t368MFzmpKkHuW0lx407Nfj7kUm5h_flN99nwoUKcS3Mxy4spKaG9/exec"; 
+        // URL ATUALIZADA
+        const API_URL = "https://script.google.com/macros/s/AKfycbywjbNS1DKl7jElh0BfW3DuJE_dopbRPlUCn9n4ou8JgECGfE8M-CfAmCJLQdMkYeff/exec"; 
         
         let currentDate = new Date();
         let selectedDate = null;
@@ -308,7 +310,7 @@
         let monitorHours = 2;
         let rainInfo = "não molha nada";
         let piscinaCovered = "não";
-        let deliveryPreviousDay = false; // NOVA VARIÁVEL
+        let deliveryPreviousDay = false;
         let socketDistances = {};
         let couponCode = "";
         let appliedDiscount = 0;
@@ -633,8 +635,11 @@
             } else if (currentStep === 'summary') {
                 container.innerHTML = `${h('Finalizar Reserva')}<div class="space-y-4"><div class="p-5 bg-white border-2 border-slate-50 rounded-2xl flex flex-col gap-2">${likedLabel('Cupom de desconto?')}<input type="text" id="couponInput" value="${couponCode}" placeholder="digite aqui" oninput="applyCoupon(this.value)" class="p-3 bg-slate-50 rounded-xl outline-none font-bold text-[#003399]"></div>
                 <div class="p-6 bg-slate-50 rounded-[24px] mb-4">${likedLabel('Deseja emitir Nota Fiscal?')}<div class="flex gap-2 mb-4">${[{v:true,l:"SIM"},{v:false,l:"NÃO"}].map(opt => `<button onclick="needsInvoice=${opt.v};renderForm()" class="flex-1 py-3 rounded-xl font-medium border-2 ${needsInvoice===opt.v?'border-[#003399] bg-[#003399] text-white':'border-white bg-white text-slate-300'} text-xs">${opt.l}</button>`).join('')}</div>
-                ${needsInvoice ? `<div class="space-y-4 pt-2"><div>${likedLabel('CNPJ')}<input type="tel" id="userCNPJ" value="${window.userCNPJ}" placeholder="00.000.000/0000-00" oninput="maskCNPJ(this)" class="w-full p-4 bg-white rounded-xl outline-none text-sm font-bold"></div><div>${likedLabel('CEP')}<input type="tel" id="userCEP" value="${window.userCEP}" placeholder="00000-000" oninput="maskCEP(this)" class="w-full p-4 bg-white rounded-xl outline-none text-sm font-bold"></div></div>` : ''}</div>
-                <div class="p-5 bg-green-50 rounded-[24px] border border-green-100 flex items-center justify-between shadow-sm" onclick="insuranceEnabled=!insuranceEnabled;updateSummary();renderForm()"><div class="flex-grow pr-4"><p class="text-[11px] font-bold text-green-800 uppercase tracking-tighter">Seguro Adicional - 14,90</p><p class="text-[9px] text-green-600 leading-tight mt-1 font-medium">Isenção de taxa extra em caso de quebra ou rasgo do brinquedo.</p></div><div class="toggle-switch scale-125 shrink-0 ${insuranceEnabled?'on':''}"><div class="toggle-knob"></div></div></div>
+                ${needsInvoice ? `<div class="space-y-4 pt-2"><div>${likedLabel('CNPJ')}<input type="tel" id="userCNPJ" value="${window.userCNPJ}" placeholder="00.000.000/0000-00" oninput="maskCNPJ(this)" class="w-full p-4 bg-white rounded-xl outline-none text-sm font-bold"></div><div>${likedLabel('CEP')}<input type="tel" id="userCEP" value="${window.userCEP}" placeholder="00.000-000" oninput="maskCEP(this)" class="w-full p-4 bg-white rounded-xl outline-none text-sm font-bold"></div></div>` : ''}</div>
+                <div class="p-5 bg-green-50 rounded-[24px] border border-green-100 flex items-center justify-between shadow-sm" onclick="insuranceEnabled=!insuranceEnabled;updateSummary();renderForm()"><div class="flex-grow pr-4">
+                    <p class="text-[11px] font-bold text-green-800 uppercase tracking-tighter">Seguro Adicional - 14,90</p>
+                    <p class="text-[9px] text-green-600 leading-tight mt-1 font-medium">Isenção de taxa extra em caso de quebra ou rasgo do brinquedo.</p>
+                </div><div class="toggle-switch scale-125 shrink-0 ${insuranceEnabled?'on':''}"><div class="toggle-knob"></div></div></div>
                 <div class="p-5 bg-slate-50 rounded-2xl"><p class="text-[10px] font-bold text-slate-400 mb-2 uppercase">Detalhes do pedido</p><div id="orderDetailList"></div></div></div>`;
                 updateSummary();
             }
