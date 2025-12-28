@@ -58,12 +58,15 @@
         .infinite-slider-track {
             display: flex;
             gap: 12px;
-            overflow-x: hidden; /* Alterado de auto para hidden para o efeito infinito fluir melhor */
+            overflow-x: hidden; 
             padding: 10px 10px 20px 10px;
             -webkit-overflow-scrolling: touch;
             scroll-behavior: auto !important;
             white-space: nowrap;
+            cursor: grab;
         }
+        .infinite-slider-track:active { cursor: grabbing; }
+
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
@@ -173,7 +176,7 @@
             letter-spacing: 0.05em;
         }
 
-        #promo-modal-overlay {
+        #promo-modal-overlay, #validate-modal-overlay {
             z-index: 10000;
             background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(15px);
@@ -389,6 +392,32 @@
             display: block;
             margin-top: 2px;
         }
+
+        /* --- VALIDATION SECTION --- */
+        .loyal-banner {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            border-radius: 2.5rem;
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.2);
+            margin: 20px 0;
+            cursor: pointer;
+        }
+        .validate-input {
+            width: 100%;
+            background: #f1f5f9;
+            border: 2px solid #e2e8f0;
+            padding: 14px 20px;
+            border-radius: 1.25rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 12px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .validate-input:focus { border-color: var(--brand-blue); }
     </style>
 </head> 
 <!DOCTYPE html>
@@ -785,6 +814,27 @@
         </div>
     </div>
 
+    <!-- MODAL DE VALIDAÇÃO (CLIENTE ANTIGO) -->
+    <div id="validate-modal-overlay" onclick="closeValidateModal(event)">
+        <div class="luxury-modal" onclick="event.stopPropagation()">
+            <div class="promo-header-premium !bg-blue-800">
+                <div class="luxury-badge-top !bg-yellow-400">Verificação</div>
+                <h3 class="text-2xl font-black brand-font uppercase leading-none mb-2">VALIDAR DESCONTO</h3>
+                <p class="text-blue-100 text-[11px] font-medium opacity-80 uppercase tracking-widest">30% OFF PARA CLIENTES FIÉIS</p>
+            </div>
+            <div class="ticket-body !pt-6" id="validate-form-container">
+                <input type="text" id="val-nome" class="validate-input" placeholder="Nome Completo">
+                <input type="text" id="val-bairro" class="validate-input" placeholder="Bairro">
+                <input type="text" id="val-rua" class="validate-input" placeholder="Rua">
+                <input type="text" id="val-numero" class="validate-input" placeholder="Número da Casa">
+                <input type="tel" id="val-tel" class="validate-input" placeholder="Telefone (WhatsApp)">
+                
+                <button onclick="handleValidate()" id="btn-validate-submit" class="w-full bg-blue-600 text-white font-black py-4 rounded-2xl shadow-xl active:scale-95 transition-all text-xs uppercase tracking-widest mb-4 mt-2">Validar Cadastro</button>
+                <button onclick="closeValidateModal()" class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Voltar</button>
+            </div>
+        </div>
+    </div>
+
     <main class="flex-grow">
         <!-- Hero Section -->
         <section class="bg-gradient-to-b from-blue-600 to-blue-500 text-white rounded-b-[2.5rem] shadow-xl px-6 pt-24 pb-14 text-center relative overflow-hidden">
@@ -823,6 +873,17 @@
                     <div class="slider-card" onclick="window.location.href='calendario.html'"><img src="https://www.dropbox.com/scl/fi/3ulqvdy513l94frbqa99p/pingpong.webp?rlkey=zwzys2yjemczin4ebi3c22jq8&st=w8pcvikq&raw=1"><div class="card-overlay"><span class="card-title brand-font">Ping Pong</span></div></div>
                     <div class="slider-card" onclick="window.location.href='calendario.html'"><img src="https://www.dropbox.com/scl/fi/zpcyj8a466fhms7vqwcr6/mesas.webp?rlkey=8ca2hbxbnvxbftagrprq7scj7&st=bb24hbti&raw=1"><div class="card-overlay"><span class="card-title brand-font">Jogos de Mesa</span></div></div>
                 </div>
+            </div>
+        </section>
+
+        <!-- AREA DE FIDELIDADE -->
+        <section class="px-6 mb-8">
+            <div class="loyal-banner" onclick="openValidateModal()">
+                <div class="flex items-center justify-center gap-3 mb-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-400"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <h3 class="text-lg font-black brand-font uppercase">Já locou conosco?</h3>
+                </div>
+                <p class="text-[11px] font-bold uppercase tracking-widest text-blue-100">Clique aqui e ganhe 30% de desconto!</p>
             </div>
         </section>
 
@@ -1191,6 +1252,10 @@
 
         window.openPromoModal = () => { document.getElementById('promo-modal-overlay').style.display = 'flex'; toggleScroll(true); };
         window.closePromoModal = () => { document.getElementById('promo-modal-overlay').style.display = 'none'; toggleScroll(false); };
+        
+        window.openValidateModal = () => { document.getElementById('validate-modal-overlay').style.display = 'flex'; toggleScroll(true); };
+        window.closeValidateModal = () => { document.getElementById('validate-modal-overlay').style.display = 'none'; toggleScroll(false); };
+
         window.copyPromoCoupon = () => {
             const text = document.getElementById('coupon-code').innerText;
             const el = document.createElement('textarea'); el.value = text; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
@@ -1198,38 +1263,162 @@
             setTimeout(() => { document.getElementById('copy-status').innerText = "Toque para copiar"; }, 2000);
         };
         window.spinWheel = () => { if(!isSpinning) triggerSpin(2); };
-        window.closeRoulette = () => { document.getElementById('roulette-overlay').style.display = 'none'; toggleScroll(false); sessionStorage.setItem('encanto_roulette_clean', 'true'); };
+        
+        // ROLETA SÓ APARECE UMA VEZ POR NAVEGADOR
+        window.closeRoulette = () => { 
+            document.getElementById('roulette-overlay').style.display = 'none'; 
+            toggleScroll(false); 
+            localStorage.setItem('encanto_roulette_seen', 'true'); 
+        };
         
         function showWinPopup(prize) {
             document.getElementById('roulette-modal').innerHTML = `<div class="py-4 text-center"><div class="text-6xl mb-6">🎈</div><h3 class="text-3xl font-black text-white brand-font mb-2 uppercase">GANHOU!</h3><p class="text-blue-100 font-bold mb-6">${prize.label}</p><div class="bg-white/10 border-2 border-white/20 border-dashed rounded-2xl p-6 mb-8"><span id="win-coupon-code" class="text-3xl font-black text-yellow-400 tracking-widest uppercase">${prize.code}</span></div><button onclick="copyWinCoupon('win-coupon-code', this)" class="w-full bg-yellow-400 text-slate-900 font-black py-4 rounded-2xl shadow-xl text-sm mb-3">Copiar Cupom</button><button onclick="closeRoulette()" class="text-white/50 text-[10px] font-bold uppercase">Sair</button></div>`;
         }
         window.copyWinCoupon = (id, btn) => { const el = document.createElement('textarea'); el.value = document.getElementById(id).innerText; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el); btn.innerText = "COPIADO! ✅"; setTimeout(closeRoulette, 1000); };
 
-        /* --- CARROSSEL INFINITO AJUSTADO --- */
+        /* --- LÓGICA DE VALIDAÇÃO AVANÇADA --- */
+        const norm = (str) => {
+            if (!str) return "";
+            return str.toString().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+        };
+
+        const isStreetSimilar = (input, db) => {
+            const s1 = norm(input);
+            const s2 = norm(db);
+            if (s1 === s2) return true;
+            if (s1.length > 4 && s2.includes(s1)) return true;
+            if (s2.length > 4 && s1.includes(s2)) return true;
+            return false;
+        };
+
+        const normNum = (num) => {
+            const n = norm(num);
+            if (n === "" || n === "s/n" || n === "sn" || n === "0" || n === "n/a" || n === "na" || n === "-") return "sn";
+            return n;
+        };
+
+        // LISTA DE CUPONS ALEATÓRIOS PERSISTENTES
+        const loyalCoupons = ["UIOU321", "3U2O1IU", "U3O1I2U", "21O3OI3", "12O3123", "OU1IO33", "13O2I3U", "0132139"];
+        
+        const getPersistentLoyalCoupon = () => {
+            let saved = localStorage.getItem('encanto_assigned_loyal_coupon');
+            if(!saved) {
+                saved = loyalCoupons[Math.floor(Math.random() * loyalCoupons.length)];
+                localStorage.setItem('encanto_assigned_loyal_coupon', saved);
+            }
+            return saved;
+        };
+
+        window.handleValidate = async () => {
+            const btn = document.getElementById('btn-validate-submit');
+            const inNome = document.getElementById('val-nome').value;
+            const inBairro = document.getElementById('val-bairro').value;
+            const inRua = document.getElementById('val-rua').value;
+            const inNumero = document.getElementById('val-numero').value;
+            const inTel = document.getElementById('val-tel').value;
+
+            btn.innerText = "Validando...";
+            btn.disabled = true;
+
+            try {
+                const JSON_URL = 'clientes.json';
+                const response = await fetch(JSON_URL + '?t=' + Date.now());
+                const clientes = await response.json();
+                
+                const cleanedTelInput = inTel.replace(/\D/g, '');
+                let success = false;
+
+                for (let c of clientes) {
+                    // 1. Validar Telefone (8 dígitos seguidos)
+                    if (c.telefone && cleanedTelInput.length >= 8) {
+                        const dbTel = c.telefone.replace(/\D/g, '');
+                        if (dbTel.includes(cleanedTelInput) || cleanedTelInput.includes(dbTel)) {
+                            success = true; break;
+                        }
+                    }
+
+                    // 2. Validar Bairro + Nome da Rua + Numero da Casa
+                    if (c.bairro && c.rua && c.numero) {
+                        if (norm(inBairro) === norm(c.bairro) && isStreetSimilar(inRua, c.rua) && normNum(inNumero) === normNum(c.numero)) {
+                            success = true; break;
+                        }
+                    }
+
+                    // 3. Validar Nome + Nome da Rua
+                    if (c.nome && c.rua && norm(inNome) !== "" && norm(inNome) !== "no name" && norm(inNome) !== "-") {
+                        if (norm(inNome) === norm(c.nome) && isStreetSimilar(inRua, c.rua)) {
+                            success = true; break;
+                        }
+                    }
+
+                    // 4. Validar Nome da Rua + Número da Casa
+                    if (c.rua && c.numero) {
+                        if (isStreetSimilar(inRua, c.rua) && normNum(inNumero) === normNum(c.numero)) {
+                            success = true; break;
+                        }
+                    }
+                }
+
+                if (success) {
+                    const couponToGive = getPersistentLoyalCoupon();
+                    document.getElementById('validate-form-container').innerHTML = `
+                        <div class="py-4 text-center">
+                            <div class="text-5xl mb-4">🏆</div>
+                            <h3 class="text-2xl font-black text-blue-600 brand-font mb-2">CLIENTE RECONHECIDO!</h3>
+                            <p class="text-slate-500 text-sm font-bold mb-6">Obrigado pela fidelidade! Aqui está seu cupom de 30% OFF.</p>
+                            <div class="bg-blue-50 border-2 border-blue-200 border-dashed rounded-2xl p-6 mb-6">
+                                <span class="text-3xl font-black text-blue-600 tracking-widest uppercase">${couponToGive}</span>
+                            </div>
+                            <button onclick="copyToClipboard('${couponToGive}', this)" class="w-full bg-blue-600 text-white font-black py-4 rounded-2xl shadow-xl text-sm mb-3">Copiar Cupom</button>
+                        </div>
+                    `;
+                } else {
+                    btn.innerText = "Dados não conferem!";
+                    btn.disabled = false;
+                    setTimeout(() => btn.innerText = "Validar Cadastro", 3000);
+                }
+            } catch (err) {
+                btn.innerText = "Erro no servidor";
+                btn.disabled = false;
+                setTimeout(() => btn.innerText = "Validar Cadastro", 3000);
+            }
+        };
+
+        window.copyToClipboard = (text, btn) => {
+            const el = document.createElement('textarea'); el.value = text; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
+            const oldText = btn.innerText; btn.innerText = "COPIADO! ✅";
+            setTimeout(() => { btn.innerText = oldText; closeValidateModal(); }, 1500);
+        };
+
+        /* --- GATILHOS DA ROLETA --- */
+        const triggerRoulette = () => {
+            if(localStorage.getItem('encanto_roulette_seen')) return;
+            document.getElementById('roulette-overlay').style.display = 'flex';
+            toggleScroll(true);
+        };
+
+        /* --- CARROSSEL INFINITO INTERATIVO --- */
         function setupSlider() {
             const track = document.getElementById('infinite-catalog'); 
             if (!track) return;
             
-            // Clonamos os itens para criar o loop visual
             const items = Array.from(track.children);
             items.forEach(item => track.appendChild(item.cloneNode(true)));
-            items.forEach(item => track.appendChild(item.cloneNode(true))); // Triplicamos para garantir cobertura
+            items.forEach(item => track.appendChild(item.cloneNode(true)));
             
             let isPaused = false;
-            let scrollSpeed = 0.9; // Velocidade solicitada
-            
-            // Largura de um conjunto completo de itens
+            let scrollSpeed = 0.9;
             let singleSetWidth = 0;
-            items.forEach(item => {
-                singleSetWidth += item.offsetWidth + 12; // Largura + Gap
-            });
+            items.forEach(item => { singleSetWidth += item.offsetWidth + 12; });
+
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+            let pauseTimer;
 
             function animate() {
-                if (!isPaused) {
+                if (!isPaused && !isDown) {
                     track.scrollLeft += scrollSpeed;
-                    
-                    // Se o scroll passar do final do primeiro set, reseta para o início
-                    // Mantendo a fluidez
                     if (track.scrollLeft >= singleSetWidth) {
                         track.scrollLeft -= singleSetWidth;
                     }
@@ -1237,23 +1426,69 @@
                 requestAnimationFrame(animate);
             }
 
-            // Pausa ao tocar/interagir
-            track.addEventListener('touchstart', () => isPaused = true);
-            track.addEventListener('touchend', () => setTimeout(() => isPaused = false, 1500));
-            track.addEventListener('mousedown', () => isPaused = true);
-            track.addEventListener('mouseup', () => isPaused = false);
+            const startInteracting = (x) => {
+                isDown = true;
+                isPaused = true;
+                clearTimeout(pauseTimer);
+                startX = x - track.offsetLeft;
+                scrollLeft = track.scrollLeft;
+            };
+
+            const stopInteracting = () => {
+                isDown = false;
+                pauseTimer = setTimeout(() => { isPaused = false; }, 4000); 
+            };
+
+            const move = (x) => {
+                if (!isDown) return;
+                const walk = (x - track.offsetLeft - startX) * 1.5;
+                track.scrollLeft = scrollLeft - walk;
+            };
+
+            track.addEventListener('mousedown', (e) => startInteracting(e.pageX));
+            window.addEventListener('mouseup', stopInteracting);
+            track.addEventListener('mousemove', (e) => { if(isDown) e.preventDefault(); move(e.pageX); });
+
+            track.addEventListener('touchstart', (e) => startInteracting(e.touches[0].pageX));
+            track.addEventListener('touchend', stopInteracting);
+            track.addEventListener('touchmove', (e) => move(e.touches[0].pageX));
 
             animate();
         }
 
         document.addEventListener('DOMContentLoaded', () => { 
             setupSlider(); drawWheel(); startCountdown(); 
-            if(!sessionStorage.getItem('encanto_roulette_clean')) { 
-                setTimeout(() => { document.getElementById('roulette-overlay').style.display = 'flex'; toggleScroll(true); }, 1200); 
-            } 
+            
+            // GATILHO 1: TEMPO (40 SEGUNDOS)
+            setTimeout(triggerRoulette, 40000);
+
+            // GATILHO 2: SCROLL RÁPIDO PARA CIMA
+            let lastScroll = 0;
+            window.addEventListener('scroll', () => {
+                let current = window.pageYOffset || document.documentElement.scrollTop;
+                if (current < lastScroll && (lastScroll - current) > 120) { // Detecta subida rápida
+                    triggerRoulette();
+                }
+                lastScroll = current <= 0 ? 0 : current;
+            }, { passive: true });
+
+            // GATILHO 3: BOTÃO VOLTAR (BACK TRAP)
+            history.pushState(null, null, location.href);
+            window.onpopstate = function() {
+                if(!localStorage.getItem('encanto_roulette_seen')) {
+                    triggerRoulette();
+                    history.pushState(null, null, location.href);
+                }
+            };
+
+            // GATILHO 4: MOUSE LEAVE (INTENÇÃO DE FECHAR ABA)
+            document.addEventListener('mouseleave', (e) => {
+                if(e.clientY < 0) triggerRoulette();
+            });
         });
     </script>
-    <!DOCTYPE html>
+</body>
+<!DOCTYPE html>
 <html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
@@ -1264,20 +1499,23 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Ajuste para permitir a rolagem do site original */
         html, body {
-            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
             width: 100%;
             font-family: 'Inter', sans-serif;
             background-color: transparent;
             -webkit-tap-highlight-color: transparent;
-            scroll-behavior: smooth;
         }
+
+        /* Bloqueia o scroll do fundo apenas quando o popup estiver aberto */
+        body.popup-open {
+            overflow: hidden;
+        }
+
         h1, h2, h3, h4, .brand-font {
             font-family: 'Baloo 2', cursive;
-        }
-        .min-h-screen-safe {
-            min-height: 100vh;
-            min-height: 100dvh;
         }
         
         /* Cores de Marca */
@@ -1286,7 +1524,7 @@
         .bg-secondary { background-color: #FACC15; }
         .text-secondary { color: #CA8A04; }
         
-        /* Animação "Vai e Volta" (Bounce) Profissional - Sem Forwards para resetar sempre */
+        /* Animação "Vai e Volta" (Bounce) */
         @keyframes bounce-click {
             0% { transform: scale(1); }
             50% { transform: scale(0.85); }
@@ -1297,16 +1535,6 @@
             animation: bounce-click 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Garantir que o link mude de cor e anime corretamente */
-        .nav-item {
-            transition: color 0.2s ease;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-        .nav-item:active {
-            color: #2563EB !important;
-        }
-
         .floating-fab {
             box-shadow: 0 8px 25px rgba(250, 204, 21, 0.4);
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -1315,8 +1543,10 @@
         #bottom-nav {
             padding-bottom: env(safe-area-inset-bottom);
             height: calc(4.5rem + env(safe-area-inset-bottom));
-            /* Garantia de visibilidade em PC/Tablet com sombra superior */
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+            background-color: white;
+            /* Garantia de renderização instantânea sem transições no carregamento */
+            transition: none !important;
         }
 
         /* Popup Slide */
@@ -1342,7 +1572,7 @@
         }
     </style>
 </head>
-<body class="text-gray-800 min-h-screen-safe flex flex-col">
+<body class="text-gray-800">
 
     <!-- [LOCK: COFRE DE ÍCONES] -->
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -1368,7 +1598,7 @@
             <polyline points="20 12 20 22 4 22 4 12"/><rect width="20" height="5" x="2" y="7"/><line x1="12" x2="12" y1="22" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
         </symbol>
         <symbol id="icon-whatsapp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 .7A2 2 0 0 1 22 16.92z"/>
         </symbol>
         <symbol id="icon-school" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2v-5"/>
@@ -1385,10 +1615,6 @@
     </svg>
     <!-- [/LOCK] -->
 
-    <main class="flex-grow w-full">
-        <!-- Área vazia para foco no footer -->
-    </main>
-
     <div class="popup-overlay fixed inset-0 bg-black/60 z-[90]" onclick="togglePopup()"></div>
 
     <div id="custom-popup" class="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-[3rem] shadow-2xl h-[72vh] overflow-y-auto">
@@ -1400,21 +1626,22 @@
         </div>
     </div>
 
-    <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 w-full bg-white border-t border-gray-100 z-[80] flex items-start">
+    <!-- FOOTER FIXO (Sempre Visível a 0.0s) -->
+    <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 w-full z-[80] flex items-start">
         <div class="grid grid-cols-5 w-full h-full max-w-7xl mx-auto">
-            <!-- Início (Ativo e Não Clicável) -->
-            <a href="javascript:void(0)" class="nav-item flex flex-col items-center justify-center text-primary pointer-events-none cursor-default">
+            <!-- Início (Selecionado e Não Clicável) -->
+            <a href="javascript:void(0)" class="flex flex-col items-center justify-center text-primary pointer-events-none cursor-default">
                 <svg class="w-6 h-6"><use href="#icon-house"></use></svg>
                 <span class="text-[10px] font-semibold mt-1">Início</span>
             </a>
             
             <!-- Parceiros -->
-            <a href="parceiros.html" class="nav-item click-bounce flex flex-col items-center justify-center text-gray-400">
+            <a href="parceiros.html" class="click-bounce flex flex-col items-center justify-center text-gray-400">
                 <svg class="w-6 h-6"><use href="#icon-handshake"></use></svg>
                 <span class="text-[10px] font-semibold mt-1">Parceiros</span>
             </a>
 
-            <!-- Botão Central (Gera o Popup de Itens) -->
+            <!-- Botão Central -->
             <div class="relative flex justify-center">
                 <button onclick="togglePopup()" class="floating-fab click-bounce absolute -top-8 bg-secondary text-blue-900 w-16 h-16 rounded-full flex items-center justify-center border-4 border-white">
                     <svg class="w-9 h-9"><use href="#icon-plus"></use></svg>
@@ -1422,13 +1649,13 @@
             </div>
 
             <!-- Catálogo -->
-            <a href="catalogo.html" class="nav-item click-bounce flex flex-col items-center justify-center text-gray-400">
+            <a href="catalogo.html" class="click-bounce flex flex-col items-center justify-center text-gray-400">
                 <svg class="w-6 h-6"><use href="#icon-book-open"></use></svg>
                 <span class="text-[10px] font-semibold mt-1">Catálogo</span>
             </a>
 
             <!-- Perfil -->
-            <a href="perfil.html" class="nav-item click-bounce flex flex-col items-center justify-center text-gray-400">
+            <a href="perfil.html" class="click-bounce flex flex-col items-center justify-center text-gray-400">
                 <svg class="w-6 h-6"><use href="#icon-user-round"></use></svg>
                 <span class="text-[10px] font-semibold mt-1">Perfil</span>
             </a>
@@ -1483,7 +1710,7 @@
                 </button>
 
                 <!-- WhatsApp -->
-                <button onclick="window.location.href='https://wa.me/5547992277324?text=Olá!%20Gostaria%20de%20falar%20sobre%20as%20festas.'" class="menu-card click-bounce p-4 bg-green-50 rounded-[2rem] border border-green-100 flex flex-col items-center">
+                <button onclick="window.location.href='https://wa.me/5547992277324?text=Olá!'" class="menu-card click-bounce p-4 bg-green-50 rounded-[2rem] border border-green-100 flex flex-col items-center">
                     <div class="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-green-200 mb-2">
                         <svg class="w-6 h-6 text-white"><use href="#icon-whatsapp"></use></svg>
                     </div>
@@ -1491,7 +1718,7 @@
                 </button>
             </div>
 
-            <!-- Botão Outros (Centralizado e Menor) -->
+            <!-- Botão Outros -->
             <div class="mt-6 flex justify-center">
                 <button onclick="window.location.href='outros.html'" class="menu-card click-bounce py-3 px-10 bg-gray-50 rounded-full border border-gray-100 flex items-center gap-2 shadow-sm">
                     <svg class="w-4 h-4 text-gray-500"><use href="#icon-more"></use></svg>
@@ -1517,5 +1744,4 @@
     </script>
 </body>
 </html>
-</body>
 </html>
