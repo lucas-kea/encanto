@@ -1391,16 +1391,27 @@
         }
 
         function validateCurrentStep() {
-            document.querySelectorAll('input, select, textarea').forEach(el => el.classList.remove('border-error'));
-            if (currentStep === 'toys' && cart.length === 0) { showToast("Selecione um item!"); return false; }
+            document.querySelectorAll('input, select, textarea').forEach(el => {
+                if(el) el.classList.remove('border-error');
+            });
+            
+            if (currentStep === 'toys') {
+                if (cart.length === 0) { showToast("Selecione um item!"); return false; }
+            }
             if (currentStep === 'id') {
-                if (!userName || userName.trim().length < 2) { document.getElementById('userName').classList.add('border-error'); return false; }
-                if (!userZap || userZap.length < 15) { document.getElementById('userZap').classList.add('border-error'); return false; }
+                const elName = document.getElementById('userName');
+                const elZap = document.getElementById('userZap');
+                if (!userName || userName.trim().length < 2) { if(elName) elName.classList.add('border-error'); return false; }
+                if (!userZap || userZap.length < 15) { if(elZap) elZap.classList.add('border-error'); return false; }
             } else if (currentStep === 'address') {
-                if (!selectedBairro) { document.getElementById('userBairro').classList.add('border-error'); return false; }
-                if (!userRua || userRua.trim().length < 3) { document.getElementById('userRua').classList.add('border-error'); return false; }
-                if (!userSN && !userNum) { document.getElementById('userNum').classList.add('border-error'); return false; }
-                if (!userDetails || userDetails.trim().length < 2) { document.getElementById('userDetails').classList.add('border-error'); return false; }
+                const elBairro = document.getElementById('userBairro');
+                const elRua = document.getElementById('userRua');
+                const elNum = document.getElementById('userNum');
+                const elDet = document.getElementById('userDetails');
+                if (!selectedBairro) { if(elBairro) elBairro.classList.add('border-error'); return false; }
+                if (!userRua || userRua.trim().length < 3) { if(elRua) elRua.classList.add('border-error'); return false; }
+                if (!userSN && !userNum) { if(elNum) elNum.classList.add('border-error'); return false; }
+                if (!userDetails || userDetails.trim().length < 2) { if(elDet) elDet.classList.add('border-error'); return false; }
                 if (selectedBairro === "Ervino") {
                     const checkStr = (userRua + " " + userDetails).toUpperCase();
                     if (checkStr.includes("TWO")) {
@@ -1419,15 +1430,32 @@
             if (!validateCurrentStep()) return;
             const steps = ['toys', 'id', 'address', 'party', 'details', 'summary'];
             const idx = steps.indexOf(currentStep);
-            if (currentStep === 'summary') { sendToSheet(); document.getElementById('pixPopup').classList.remove('hidden'); return; }
-            currentStep = steps[idx + 1]; 
-            closeSheet(); 
-            setTimeout(() => { 
-                openSheet('formSheet'); 
-                renderForm(); 
-                const sheet = document.getElementById('formSheet');
-                if(sheet) sheet.scrollTop = 0;
-            }, 300);
+            
+            // Garantir que estamos em um passo válido
+            if (idx === -1 && currentStep !== 'calendar') {
+                // Se por algum motivo o estado se perder, força volta para o início da seleção
+                currentStep = 'toys';
+                openSheet('toySheet');
+                return;
+            }
+
+            if (currentStep === 'summary') { 
+                sendToSheet(); 
+                document.getElementById('pixPopup').classList.remove('hidden'); 
+                return; 
+            }
+            
+            const next = steps[idx + 1];
+            if (next) {
+                currentStep = next;
+                closeSheet(); 
+                setTimeout(() => { 
+                    openSheet('formSheet'); 
+                    renderForm(); 
+                    const sheet = document.getElementById('formSheet');
+                    if(sheet) sheet.scrollTop = 0; // Sobe para o topo do formulário
+                }, 150); // Reduzido para transição mais rápida
+            }
         }
 
         function formatName(i) { 
@@ -1465,7 +1493,117 @@
                 couponIsValid = true;
                 updateSummary();
                 renderForm();
+                setTimeout(() => {
+                    const inp = document.getElementById('couponInput');
+                    if(inp) inp.classList.add('border-success');
+                }, 50);
             }
+        }
+
+        function renderForm() {
+            const container = document.getElementById('formContent');
+            if(!container) return;
+            const h = (t) => `<h3 class="text-xl font-bold text-[#003399] uppercase tracking-tighter mb-6">${t}</h3>`;
+            const likedLabel = (t) => `<label class="text-[10px] font-bold text-[#003399] uppercase ml-1 mb-1 block">${t}</label>`;
+            const spacer = '<div class="h-40"></div>';
+
+            if (currentStep === 'id') {
+                container.innerHTML = `
+                    ${h('Seus Dados')}
+                    <div class="mb-4">
+                        ${likedLabel('Nome')}
+                        <input type='text' id='userName' value='${userName}' placeholder='Seu primeiro nome' maxlength='20' oninput='formatName(this)' class='w-full p-5 bg-slate-50 rounded-2xl outline-none border-2 border-transparent focus:border-blue-500 font-bold'>
+                    </div>
+                    <div class="mb-4">
+                        <div class="flex items-center gap-1 mb-1 ml-1">
+                            <i class="fab fa-whatsapp text-green-500 text-xs"></i>
+                            <label class="text-[10px] font-bold text-[#003399] uppercase">WhatsApp</label>
+                        </div>
+                        <input type='tel' id='userZap' value='${userZap}' placeholder='(xx) xxxxx-xxxx' oninput='maskZap(this)' class='w-full p-5 bg-slate-50 rounded-2xl outline-none border-2 border-transparent focus:border-blue-500 font-bold'>
+                    </div>
+                    <div class="mt-8 p-6 bg-blue-50/50 rounded-3xl border border-blue-100 flex gap-4">
+                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-blue-600 shadow-sm shrink-0">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div>
+                            <p class="text-[11px] font-black text-blue-900 uppercase mb-1 text-left">Segurança Garantida</p>
+                            <p class="text-[10px] text-blue-800 leading-relaxed text-left">Fique tranquilo! Seus dados são processados em ambiente seguro e usados exclusivamente pela <b>Encanto Festas</b> para confirmar sua reserva.</p>
+                        </div>
+                    </div>
+                    ${spacer}
+                `;
+            }
+            else if (currentStep === 'address') {
+                container.innerHTML = `
+                    ${h('Endereço')}
+                    <select id='userBairro' onchange='selectedBairro=this.value;updateSummary()' class='w-full p-5 bg-slate-50 rounded-2xl mb-4 font-bold outline-none'>
+                        <option value=''>Selecione o Bairro</option>
+                        ${Object.keys(BAIRROS).map(b => `<option value="${b}" ${selectedBairro===b?'selected':''}>${b}</option>`)}
+                    </select>
+                    <div class="relative mb-4">
+                        <input type="text" id="userRuaGhost" class="w-full p-5 bg-slate-50 rounded-2xl absolute inset-0 text-slate-300 pointer-events-none font-bold outline-none border-2 border-transparent" disabled>
+                        <input type='text' id='userRua' value='${userRua}' placeholder='Nome da Rua' oninput='handleStreetInput(this)' onkeydown="handleStreetKeydown(event)" class='w-full p-5 bg-transparent rounded-2xl relative font-bold outline-none border-2 border-transparent focus:border-blue-500'>
+                    </div>
+                    <div id='streetSuggestionsContainer'></div>
+                    <div class='flex gap-2 mb-4'>
+                        <input type='text' id='userNum' value='${userSN ? "S/N" : userNum}' ${userSN ? "disabled" : ""} maxlength='4' placeholder='${userSN ? "S/N" : "N° da casa"}' oninput='this.value=this.value.replace(/\\D/g,"");userNum=this.value' class='w-full p-5 bg-slate-50 rounded-2xl font-bold outline-none ${userSN ? "opacity-50" : ""}'>
+                        <div class='flex items-center gap-2 p-3 bg-slate-50 rounded-2xl flex-grow cursor-pointer' onclick='userSN=!userSN;renderForm()'>
+                            <div class='toggle-switch ${userSN?"on":""}'><div class='toggle-knob'></div></div>
+                            <span class='text-[9px] font-medium text-slate-600 uppercase font-black'>sem número</span>
+                        </div>
+                    </div>
+                    <input type='text' id='userDetails' value='${userDetails}' placeholder='Detalhes (Cor da casa, muro, etc)' oninput='userDetails=this.value' class='w-full p-5 bg-slate-50 rounded-2xl font-bold outline-none'>
+                    ${spacer}
+                `;
+            }
+            else if (currentStep === 'party') {
+                const dayDiscounts = ["", "0%", "15%", "23%", "30%", "36%"];
+                let startInt = parseInt(startTime.split(':')[0]);
+                container.innerHTML = `${h('Duração')}<p class='text-[10px] font-bold text-slate-400 mb-2 uppercase tracking-wide'>Quantos dias de diversão?</p><div class='flex gap-2 mb-6'>${[1,2,3,4,5].map(d => `<button onclick="setExtraDays(${d})" class='flex-1 py-3 rounded-xl font-bold border-2 ${extraDays===d?"border-blue-600 bg-blue-50 text-blue-800":"border-slate-100 text-slate-800"} flex flex-col items-center'><span class='text-lg'>${d}${d>1?"d":""}</span><span class='text-[10px] text-green-500 font-black'>-${dayDiscounts[d]}</span></button>`).join('')}</div>
+                <div class='flex gap-3 mb-6'>
+                    <div class='flex-1'>${likedLabel('Início')}<select onchange="startTime=this.value;renderForm();updateSummary()" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-sm outline-none">${["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00"].map(h => `<option value="${h}" ${startTime===h?'selected':''}>${h}</option>`).join('')}</select></div>
+                    <div class='flex-1'>${likedLabel('Término')}<select id="partyEndTime" onchange="endTime=this.value;updateSummary()" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-sm outline-none">${["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"].filter(h => parseInt(h.split(':')[0]) > startInt).map(h => `<option value="${h}" ${endTime===h?'selected':''}>${h}</option>`).join('')}<option value="NEXT_DAY" ${endTime==='NEXT_DAY'?'selected':''}>DIA SEGUINTE (PELA MANHÃ)</option></select></div>
+                </div>
+                <div class='p-5 bg-blue-50 rounded-2xl mb-4 flex justify-between' onclick='deliveryPreviousDay=!deliveryPreviousDay;renderForm()'><div><p class='text-[11px] font-bold text-blue-800 uppercase'>Entregar um dia antes pelo mesmo valor?</p><p class='text-[9px] text-blue-600 font-medium'>Não é certeza mas uma possibilidade!</p></div><div class='toggle-switch ${deliveryPreviousDay?"on":""}'><div class='toggle-knob'></div></div></div><p class='text-[10px] font-bold text-blue-600 text-center uppercase tracking-wide'>6 Horas Gratis / Extra 1h = 5,00</p>${spacer}`;
+            }
+            else if (currentStep === 'details') {
+                container.innerHTML = `
+                    ${h('Preferências')}
+                    <div class='p-6 bg-slate-50 rounded-3xl mb-12 text-center'>
+                        <p class='text-[11px] font-black text-blue-700 mb-2 uppercase tracking-tight'>Em caso de chuva, a piscina fica 100% coberta?</p>
+                        <p class='text-[9px] text-blue-500 font-bold mb-4 uppercase'>Só selecione "Sim" se ela não molhar de jeito nenhum</p>
+                        <div class='flex gap-2 mb-10'>${["sim","não"].map(o => `<button onclick="piscinaCovered='${o}';renderForm()" class='flex-1 py-2 rounded-xl border-2 ${piscinaCovered===o?"border-blue-600 bg-blue-600 text-white":"bg-white text-slate-800 font-bold font-black"}'>${o.toUpperCase()}</button>`).join('')}</div>
+                        
+                        <p class='text-[11px] font-black text-[#003399] mb-1 uppercase tracking-tight'>Contratar monitor?</p>
+                        <p class='text-[9px] text-slate-500 leading-tight mb-4 px-2'>Com monitores, eles ficam responsáveis pelas crianças em festas médias ou grandes, garantindo a <b>segurança dos pequenos</b> e a tranquilidade total da sua festa.</p>
+                        
+                        <div class='flex gap-2 mb-4 font-black'><button onclick="monitorsCount=0;renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===0?"border-blue-600 bg-blue-600 text-white":"bg-white font-bold"}'>NÃO</button><button onclick="monitorsCount=1;renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===1?"border-blue-600 bg-blue-600 text-white":"bg-white font-bold"}'>1 MON.</button><button onclick="monitorsCount=2;renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===2?"border-blue-600 bg-blue-600 text-white":"bg-white font-bold"}'>2 MON.</button></div>
+                        ${monitorsCount > 0 ? `<select onchange="monitorHours=parseInt(this.value);updateSummary()" class="w-full p-3 bg-white rounded-xl font-bold border border-slate-200">${[2,3,4,5,6].map(h => `<option value="${h}" ${monitorHours===h?'selected':''}>${h} HORAS</option>`).join('')}</select>` : ''}
+                    </div>
+                    
+                    ${cart.filter(t=>t.power).length > 0 ? `<p class='text-[11px] font-black text-[#003399] mb-4 uppercase tracking-tighter text-center'>Qual a distância da tomada?</p>` : ''}
+                    ${cart.filter(t=>t.power).map(t => `<div class="mb-4 bg-white p-5 rounded-2xl border border-slate-100 flex items-center justify-between"><p class="text-[10px] font-black text-[#003399] uppercase mr-4">DISTÂNCIA: ${t.name}</p><div class="flex items-center gap-2"><input type="tel" maxlength="2" placeholder="0" value="${socketDistances[t.id] || ''}" oninput="socketDistances[${t.id}]=this.value" class="w-12 p-3 bg-slate-50 rounded-xl outline-none font-bold text-sm text-center border-2 focus:border-blue-500 font-bold"><span class="text-[10px] font-black text-slate-400">M</span></div></div>`).join('')}${spacer}`;
+            }
+            else if (currentStep === 'summary') container.innerHTML = `
+                ${h('Finalizar')}
+                <div class='p-6 bg-slate-50 rounded-[24px] mb-4'>
+                    ${likedLabel('Possui cupom?')}
+                    <input type="text" id="couponInput" ${couponIsValid?'disabled':''} placeholder="${couponCode || 'DIGITE AQUI'}" value="${couponCode}" oninput="checkCoupon(this.value)" class="w-full p-4 rounded-xl outline-none font-bold uppercase tracking-widest ${couponIsValid?'border-2 border-green-500 bg-green-50 font-bold':'bg-white shadow-inner font-bold'}">
+                    ${couponIsValid?`<p class="text-green-600 text-[10px] font-black mt-2 uppercase tracking-tighter font-black"><i class="fas fa-check-circle mr-1"></i> Aplicado com Sucesso: ${COUPONS_DB[couponCode]}</p>`:''}
+                    <div class="mt-8 font-black">
+                        ${likedLabel('Deseja emitir Nota Fiscal?')}
+                        <div class="flex gap-2 mb-4">${[{v:true,l:"SIM"},{v:false,l:"NÃO"}].map(opt => `<button onclick="needsInvoice=${opt.v};renderForm()" class="flex-1 py-3 rounded-xl border-2 ${needsInvoice===opt.v?'border-[#003399] bg-[#003399] text-white font-black':'border-white bg-white text-slate-300 shadow-sm font-black'} text-xs font-bold font-black font-black font-black">${opt.l}</button>`).join('')}</div>
+                        ${needsInvoice ? `<div class="space-y-4 pt-2 animate-in fade-in slide-in-from-top-2"><div>${likedLabel('CNPJ')} <input type="tel" id="userCNPJ" value="${userCNPJ}" placeholder="00.000.000/0000-00" oninput="maskCNPJ(this)" class="w-full p-4 bg-white rounded-xl outline-none text-sm font-bold shadow-inner font-black"></div><div>${likedLabel('CEP')} <input type="tel" id="userCEP" value="${userCEP}" placeholder="00.000-000" oninput="maskCEP(this)" class="w-full p-4 bg-white rounded-xl outline-none text-sm font-bold shadow-inner font-black"></div></div>` : ''}
+                    </div>
+                </div>
+                <div class='p-5 bg-green-50 rounded-3xl mb-4 border border-green-100 flex justify-between gap-4 shadow-sm' onclick='insuranceEnabled=!insuranceEnabled;updateSummary();renderForm()'>
+                    <div class="flex-grow">
+                        <p class='text-[11px] font-black text-green-800 uppercase tracking-tighter font-black'>Seguro Diversão Isenta - R$ 14,90</p>
+                        <p class='text-[9px] text-green-700 font-medium leading-tight mt-1 text-left font-black'>Alugue com paz absoluta! Com o seguro você fica <b>isento de taxas</b> em caso de rasgos ou quebras acidentais. Sem ele, reparos podem custar até R$ 300,00.</p>
+                    </div>
+                    <div class="shrink-0 flex items-center"><div class='toggle-switch ${insuranceEnabled?"on":""}'><div class='toggle-knob'></div></div></div>
+                </div>
+                <div class="p-5 bg-slate-50 rounded-3xl border border-slate-100 font-black"><div id="orderDetailList" class="space-y-1 font-black font-black"></div></div>${spacer}`;
         }
 
         function setExtraDays(d) { extraDays = d; updateSummary(); renderForm(); }
