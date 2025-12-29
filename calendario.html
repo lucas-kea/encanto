@@ -886,12 +886,12 @@
                 <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">TOTAL</span>
                 <div class="flex items-center">
                     <span class="text-2xl font-bold text-[#003399]" id="totalValueText">R$ 0,00</span>
-                    <span id="discountBadge" class="hidden ml-2 bg-green-500 text-white text-[10px] px-2 py-0.5 rounded-lg font-black shadow-sm">COMBO</span>
+                    <span id="discountBadge" class="hidden ml-2 bg-green-500 text-white text-[8px] px-2 py-0.5 rounded-lg font-black shadow-sm">COMBO</span>
                 </div>
                 <span id="savingsText" class="hidden text-[9px] text-green-500 font-bold leading-none mt-1">Você economizou R$ 0,00</span>
             </div>
             <div class="text-right">
-                <span id="deliveryText" class="text-[10px] font-bold uppercase tracking-tighter"></span>
+                <span id="deliveryText" class="text-[8px] font-bold uppercase tracking-tighter"></span>
             </div>
         </div>
         <button id="mainBtn" onclick="nextStep()" class="w-full btn-primary py-4 rounded-2xl text-lg shadow-xl active:scale-95 transition-all uppercase">
@@ -904,7 +904,7 @@
             <div class="w-20 h-20 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
                 <i class="fas fa-calendar-check text-3xl"></i>
             </div>
-            <h4 class="text-2xl font-black text-slate-800 mb-2 uppercase font-black">Reservado!</h4>
+            <h4 class="text-2xl font-black text-slate-800 mb-2 uppercase">Reservado!</h4>
             <p class="text-slate-500 text-sm mb-2 leading-relaxed font-bold">Para manter sua reserva, pedimos um pequeno sinal de <b>R$ 25,00</b> e o restante no dia da montagem.</p>
             
             <div class="bg-blue-50/50 py-3 px-4 rounded-2xl mb-6 inline-block">
@@ -1356,29 +1356,29 @@
         async function sendToSheet() {
             if (!API_URL) return;
             const payload = {
-                evento: normalizeDate(selectedDate),    
+                evento: normalizeDate(selectedDate) || "N/A",    
                 diaAnt: deliveryPreviousDay ? "Sim" : "Não", 
-                inicio: startTime,                      
-                termino: endTime === "NEXT_DAY" ? "Dia Seg." : endTime, 
-                nome: userName,                         
-                whatsapp: userZap,                      
-                bairro: selectedBairro,                 
-                rua: userRua,                           
-                num: userSN ? "S/N" : userNum,          
-                pontoRef: userDetails,                  
+                inicio: startTime || "N/A",                      
+                termino: (endTime === "NEXT_DAY" ? "Dia Seg." : endTime) || "N/A", 
+                nome: userName || "N/A",                         
+                whatsapp: userZap || "N/A",                      
+                bairro: selectedBairro || "N/A",                 
+                rua: userRua || "N/A",                           
+                num: userSN ? "S/N" : (userNum || "N/A"),          
+                pontoRef: userDetails || "N/A",                  
                 itens: cart.map(i => `${i.qty}x ${i.name}`).join("\n"), 
-                cobert: piscinaCovered,                 
+                cobert: piscinaCovered || "N/A",                 
                 monitores: monitorsCount > 0 ? `${monitorsCount} Mon. (${monitorHours}h)` : "Não", 
                 extensao: Object.entries(socketDistances).map(([id, dist]) => {
                     const toy = TOYS_DB.find(t => t.id == id);
                     return toy ? `${toy.name}: ${dist}m` : `${dist}m`;
-                }).join("\n"),                           
+                }).join("\n") || "N/A",                           
                 seguro: insuranceEnabled ? "Sim" : "Não",
                 nota: needsInvoice ? "Sim" : "Não",      
-                diaria: extraDays,                       
-                total: document.getElementById('totalValueText').innerText, 
-                cnpj: userCNPJ,                         
-                cep: userCEP                             
+                diaria: extraDays || "N/A",                       
+                total: document.getElementById('totalValueText').innerText || "N/A", 
+                cnpj: userCNPJ || "N/A",                         
+                cep: userCEP || "N/A"                             
             };
             try { 
                 await fetch(API_URL, { 
@@ -1576,7 +1576,22 @@
                 container.innerHTML = `${h('Duração')}<p class='text-[10px] font-bold text-slate-400 mb-2 uppercase font-black font-black font-black font-black font-black'>Quantos dias de diversão?</p><div class='flex gap-2 mb-6 font-black font-black font-black font-black font-black'>${[1,2,3,4,5].map(d => `<button onclick="setExtraDays(${d})" class='flex-1 py-3 rounded-xl font-bold border-2 ${extraDays===d?"border-blue-600 bg-blue-50 text-blue-800 font-black":"border-slate-100 text-slate-800 font-black"} flex flex-col items-center'><span class='text-lg'>${d}${d>1?"d":""}</span>${d > 1 ? `<span class='text-[10px] text-green-500 font-black font-black font-black font-black'>-${dayDiscounts[d]}</span>` : ""}</button>`).join('')}</div><div class='flex gap-3 mb-6 font-black font-black font-black font-black font-black'><div class='flex-1'>${likedLabel('Início')}<select onchange="startTime=this.value;renderForm();updateSummary()" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-sm outline-none font-black font-black font-black font-black font-black font-black">${["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00"].map(h => `<option value="${h}" ${startTime===h?'selected':''}>${h}</option>`).join('')}</select></div><div class='flex-1'>${likedLabel('Término')}<select id="partyEndTime" onchange="endTime=this.value;updateSummary()" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-sm outline-none font-black font-black font-black font-black font-black">${["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"].filter(h => parseInt(h.split(':')[0]) > startInt).map(h => `<option value="${h}" ${endTime===h?'selected':''}>${h}</option>`).join('')}<option value="NEXT_DAY" ${endTime==='NEXT_DAY'?'selected':''}>DIA SEGUINTE</option></select></div></div><div class='p-5 bg-blue-50 rounded-2xl mb-4 flex justify-between font-black font-black font-black font-black font-black font-black' onclick='deliveryPreviousDay=!deliveryPreviousDay;renderForm()'><div><p class='text-[11px] font-bold text-blue-800 uppercase font-black font-black font-black font-black font-black'>Entregar um dia antes?</p><p class='text-[9px] text-blue-600 font-medium font-black font-black font-black font-black font-black font-black font-black'>Mesmo valor!</p></div><div class='toggle-switch ${deliveryPreviousDay?"on":""}'><div class='toggle-knob'></div></div></div>${spacer}`;
             }
             else if (currentStep === 'details') {
-                container.innerHTML = `${h('Preferências')}<div class='p-6 bg-slate-50 rounded-3xl mb-12 text-center font-black font-black'><p class='text-[11px] font-black text-blue-700 mb-2 uppercase font-black font-black font-black font-black font-black'>A piscina fica coberta?</p><p class='text-[9px] text-blue-500 font-bold mb-4 font-black font-black font-black font-black font-black font-black'>Só selecione "Sim" se ela não molhar nada</p><div class='flex gap-2 mb-10 font-black font-black font-black font-black font-black'>${["sim","não"].map(o => `<button onclick="piscinaCovered='${o}';renderForm()" class='flex-1 py-2 rounded-xl border-2 ${piscinaCovered===o?"border-blue-600 bg-blue-600 text-white font-black font-black":"bg-white text-slate-800 font-bold font-black font-black font-black font-black"}'>${o.toUpperCase()}</button>`).join('')}</div><p class='text-[11px] font-black text-[#003399] mb-1 uppercase font-black font-black font-black font-black font-black font-black'>Monitor?</p><div class='flex gap-2 mb-4 font-black font-black font-black font-black font-black font-black font-black'><button onclick="monitorsCount=0;renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===0?"border-blue-600 bg-blue-600 text-white font-black font-black font-black font-black":"bg-white font-bold font-black font-black font-black font-black font-black"}'>NÃO</button><button onclick="monitorsCount=1;renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===1?"border-blue-600 bg-blue-600 text-white font-black font-black font-black font-black":"bg-white font-bold font-black font-black font-black font-black font-black"}'>1 MON.</button><button onclick="monitorsCount=2;renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===2?"border-blue-600 bg-blue-600 text-white font-black font-black font-black font-black":"bg-white font-bold font-black font-black font-black font-black font-black"}'>2 MON.</button></div>${monitorsCount > 0 ? `<select onchange="monitorHours=parseInt(this.value);updateSummary()" class="w-full p-3 bg-white rounded-xl font-bold border border-slate-200 font-black font-black font-black font-black font-black font-black">${[2,3,4,5,6].map(h => `<option value="${h}" ${monitorHours===h?'selected':''}>${h} HORAS</option>`).join('')}</select>` : ''}</div>
+                const hasPiscina = cart.some(i => i.id === 3);
+                container.innerHTML = `${h('Preferências')}<div class='p-6 bg-slate-50 rounded-3xl mb-12 text-center font-black font-black'>
+                ${hasPiscina ? `
+                    <p class='text-[11px] font-black text-blue-700 mb-2 uppercase font-black font-black font-black font-black font-black'>A piscina fica coberta?</p>
+                    <p class='text-[9px] text-blue-500 font-bold mb-4 font-black font-black font-black font-black font-black font-black'>Só selecione "Sim" se ela não molhar nada</p>
+                    <div class='flex gap-2 mb-10 font-black font-black font-black font-black font-black'>
+                        ${["sim","não"].map(o => `<button onclick="piscinaCovered='${o}';renderForm()" class='flex-1 py-2 rounded-xl border-2 ${piscinaCovered===o?"border-blue-600 bg-blue-600 text-white font-black font-black":"bg-white text-slate-800 font-bold font-black font-black font-black font-black"}'>${o.toUpperCase()}</button>`).join('')}
+                    </div>` : ''}
+                
+                <p class='text-[11px] font-black text-[#003399] mb-1 uppercase font-black font-black font-black font-black font-black font-black'>Monitor?</p>
+                <div class='flex gap-2 mb-4 font-black font-black font-black font-black font-black font-black font-black'>
+                    <button onclick="monitorsCount=0;renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===0?"border-blue-600 bg-blue-600 text-white font-black font-black font-black font-black":"bg-white font-bold font-black font-black font-black font-black font-black"}'>NÃO</button>
+                    <button onclick="monitorsCount=1;renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===1?"border-blue-600 bg-blue-600 text-white font-black font-black font-black font-black":"bg-white font-bold font-black font-black font-black font-black font-black"}'>1 MON.</button>
+                    <button onclick="monitorsCount=2;renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===2?"border-blue-600 bg-blue-600 text-white font-black font-black font-black font-black":"bg-white font-bold font-black font-black font-black font-black font-black"}'>2 MON.</button>
+                </div>
+                ${monitorsCount > 0 ? `<select onchange="monitorHours=parseInt(this.value);updateSummary()" class="w-full p-3 bg-white rounded-xl font-bold border border-slate-200 font-black font-black font-black font-black font-black font-black">${[2,3,4,5,6].map(h => `<option value="${h}" ${monitorHours===h?'selected':''}>${h} HORAS</option>`).join('')}</select>` : ''}</div>
                 ${cart.filter(t=>t.power).length > 0 ? `
                     <div class='mb-8 font-black font-black font-black font-black'>
                         <p class='text-[11px] font-black text-[#003399] mb-4 uppercase text-center font-black font-black font-black font-black font-black font-black'>Qual a distância da tomada?</p>
@@ -1584,7 +1599,7 @@
                     </div>` : ''}
                 ${spacer}`;
             }
-            else if (currentStep === 'summary') container.innerHTML = `${h('Finalizar')}<div class='p-6 bg-slate-50 rounded-[24px] mb-4 font-black font-black font-black font-black font-black font-black'>${likedLabel('Possui cupom?')}<input type="text" id="couponInput" ${couponIsValid?'disabled':''} placeholder="${couponIsValid ? couponCode : 'DIGITE AQUI'}" value="${couponCode}" oninput="checkCoupon(this.value)" class="w-full p-4 rounded-xl outline-none font-bold uppercase tracking-widest font-black font-black font-black font-black font-black font-black ${couponIsValid?'border-2 border-green-500 bg-green-50':'bg-white shadow-inner font-black font-black font-black font-black'}">${couponIsValid?`<p class="text-green-600 text-[10px] font-black mt-2 font-black font-black font-black font-black font-black"><i class="fas fa-check-circle mr-1"></i> Aplicado!</p>`:''}<div class="mt-8 font-black font-black font-black font-black font-black font-black">${likedLabel('Nota Fiscal?')}<div class="flex gap-2 mb-4 font-black font-black font-black font-black font-black font-black">${[{v:true,l:"SIM"},{v:false,l:"NÃO"}].map(opt => `<button onclick="needsInvoice=${opt.v};renderForm()" class="flex-1 py-3 rounded-xl border-2 font-black font-black font-black font-black font-black font-black ${needsInvoice===opt.v?'border-[#003399] bg-[#003399] text-white font-black font-black font-black font-black font-black':'border-white bg-white text-slate-300 shadow-sm font-black font-black font-black font-black font-black'} text-xs font-bold font-black font-black font-black font-black font-black font-black font-black">${opt.l}</button>`).join('')}</div>${needsInvoice ? `<div class="space-y-4 pt-2 font-black font-black font-black font-black font-black font-black"><div>${likedLabel('CNPJ')} <input type="tel" id="userCNPJ" value="${userCNPJ}" placeholder="00.000.000/0000-00" oninput="maskCNPJ(this)" class="w-full p-4 bg-white rounded-xl outline-none text-sm font-bold shadow-inner font-black font-black font-black font-black font-black font-black font-black"></div><div>${likedLabel('CEP')} <input type="tel" id="userCEP" value="${userCEP}" placeholder="00.000-000" oninput="maskCEP(this)" class="w-full p-4 bg-white rounded-xl outline-none text-sm font-bold shadow-inner font-black font-black font-black font-black font-black font-black font-black"></div></div>` : ''}</div></div><div class='p-5 bg-green-50 rounded-3xl mb-4 border border-green-100 flex justify-between gap-4 shadow-sm font-black font-black font-black font-black font-black' onclick='insuranceEnabled=!insuranceEnabled;updateSummary();renderForm()'><div class="flex-grow font-black font-black font-black font-black font-black font-black font-black font-black font-black"><p class='text-[11px] font-black text-green-800 uppercase font-black font-black font-black font-black font-black'>Seguro Diversão Isenta - R$ 14,90</p><p class='text-[9px] text-green-700 font-medium leading-tight font-black font-black font-black font-black font-black font-black font-black font-black font-black'>Alugue com paz absoluta! Com o seguro você fica isento de taxas.</p></div><div class="shrink-0 flex items-center font-black font-black font-black font-black"><div class='toggle-switch ${insuranceEnabled?"on":""}'><div class='toggle-knob'></div></div></div></div><div class="p-5 bg-slate-50 rounded-3xl border border-slate-100 font-black font-black font-black font-black font-black font-black"><div id="orderDetailList" class="space-y-1 font-black font-black font-black font-black font-black"></div></div>${spacer}`;
+            else if (currentStep === 'summary') container.innerHTML = `${h('Finalizar')}<div class='p-6 bg-slate-50 rounded-[24px] mb-4 font-black font-black font-black font-black font-black font-black'>${likedLabel('Possui cupom?')}<input type="text" id="couponInput" ${couponIsValid?'disabled':''} placeholder="${couponIsValid ? couponCode : 'DIGITE AQUI'}" value="${couponCode}" oninput="checkCoupon(this.value)" class="w-full p-4 rounded-xl outline-none font-bold uppercase tracking-widest font-black font-black font-black font-black font-black font-black ${couponIsValid?'border-2 border-green-500 bg-green-50':'bg-white shadow-inner font-black font-black font-black font-black'}">${couponIsValid?`<p class="text-green-600 text-[10px] font-black mt-2 font-black font-black font-black font-black font-black"><i class="fas fa-check-circle mr-1"></i> Aplicado!</p>`:''}<div class="mt-8 font-black font-black font-black font-black font-black font-black">${likedLabel('Nota Fiscal?')}<div class="flex gap-2 mb-4 font-black font-black font-black font-black font-black font-black">${[{v:true,l:"SIM"},{v:false,l:"NÃO"}].map(opt => `<button onclick="needsInvoice=${opt.v};renderForm()" class="flex-1 py-3 rounded-xl border-2 font-black font-black font-black font-black font-black font-black ${needsInvoice===opt.v?'border-[#003399] bg-[#003399] text-white font-black font-black font-black font-black font-black':'border-white bg-white text-slate-300 shadow-sm font-black font-black font-black font-black font-black'} text-xs font-bold font-black font-black font-black font-black font-black font-black font-black">${opt.l}</button>`).join('')}</div>${needsInvoice ? `<div class="space-y-4 pt-2 font-black font-black font-black font-black font-black font-black"><div>${likedLabel('CNPJ')} <input type="tel" id="userCNPJ" value="${userCNPJ}" placeholder="00.000.000/0000-00" oninput="maskCNPJ(this)" class="w-full p-4 bg-white rounded-xl outline-none text-sm font-bold shadow-inner font-black font-black font-black font-black font-black font-black font-black"></div><div>${likedLabel('CEP')} <input type="tel" id="userCEP" value="${userCEP}" placeholder="00.000-000" oninput="maskCEP(this)" class="w-full p-4 bg-white rounded-xl outline-none text-sm font-bold shadow-inner font-black font-black font-black font-black font-black font-black font-black"></div></div>` : ''}</div></div><div class='p-5 bg-green-50 rounded-3xl mb-4 border border-green-100 flex justify-between gap-4 shadow-sm font-black font-black font-black font-black font-black' onclick='insuranceEnabled=!insuranceEnabled;updateSummary();renderForm()'><div class="flex-grow font-black font-black font-black font-black font-black font-black font-black font-black font-black"><p class='text-[11px] font-black text-green-800 uppercase font-black font-black font-black font-black font-black font-black font-black font-black'>Seguro Diversão Isenta - R$ 14,90</p><p class='text-[9px] text-green-700 font-medium leading-tight font-black font-black font-black font-black font-black font-black font-black font-black font-black'>Alugue com paz absoluta! Com o seguro você fica isento de taxas.</p></div><div class="shrink-0 flex items-center font-black font-black font-black font-black"><div class='toggle-switch ${insuranceEnabled?"on":""}'><div class='toggle-knob'></div></div></div></div><div class="p-5 bg-slate-50 rounded-3xl border border-slate-100 font-black font-black font-black font-black font-black font-black font-black font-black"><div id="orderDetailList" class="space-y-1 font-black font-black font-black font-black font-black font-black font-black font-black"></div></div>${spacer}`;
         }
 
         function setExtraDays(d) { extraDays = d; updateSummary(); renderForm(); }
