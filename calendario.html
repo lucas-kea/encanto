@@ -222,6 +222,586 @@
         .suggestion-item:active { background: #F1F5F9; }
     </style>
 </head>
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- Configuração da cor da barra do browser (Chrome, Safari, Samsung Internet, etc) -->
+    <meta name="theme-color" content="#2563eb">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="msapplication-navbutton-color" content="#2563eb">
+
+    <title>Encanto Festas - Header</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-blue: #2563eb;
+            --deep-blue: #1e3a8a;
+            --marketing-gold: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            --marketing-glow: 0 0 20px rgba(245, 158, 11, 0.5);
+            --tooltip-bg: linear-gradient(165deg, #2563eb 0%, #1e40af 100%);
+        }
+
+        html, body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        h1, h2, h3, h4, .brand-font {
+            font-family: 'Baloo 2', cursive;
+            line-height: 1.2;
+        }
+        
+        .glass-header {
+            background: #2563eb; 
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .item-card {
+            transition: transform 0.25s ease-out, opacity 0.25s ease-out;
+            animation: fadeIn 0.4s ease-out forwards;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            will-change: transform, opacity;
+            user-select: none;
+            touch-action: pan-y; 
+        }
+
+        /* Efeito Skeleton Loader */
+        .skeleton-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 1.5rem;
+            height: 110px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .shimmer-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.05) 50%, 
+                transparent 100%);
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes fadeIn {
+            from { transform: translateY(8px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .dismissing {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease !important;
+            transform: translateX(120%) !important;
+            opacity: 0 !important;
+            pointer-events: none;
+        }
+
+        .modal-view {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(100%);
+            background: linear-gradient(180deg, #2563eb 0%, #1e3a8a 100%);
+            background-attachment: fixed;
+            visibility: hidden;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+        }
+        .modal-view.active {
+            transform: translateY(0%);
+            visibility: visible;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Tooltip Premium v5 */
+        #marketingTooltip {
+            z-index: 100;
+            filter: drop-shadow(0 20px 45px rgba(0,0,0,0.5));
+            animation: elasticImpact 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            max-width: calc(100vw - 12px);
+            background: var(--tooltip-bg);
+            border: 1.5px solid rgba(255, 255, 255, 0.25);
+            position: absolute;
+            box-shadow: inset 0 0 25px rgba(255, 255, 255, 0.1);
+            transform-origin: top right;
+        }
+
+        @keyframes elasticImpact {
+            0% { 
+                opacity: 0; 
+                transform: scale(0.2) translateY(-60px) rotate(15deg); 
+                filter: blur(15px);
+            }
+            70% {
+                transform: scale(1.05) translateY(5px) rotate(-2deg);
+            }
+            100% { 
+                opacity: 1; 
+                transform: scale(1) translateY(0) rotate(0deg);
+                filter: blur(0);
+            }
+        }
+
+        .tooltip-arrow {
+            position: absolute;
+            top: -10px;
+            right: 18px;
+            width: 24px;
+            height: 12px;
+            z-index: 10;
+        }
+        .tooltip-arrow svg {
+            fill: #2563eb; 
+        }
+
+        .novidade-badge {
+            background: var(--marketing-gold);
+            color: #1e3a8a;
+            box-shadow: var(--marketing-glow);
+            animation: pulse-gold 2s infinite;
+        }
+
+        @keyframes pulse-gold {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.6); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); }
+        }
+
+        .month-divider {
+            position: sticky;
+            top: 0; 
+            z-index: 20;
+            background: #1e3a8a; 
+            margin: 0 -1rem 0.5rem -1rem;
+            padding: 0.75rem 1.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff !important; 
+            font-weight: 800;
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .search-area {
+            background: #1e3a8a;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            flex-shrink: 0;
+        }
+
+        .date-badge {
+            background: var(--marketing-gold);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 3.5rem; 
+            height: 3.5rem;
+            border-radius: 1rem;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="tooltipOverlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[45] hidden transition-opacity duration-300"></div>
+
+    <header id="mainHeader" class="fixed top-0 left-0 right-0 w-full glass-header z-[50] h-16">
+        <div class="max-w-xl mx-auto px-3 h-full flex justify-between items-center">
+            
+            <a href="index.html" class="flex items-center gap-2 active:scale-95 transition-transform outline-none text-decoration-none group">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdX7GkygoIKwK06MzeweiE0GPt5I1rsz808w&s" 
+                    class="w-10 h-10 rounded-full border-2 border-yellow-400 shadow-sm transition-transform group-hover:rotate-12"
+                    alt="Logo Encanto Festas">
+                
+                <div class="inline-flex flex-col items-start leading-none -mt-1.5 ml-0.5">
+                    <div class="text-xl font-bold brand-font tracking-tight">
+                        <span class="text-white">Encanto</span><span class="text-yellow-400">Festas</span>
+                    </div>
+                    <span class="text-[7.2px] font-black text-white/90 uppercase -mt-0.5 tracking-[0.15em] w-full text-justify ml-[2px]" style="text-align-last: justify;">
+                        LOCAÇÃO DE BRINQUEDOS
+                    </span>
+                </div>
+            </a>
+            
+            <div class="flex items-center gap-2">
+                <div class="relative">
+                    <button id="agendaBtn" class="p-2.5 bg-white/10 rounded-xl text-white hover:bg-white/20 transition-all active:scale-90 flex items-center justify-center outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y2="6"/><line x1="8" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/>
+                        </svg>
+                    </button>
+
+                    <div id="marketingTooltip" class="absolute top-14 -right-1 w-72 rounded-[2rem] overflow-visible hidden flex flex-col">
+                        <div class="tooltip-arrow">
+                            <svg viewBox="0 0 24 12" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 0L24 12H0L12 0Z"/>
+                            </svg>
+                        </div>
+                        
+                        <div class="p-7 flex flex-col gap-4 relative z-20">
+                            <div class="flex justify-between items-center">
+                                <div class="novidade-badge px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-[0.2em]">
+                                    NOVIDADE
+                                </div>
+                                <span class="text-2xl drop-shadow-lg">🎉</span>
+                            </div>
+                            
+                            <div class="space-y-1.5">
+                                <h4 class="text-xl font-black text-white leading-tight">
+                                    Painel de Agendamento
+                                </h4>
+                                <p class="text-[14px] text-blue-100 leading-relaxed font-medium">
+                                    Quer confirmar se a sua festa está agendada corretamente? Valide todos os itens e horários agora mesmo!
+                                </p>
+                            </div>
+
+                            <button id="closeMarketing" class="mt-2 w-max px-5 py-2 bg-white text-[#1e3a8a] text-[10px] font-black rounded-xl active:scale-95 transition-all shadow-lg uppercase tracking-widest self-end border-b-2 border-blue-200">
+                                Entendido!
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="notifBtn" class="relative p-2.5 bg-white/10 rounded-xl text-white hover:bg-white/20 transition-all active:scale-90 flex items-center justify-center outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                    </svg>
+                    <span id="notifBadge" class="hidden absolute top-2 right-2 w-2.5 h-2.5 bg-yellow-400 rounded-full border-2 border-blue-600 animate-pulse"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MODAL DE NOTIFICAÇÕES -->
+    <div id="notifModal" class="modal-view hidden flex flex-col">
+        <div class="px-5 py-3 border-b border-white/10 flex justify-between items-center bg-blue-900/40 backdrop-blur-xl">
+            <div class="flex items-center gap-4">
+                <button id="closeNotif" class="p-2 text-white/70 hover:text-white transition-colors bg-white/10 rounded-lg outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <h2 class="text-lg font-bold brand-font text-white">Notificações</h2>
+            </div>
+            <button id="markAllRead" class="text-[10px] font-bold uppercase tracking-widest text-blue-200 hover:text-white transition-colors outline-none">Limpar Tudo</button>
+        </div>
+        <div id="notifContainer" class="flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar pb-10"></div>
+    </div>
+
+    <!-- MODAL DE AGENDA -->
+    <div id="agendaModal" class="modal-view hidden flex flex-col">
+        <div class="px-5 py-3 border-b border-white/10 flex justify-between items-center bg-blue-900/60 backdrop-blur-xl flex-shrink-0">
+            <div class="flex items-center gap-4">
+                <button id="closeAgenda" class="p-2 text-white/70 hover:text-white transition-colors bg-white/10 rounded-lg outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <h2 class="text-lg font-bold brand-font text-white">Próximas Reservas</h2>
+            </div>
+            <div id="agendaCount" class="text-[10px] font-bold text-yellow-400 bg-white/10 px-2 py-1 rounded-full uppercase tracking-wider">Aguarde...</div>
+        </div>
+        <div class="search-area">
+            <div class="relative max-w-xl mx-auto">
+                <input type="text" id="agendaSearch" placeholder="Procurar por nome" class="w-full bg-white/10 border border-white/10 rounded-xl py-2.5 pl-9 pr-4 text-white placeholder-white/30 text-sm focus:outline-none focus:bg-white/20 focus:border-yellow-400/50 transition-all">
+                <div class="absolute left-3 top-1/2 -translate-y-1/2 text-white/30">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </div>
+            </div>
+        </div>
+        <div id="agendaContainer" class="flex-1 overflow-y-auto p-4 pt-0 space-y-4 no-scrollbar pb-10">
+            <div id="agendaLoading" class="flex flex-col gap-4 mt-4">
+                <div class="skeleton-card"><div class="shimmer-overlay"></div></div>
+                <div class="skeleton-card"><div class="shimmer-overlay"></div></div>
+                <div class="skeleton-card"><div class="shimmer-overlay"></div></div>
+            </div>
+        </div>
+        <div id="agendaPagination" class="px-5 py-4 border-t border-white/10 hidden bg-blue-900/40">
+            <button id="viewMoreAgenda" class="w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-2xl font-bold text-sm transition-all active:scale-95">Ver mais agendamentos</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, updateDoc, arrayUnion, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const fbConfigRaw = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const AGENDA_API = 'https://script.google.com/macros/s/AKfycbz_4NqmCf3iwAzXdBTUC-o1C9d_029b6g-HP6QyD8oEaHKt5eNjSd3eWsB9EaRJo9Nj/exec';
+        const NOTIF_URL = 'notificacoes.json';
+
+        let db, auth, user;
+        let readIds = JSON.parse(localStorage.getItem('encanto_read_ids') || '[]').map(id => Number(id)); 
+        let rawNotifications = [];
+        let agendaData = [];
+        let agendaVisibleLimit = 5;
+        let isLoadingAgenda = false;
+        let searchQuery = "";
+
+        const getEl = (id) => document.getElementById(id);
+
+        const init = async () => {
+            fetchNotifications();
+            handleMarketingTooltip();
+            if (fbConfigRaw) {
+                try {
+                    const app = initializeApp(JSON.parse(fbConfigRaw));
+                    auth = getAuth(app);
+                    db = getFirestore(app);
+                    await signInAnonymously(auth);
+                    onAuthStateChanged(auth, u => { if (u) { user = u; setupPersistenceListener(); } });
+                } catch (e) { console.warn("Firebase Offline"); }
+            }
+        };
+
+        function handleMarketingTooltip() {
+            const hasSeen = localStorage.getItem('encanto_marketing_v14');
+            const tooltip = getEl('marketingTooltip');
+            const overlay = getEl('tooltipOverlay');
+            const closeBtn = getEl('closeMarketing');
+            if (!hasSeen && tooltip && overlay) {
+                setTimeout(() => {
+                    overlay.classList.remove('hidden');
+                    tooltip.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
+                }, 800);
+                closeBtn.onclick = () => {
+                    tooltip.classList.add('hidden');
+                    overlay.classList.add('hidden');
+                    document.body.style.overflow = '';
+                    localStorage.setItem('encanto_marketing_v14', 'true');
+                };
+            }
+        }
+
+        const setupPersistenceListener = () => {
+            if (!user || !db) return;
+            const stateRef = doc(db, 'artifacts', appId, 'users', user.uid, 'notification_data', 'state');
+            onSnapshot(stateRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const cloudIds = (docSnap.data().readIds || []).map(id => Number(id));
+                    readIds = [...new Set([...readIds, ...cloudIds])];
+                    localStorage.setItem('encanto_read_ids', JSON.stringify(readIds));
+                    updateNotifUI();
+                }
+            });
+        };
+
+        async function fetchAgenda() {
+            if (isLoadingAgenda) return;
+            isLoadingAgenda = true;
+            const container = getEl('agendaContainer');
+            const countEl = getEl('agendaCount');
+            if (countEl) countEl.innerText = 'Consultando...';
+            container.innerHTML = `
+                <div class="flex flex-col gap-4 mt-4">
+                    <div class="skeleton-card"><div class="shimmer-overlay"></div></div>
+                    <div class="skeleton-card"><div class="shimmer-overlay"></div></div>
+                    <div class="skeleton-card"><div class="shimmer-overlay"></div></div>
+                </div>
+            `;
+            try {
+                const res = await fetch(AGENDA_API);
+                const data = await res.json();
+                const today = new Date();
+                today.setHours(0,0,0,0);
+                agendaData = data.filter(item => {
+                    const dateVal = item.EVENTO || item.dia || item.data;
+                    return parseSheetDate(dateVal) >= today;
+                }).sort((a, b) => parseSheetDate(a.EVENTO || a.dia) - parseSheetDate(b.EVENTO || b.dia));
+                renderAgenda();
+            } catch (e) {
+                container.innerHTML = `<p class="text-white/50 text-center py-10">Não foi possível carregar as reservas no momento.</p>`;
+                if (countEl) countEl.innerText = 'Erro';
+            } finally { 
+                isLoadingAgenda = false; 
+            }
+        }
+
+        function parseSheetDate(dateStr) {
+            if (!dateStr) return new Date();
+            if (String(dateStr).includes('-') && String(dateStr).includes('T')) return new Date(dateStr);
+            const parts = String(dateStr).split('/');
+            if (parts.length === 3) return new Date(parts[2], parts[1] - 1, parts[0]);
+            return new Date(dateStr);
+        }
+
+        function formatPhone(phone) {
+            if (!phone) return "(xx) xxxxx-x***";
+            let cleaned = ('' + phone).replace(/\D/g, '');
+            if (cleaned.length < 10) return phone;
+            return `(${cleaned.substring(0, 2)}) ${cleaned.substring(2, 7)}-${cleaned.substring(7, 8)}***`;
+        }
+
+        function renderAgenda() {
+            const container = getEl('agendaContainer');
+            const countEl = getEl('agendaCount');
+            if (!container) return;
+            const filtered = searchQuery.trim() === "" ? agendaData : agendaData.filter(item => {
+                const nome = (item.NOME || '').toLowerCase();
+                return nome.includes(searchQuery.toLowerCase());
+            });
+            if (countEl) countEl.innerText = searchQuery ? `${filtered.length} ENCONTRADOS` : `${agendaData.length} RESERVAS`;
+            const visibleItems = filtered.slice(0, searchQuery ? 100 : agendaVisibleLimit);
+            if (visibleItems.length === 0) {
+                container.innerHTML = `<div class="text-center py-20 opacity-30 text-white brand-font text-xl">${searchQuery ? 'Sem resultados.' : 'Sem reservas futuras.'}</div>`;
+                return;
+            }
+            const today = new Date(); today.setHours(0,0,0,0);
+            const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
+            let lastMonthYear = "";
+            let html = "";
+            visibleItems.forEach((item) => {
+                const date = parseSheetDate(item.EVENTO || item.dia || item.data);
+                const checkDate = new Date(date); checkDate.setHours(0,0,0,0);
+                const monthYearKey = `${date.getMonth()}-${date.getFullYear()}`;
+                if (monthYearKey !== lastMonthYear) {
+                    const monthName = date.toLocaleDateString('pt-PT', { month: 'long' });
+                    const isThisMonth = date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear();
+                    html += `<div class="month-divider">${isThisMonth ? 'ESTE MÊS' : monthName}</div>`;
+                    lastMonthYear = monthYearKey;
+                }
+                let dateBadgeHtml = "";
+                if (checkDate.getTime() === today.getTime()) {
+                    dateBadgeHtml = `<span class="text-[11px] font-black text-[#1e3a8a]">HOJE</span>`;
+                } else if (checkDate.getTime() === tomorrow.getTime()) {
+                    dateBadgeHtml = `<span class="text-[10px] font-black text-[#1e3a8a] leading-none uppercase text-center">AMA<br>NHÃ</span>`;
+                } else {
+                    dateBadgeHtml = `<span class="text-[10px] uppercase font-bold opacity-70 leading-none text-[#1e3a8a]/80">${date.toLocaleDateString('pt-PT', { month: 'short' }).replace('.','')}</span><span class="text-xl font-bold brand-font leading-none text-[#1e3a8a]">${date.getDate()}</span>`;
+                }
+                const itensRaw = item["ITENS LOCADOS"] || 'Equipamentos Diversos';
+                const itensList = itensRaw.split(',').map(i => i.trim()).join('<br>');
+                const bairro = item.BAIRRO || item.bairro || '';
+                html += `<div class="item-card p-4 rounded-[1.5rem] text-white shadow-lg flex flex-col gap-3"><div class="flex items-center gap-4"><div class="date-badge">${dateBadgeHtml}</div><div class="flex-1 min-w-0"><h3 class="font-bold text-sm leading-tight mb-0.5 truncate flex items-center gap-1.5">${item.NOME || 'Cliente Encanto'} ${bairro ? `<span class="text-[10px] font-medium text-slate-400 whitespace-nowrap opacity-90 tracking-tight">(${bairro})</span>` : ''}</h3><p class="text-[12px] text-blue-100/70 font-medium">${formatPhone(item.WHATSAPP || item.telefone)}</p></div></div><div class="pt-2 border-t border-white/5"><p class="text-[11px] text-yellow-400 font-bold italic leading-relaxed uppercase tracking-tight">${itensList}</p></div></div>`;
+            });
+            container.innerHTML = html;
+            const pagination = getEl('agendaPagination');
+            if (pagination) pagination.classList.toggle('hidden', searchQuery !== "" || agendaVisibleLimit >= agendaData.length);
+        }
+
+        async function fetchNotifications() {
+            try {
+                const response = await fetch(`${NOTIF_URL}?t=${new Date().getTime()}`);
+                if (response.ok) rawNotifications = await response.json();
+            } catch (e) {
+                rawNotifications = [{ id: 101, titulo: "Bem-vindo! 🎈", mensagem: "Confira as novidades no seu painel.", tipo: "info", data: new Date().toISOString() }];
+            }
+            updateNotifUI();
+        }
+
+        function updateNotifUI() {
+            const active = rawNotifications.filter(n => !readIds.includes(Number(n.id)));
+            active.sort((a, b) => new Date(b.data) - new Date(a.data));
+            const badge = getEl('notifBadge');
+            if (badge) badge.classList.toggle('hidden', active.length === 0);
+            renderNotifs(active);
+        }
+
+        function renderNotifs(list) {
+            const container = getEl('notifContainer');
+            if (!container) return;
+            if (list.length === 0) {
+                container.innerHTML = `<div class="text-center py-20 opacity-20 text-white brand-font text-xl">Tudo em dia!</div>`;
+                return;
+            }
+            container.innerHTML = '';
+            list.forEach(n => {
+                const card = document.createElement('div');
+                card.className = "item-card p-4 rounded-[1.5rem] text-white shadow-lg cursor-pointer";
+                card.innerHTML = `<div class="flex gap-3"><div class="w-10 h-10 shrink-0 rounded-xl bg-white/10 flex items-center justify-center text-xl shadow-inner pointer-events-none">${n.tipo === 'alerta' ? '⚡' : '✨'}</div><div class="flex-1 min-w-0 pointer-events-none"><h3 class="font-bold text-sm leading-tight mb-1 text-white">${n.titulo}</h3><p class="text-[13px] text-blue-50/80 mb-2 leading-relaxed line-clamp-msg">${n.mensagem}</p><button class="mark-btn text-[10px] font-bold text-blue-300 hover:text-white uppercase transition-colors pointer-events-auto">Marcar lido</button></div></div>`;
+                card.onclick = (e) => {
+                    if (e.target.classList.contains('mark-btn')) {
+                        e.stopPropagation(); if(card) card.classList.add('dismissing'); setTimeout(() => persistReadId(n.id), 450); return;
+                    }
+                    const msgPara = card.querySelector('.line-clamp-msg');
+                    if (msgPara) {
+                        const isTruncated = msgPara.scrollHeight > msgPara.clientHeight;
+                        if (isTruncated && !card.classList.contains('expanded')) { card.classList.add('expanded'); }
+                        else if (n.link) window.location.href = n.link;
+                    }
+                };
+                container.appendChild(card);
+            });
+        }
+
+        async function persistReadId(id) {
+            const nid = Number(id);
+            if (!readIds.includes(nid)) { readIds.push(nid); localStorage.setItem('encanto_read_ids', JSON.stringify(readIds)); }
+            updateNotifUI();
+            if (user && db) {
+                const stateRef = doc(db, 'artifacts', appId, 'users', user.uid, 'notification_data', 'state');
+                try { await updateDoc(stateRef, { readIds: arrayUnion(nid) }); } catch (e) { await setDoc(stateRef, { readIds }); }
+            }
+        }
+
+        async function markAllNotificationsAsRead() {
+            const newIds = rawNotifications.map(n => Number(n.id));
+            readIds = [...new Set([...readIds, ...newIds])];
+            localStorage.setItem('encanto_read_ids', JSON.stringify(readIds));
+            updateNotifUI();
+            if (user && db) {
+                const stateRef = doc(db, 'artifacts', appId, 'users', user.uid, 'notification_data', 'state');
+                try { await updateDoc(stateRef, { readIds: readIds }); } catch (e) { await setDoc(stateRef, { readIds: readIds }); }
+            }
+        }
+
+        const setupUIListeners = () => {
+            const btns = { notif: getEl('notifBtn'), agenda: getEl('agendaBtn'), closeNotif: getEl('closeNotif'), closeAgenda: getEl('closeAgenda'), viewMore: getEl('viewMoreAgenda'), markAll: getEl('markAllRead') };
+            const modals = { notif: getEl('notifModal'), agenda: getEl('agendaModal') };
+            const searchInput = getEl('agendaSearch');
+            if (btns.notif && modals.notif) {
+                btns.notif.onclick = () => { modals.notif.classList.remove('hidden'); setTimeout(() => modals.notif.classList.add('active'), 10); };
+            }
+            if (btns.agenda && modals.agenda) {
+                btns.agenda.onclick = () => { 
+                    modals.agenda.classList.remove('hidden'); 
+                    setTimeout(() => { 
+                        modals.agenda.classList.add('active'); 
+                        fetchAgenda(); 
+                        if (searchInput) searchInput.focus(); 
+                    }, 10); 
+                };
+            }
+            if (btns.closeNotif && modals.notif) {
+                btns.closeNotif.onclick = () => { modals.notif.classList.remove('active'); setTimeout(() => modals.notif.classList.add('hidden'), 400); };
+            }
+            if (btns.closeAgenda && modals.agenda) {
+                btns.closeAgenda.onclick = () => { modals.agenda.classList.remove('active'); setTimeout(() => modals.agenda.classList.add('hidden'), 400); };
+            }
+            if (btns.viewMore) {
+                btns.viewMore.onclick = () => { agendaVisibleLimit += 5; renderAgenda(); };
+            }
+            if (btns.markAll) {
+                btns.markAll.onclick = () => markAllNotificationsAsRead();
+            }
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => { searchQuery = e.target.value; renderAgenda(); });
+            }
+        };
+        setupUIListeners();
+        init();
+    </script>
+</body>
+</html>
 <body class="pb-32 bg-slate-50">
 
     <div id="cartToast">Adicionado ao carrinho</div>
@@ -324,7 +904,7 @@
             <div class="w-20 h-20 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
                 <i class="fas fa-calendar-check text-3xl"></i>
             </div>
-            <h4 class="text-2xl font-black text-slate-800 mb-2 uppercase font-black uppercase">Reservado!</h4>
+            <h4 class="text-2xl font-black text-slate-800 mb-2 uppercase font-black">Reservado!</h4>
             <p class="text-slate-500 text-sm mb-2 leading-relaxed font-bold">Para manter sua reserva, pedimos um pequeno sinal de <b>R$ 25,00</b> e o restante no dia da montagem.</p>
             
             <div class="bg-blue-50/50 py-3 px-4 rounded-2xl mb-6 inline-block">
@@ -380,37 +960,35 @@
         var userCEP = "";
 
         const COUPONS_DB = {
-            "FRETE10": "R$ 15,00 de desconto no frete aplicado!",
+            "UIOU321": "30% de desconto aplicado!",
+            "3U2O1IU": "30% de desconto aplicado!",
+            "U3O1I2U": "30% de desconto aplicado!",
+            "21O3OI3": "30% de desconto aplicado!",
+            "12O3123": "30% de desconto aplicado!",
+            "OU1IO33": "30% de desconto aplicado!",
+            "13O2I3U": "30% de desconto aplicado!",
+            "0132139": "30% de desconto aplicado!",
             "MIXCASTLE": "Castelinho por R$ 180,00 aplicado!",
-            "MEGAPROMO": "20% de desconto aplicado!",
-            "ENCANTO": "10% de desconto aplicado!",
-            "CLUBEDEZ": "10% de desconto aplicado!",
-            "DESCONTO1": "1% de desconto aplicado!",
-            "DESCONTO2": "2% de desconto aplicado!",
-            "DESCONTO3": "3% de desconto aplicado!",
-            "DESCONTO4": "4% de desconto aplicado!",
-            "DESCONTO5": "5% de desconto aplicado!",
-            "DESCONTO6": "6% de desconto aplicado!",
-            "DESCONTO7": "7% de desconto aplicado!",
-            "DESCONTO8": "8% de desconto aplicado!",
-            "DESCONTO9": "9% de desconto aplicado!",
-            "DESCONTO10": "10% de desconto aplicado!"
+            "FIVEHUND": "5% de desconto aplicado!",
+            "DEZZOFF": "10% de desconto aplicado!",
+            "MEGAPROMO30": "30% de desconto aplicado!",
+            "MEUCLUB": "R$ 15,00 de desconto na entrega aplicado!"
         };
 
         const TOYS_DB = [
-            { id: 1, name: "Pula Pula Pequeno", qty: 1, price: 170, category: "pula", age: "14", size: "2.4m", power: false, relevance: 1, photo: "https://www.dropbox.com/scl/fi/el5jqaoyod5ukwwzaxihx/camap.webp?rlkey=y1zvmsi9cdtsbh3gtb3091a4x&st=bpwuda61&raw=1" },
-            { id: 2, name: "Pula Pula Médio", qty: 3, price: 190, category: "pula", age: "14", size: "3.0m", power: false, relevance: 2, photo: "https://www.dropbox.com/scl/fi/2xwplyqsnbhndgwde2scg/camam.webp?rlkey=41hiqdgiwnxzvmllf0owgckx8&st=g35vk0oj&raw=1" },
-            { id: 3, name: "Piscina de Bolinhas", qty: 2, price: 160, category: "piscina", age: "14", size: "2.0m", power: false, relevance: 3, photo: "https://www.dropbox.com/scl/fi/pr90on1ea81nq30lzpxr8/piscina.webp?rlkey=mp5a9b4yfk5v0tyqt75g0ij2j&st=gp4p2onk&raw=1" },
-            { id: 4, name: "Tobogã Médio", qty: 1, price: 400, category: "toboga", age: "14", size: "5.0m", power: true, motorForte: true, relevance: 4, photo: "https://www.dropbox.com/scl/fi/a673dgh39ak497b6h9e2t/tobogam.webp?rlkey=byhi3k1tklmum2sfq9fyor2rb&st=rz9ming4&raw=1" },
-            { id: 5, name: "Área Baby", qty: 1, price: 120, category: "baby", age: "6", size: "3x3m", power: false, relevance: 5, photo: "https://www.dropbox.com/scl/fi/fttgp8j0mjdhw22rwgr3i/areababy.webp?rlkey=028cvlshetwv4w7dm3aydbzwj&st=7kmq57d2&raw=1" },
-            { id: 6, name: "Mini Baby", qty: 1, price: 220, category: "baby", age: "6", size: "2.5m", power: true, relevance: 6, photo: "https://www.dropbox.com/scl/fi/178cc2igiy3y5wchnseum/minibaby.webp?rlkey=7svoyh1p0tggjsjehqhaegpt&st=9zacigwz&raw=1" },
-            { id: 7, name: "Castelinho", qty: 1, price: 220, category: "baby", age: "14", size: "3.0m", power: true, relevance: 7, photo: "https://www.dropbox.com/scl/fi/zn1npqidyhre44o7v1nwr/castelinho.webp?rlkey=8765usqe385cii48inuz99e5j&st=5q2xu57k&raw=1" },
-            { id: 8, name: "Futebol de Sabão", qty: 1, price: 600, category: "especial", age: "14", size: "10.0m", power: true, motorForte: true, relevance: 8, photo: "https://www.dropbox.com/scl/fi/iceod32yym2tttljajh8e/futebol.webp?rlkey=qttzkj74om9j8uyov770cvkdn&st=10wsk8x8&raw=1" },
-            { id: 9, name: "Escorrega com Bolinhas", qty: 1, price: 400, category: "especial", age: "14", size: "4.0m", power: true, motorForte: true, relevance: 9, photo: "https://www.dropbox.com/scl/fi/vqjds36sx0wvhjuxurc4l/escorregobol.webp?rlkey=qxk7tzac8xod1fdzrwr8u508m&st=59u3k5x9&raw=1" },
-            { id: 10, name: "Airhockey", qty: 1, price: 200, category: "mesa_jogo", age: "L", size: "1.5m", power: true, relevance: 10, photo: "https://www.dropbox.com/scl/fi/ajfbj633cif6lpupadding_rw/aero.webp?rlkey=hw3hlemgizrnj4ta2fkrcs1ep&st=33j7lib0&raw=1" },
-            { id: 11, name: "Pebolim", qty: 1, price: 200, category: "mesa_jogo", age: "L", size: "1.4m", power: false, relevance: 11, photo: "https://www.dropbox.com/scl/fi/bx7605s0ls33k02y74t4j/pebolim.webp?rlkey=409zdmagm2yj6ao6g4mfhfquj&st=j6elwlyz&raw=1" },
-            { id: 12, name: "Pingpong", qty: 1, price: 200, category: "mesa_jogo", age: "L", size: "2.7m", power: false, relevance: 12, photo: "https://www.dropbox.com/scl/fi/3ulqvdy513l94frbqa99p/pingpong.webp?rlkey=zwzys2yjemczin4ebi3c22jq8&st=w8pcvikq&raw=1" },
-            { id: 13, name: "Mesas", qty: 4, price: 15, category: "mesa_comer", age: "L", size: "0.8m", power: false, relevance: 13, photo: "https://www.dropbox.com/scl/fi/zpcyj8a466fhms7vqwcr6/mesas.webp?rlkey=8ca2hbxbnvxbftagrprq7scj7&st=bb24hbti&raw=1" }
+            { id: 1, name: "Pula Pula Pequeno", qty: 1, price: 170, category: "pula", age: "14", size: "2.44m", power: false, motorForte: false, relevance: 1, photo: "https://www.dropbox.com/scl/fi/el5jqaoyod5ukwwzaxihx/camap.webp?rlkey=y1zvmsi9cdtsbh3gtb3091a4x&st=bpwuda61&raw=1" },
+            { id: 2, name: "Pula Pula Médio", qty: 3, price: 190, category: "pula", age: "14", size: "3.05m", power: false, motorForte: false, relevance: 2, photo: "https://www.dropbox.com/scl/fi/2xwplyqsnbhndgwde2scg/camam.webp?rlkey=41hiqdgiwnxzvmllf0owgckx8&st=g35vk0oj&raw=1" },
+            { id: 3, name: "Piscina de Bolinhas", qty: 2, price: 160, category: "piscina", age: "14", size: "Padrão", power: false, motorForte: false, relevance: 3, photo: "https://www.dropbox.com/scl/fi/pr90on1ea81nq30lzpxr8/piscina.webp?rlkey=mp5a9b4yfk5v0tyqt75g0ij2j&st=gp4p2onk&raw=1" },
+            { id: 4, name: "Tobogã Médio", qty: 1, price: 400, category: "toboga", age: "14", size: "3x5m", power: true, motorForte: true, relevance: 4, photo: "https://www.dropbox.com/scl/fi/a673dgh39ak497b6h9e2t/tobogam.webp?rlkey=byhi3k1tklmum2sfq9fyor2rb&st=rz9ming4&raw=1" },
+            { id: 5, name: "Área Baby", qty: 1, price: 120, category: "baby", age: "6", size: "Padrão", power: false, motorForte: false, relevance: 5, photo: "https://www.dropbox.com/scl/fi/fttgp8j0mjdhw22rwgr3i/areababy.webp?rlkey=028cvlshetwv4w7dm3aydbzwj&st=7kmq57d2&raw=1" },
+            { id: 6, name: "Mini Baby", qty: 1, price: 220, category: "baby", age: "6", size: "Padrão", power: true, motorForte: false, relevance: 6, photo: "https://www.dropbox.com/scl/fi/fxeu36d83jxv2jpwi2c1n/mini-babyyy.webp?rlkey=kecnwpquq7415hlrwf3j1man4&st=jsdhlky6&raw=1" },
+            { id: 7, name: "Castelinho", qty: 1, price: 220, category: "baby", age: "14", size: "3m", power: true, motorForte: false, relevance: 7, photo: "https://www.dropbox.com/scl/fi/zn1npqidyhre44o7v1nwr/castelinho.webp?rlkey=8765usqe385cii48inuz99e5j&st=5q2xu57k&raw=1" },
+            { id: 8, name: "Futebol de Sabão", qty: 1, price: 600, category: "especial", age: "14", size: "4x8", power: true, motorForte: true, relevance: 8, photo: "https://www.dropbox.com/scl/fi/iceod32yym2tttljajh8e/futebol.webp?rlkey=qttzkj74om9j8uyov770cvkdn&st=10wsk8x8&raw=1" },
+            { id: 9, name: "Escorrega com Bolinhas", qty: 1, price: 400, category: "especial", age: "14", size: "Padrão", power: true, motorForte: true, relevance: 9, photo: "https://www.dropbox.com/scl/fi/vqjds36sx0wvhjuxurc4l/escorregobol.webp?rlkey=qxk7tzac8xod1fdzrwr8u508m&st=59u3k5x9&raw=1" },
+            { id: 10, name: "Airhockey", qty: 1, price: 200, category: "mesa_jogo", age: "L", size: "Padrão", power: true, motorForte: false, relevance: 10, photo: "https://www.dropbox.com/scl/fi/ajfbj633cif6lpuqblzrw/aero.webp?rlkey=hw3hlemgizrnj4ta2fkrcs1ep&st=33j7lib0&raw=1" },
+            { id: 11, name: "Pebolim", qty: 1, price: 200, category: "mesa_jogo", age: "L", size: "Padrão", power: false, motorForte: false, relevance: 11, photo: "https://www.dropbox.com/scl/fi/bx7605s0ls33k02y74t4j/pebolim.webp?rlkey=409zdmagm2yj6ao6g4mfhfquj&st=j6elwlyz&raw=1" },
+            { id: 12, name: "Pingpong", qty: 1, price: 200, category: "mesa_jogo", age: "L", size: "Padrão", power: false, motorForte: false, relevance: 12, photo: "https://www.dropbox.com/scl/fi/3ulqvdy513l94frbqa99p/pingpong.webp?rlkey=zwzys2yjemczin4ebi3c22jq8&st=w8pcvikq&raw=1" },
+            { id: 13, name: "Mesas", qty: 4, price: 15, category: "mesa_comer", age: "L", size: "Padrão", power: false, motorForte: false, relevance: 13, photo: "https://www.dropbox.com/scl/fi/zpcyj8a466fhms7vqwcr6/mesas.webp?rlkey=8ca2hbxbnvxbftagrprq7scj7&st=bb24hbti&raw=1" }
         ];
 
         const totalEstoqueGlobal = TOYS_DB.reduce((acc, toy) => acc + toy.qty, 0);
@@ -616,6 +1194,13 @@
         function renderToys() {
             const list = document.getElementById('toyList');
             const dateStr = normalizeDate(selectedDate);
+            
+            // Lógica de Trava para Motor Forte
+            const motorGrandeIds = TOYS_DB.filter(t => t.motorForte).map(t => t.id);
+            const isMotorGrandeBooked = motorGrandeIds.some(id => (globalAgendamentos[dateStr] || {})[id] > 0);
+            const cartHasMotorGrande = cart.some(c => motorGrandeIds.includes(c.id));
+            const selectedMotorId = cart.find(c => motorGrandeIds.includes(c.id))?.id;
+
             let toys = [...TOYS_DB].map(toy => ({ ...toy, availableQty: getToyStockForDate(toy.id, dateStr) }));
             const ageF = document.getElementById('ageFilter').value;
             const sort = document.getElementById('sortFilter').value;
@@ -630,19 +1215,24 @@
             toys.forEach(toy => {
                 const inCart = cart.find(c => c.id === toy.id) || { qty: 0 };
                 let isOut = toy.availableQty <= 0 && inCart.qty === 0;
+                
+                // Trava: Se já tem motor forte agendado ou no carrinho, bloqueia outros motores fortes
+                let isMotorLock = toy.motorForte && (isMotorGrandeBooked || (cartHasMotorGrande && toy.id !== selectedMotorId));
+                
+                let isBlocked = isOut || isMotorLock;
                 let price = (toy.category === 'mesa_comer') ? toy.price : toy.price * mult;
                 
                 const card = document.createElement('div');
-                card.className = `toy-card flex p-4 relative ${isOut ? 'disabled' : ''}`;
+                card.className = `toy-card flex p-4 relative ${isBlocked ? 'disabled' : ''}`;
                 card.innerHTML = `
                     <div class="w-20 h-20 rounded-xl overflow-hidden mr-4 shrink-0 bg-slate-100 flex items-center justify-center relative img-skeleton">
-                        <img src="${toy.photo}" class="w-full h-full object-cover opacity-0 transition-opacity duration-300" onload="this.classList.remove('opacity-0'); this.parentElement.classList.remove('img-skeleton')"><div class="age-badge bg-blue-500">${toy.age}</div>
+                        <img src="${toy.photo}" class="w-full h-full object-cover opacity-0 transition-opacity duration-300" onload="this.classList.remove('opacity-0'); this.parentElement.classList.remove('img-skeleton')" onerror="this.src='https://via.placeholder.com/150?text=Indispon%C3%ADvel'; this.classList.remove('opacity-0'); this.parentElement.classList.remove('img-skeleton')"><div class="age-badge bg-blue-500">${toy.age}</div>
                     </div>
                     <div class="flex-grow">
-                        <h4 class="font-bold text-slate-800 text-sm leading-tight uppercase font-black">${toy.name}</h4>
+                        <h4 class="font-bold text-slate-800 text-sm leading-tight uppercase font-black font-black">${toy.name}</h4>
                         <p class="text-[10px] text-slate-400 mt-1 uppercase font-semibold font-black font-black">${toy.size}</p>
-                        <p class="${mult < 1.0 && toy.category !== 'mesa_comer' ? 'text-green-500' : (mult > 1.0 && toy.category !== 'mesa_comer' ? 'text-red-500' : 'text-[#003399]')} font-black mt-1 font-black font-black font-black font-black font-black font-black">R$ ${price.toLocaleString('pt-BR', {minimumFractionDigits: 0})}</p>
-                        <div class="flex items-center mt-2 gap-3">
+                        <p class="${mult < 1.0 && toy.category !== 'mesa_comer' ? 'text-green-500' : (mult > 1.0 && toy.category !== 'mesa_comer' ? 'text-red-500' : 'text-[#003399]')} font-black mt-1 font-black font-black">R$ ${price.toLocaleString('pt-BR', {minimumFractionDigits: 0})}</p>
+                        <div class="flex items-center mt-2 gap-3 font-black">
                             <button onclick="changeQty(${toy.id}, -1)" class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 border border-slate-100">-</button>
                             <span class="font-bold text-sm w-4 text-center font-black">${inCart.qty}</span>
                             <button onclick="changeQty(${toy.id}, 1)" class="w-8 h-8 rounded-full bg-[#003399] text-white flex items-center justify-center">+</button>
@@ -675,26 +1265,35 @@
 
         function updateSummary() {
             let totalBrinquedos = 0;
+            let fullPriceItemsSum = 0; // Soma dos preços unitários originais
             const pl = getPriceLevel(selectedDate);
             let plMult = pl==='$' ? 0.8 : (pl==='$$$' ? 1.2 : (pl==='$$$$' ? 1.6 : 1.0));
             let countCombo = 0;
+
             cart.forEach(i => {
                 let priceItem = (i.category === 'mesa_comer') ? i.price : i.price * plMult;
                 if (couponCode === "MIXCASTLE" && i.id === 7) priceItem = 180;
+                
                 totalBrinquedos += priceItem * i.qty;
+                fullPriceItemsSum += i.price * i.qty; // Base para cálculo de economia
                 if (i.category !== 'mesa_comer') countCombo += i.qty;
             });
-            let comboDiscount = 1.0;
+
+            let comboDiscountFactor = 1.0;
             const badge = document.getElementById('discountBadge');
             if (countCombo >= 2) {
                 const discPerc = pl === '$' ? 5 : 10;
-                comboDiscount = pl === '$' ? 0.95 : 0.90;
+                comboDiscountFactor = pl === '$' ? 0.95 : 0.90;
                 badge.innerText = `COMBO ${discPerc}%!`;
                 badge.classList.remove('hidden');
             } else badge.classList.add('hidden');
-            totalBrinquedos *= comboDiscount;
-            let multDays = [1, 1, 1.7, 2.3, 2.8, 3.2][extraDays] || 1;
-            let totalFinal = totalBrinquedos * multDays;
+
+            totalBrinquedos *= comboDiscountFactor;
+
+            // Fator de diárias múltiplas
+            let multDaysFactor = [1, 1, 1.7, 2.3, 2.8, 3.2][extraDays] || 1;
+            let totalFinal = totalBrinquedos * multDaysFactor;
+
             let startInt = parseInt(startTime.split(':')[0]);
             let isNextDay = endTime === "NEXT_DAY";
             let endInt = isNextDay ? 22 : parseInt(endTime.split(':')[0]);
@@ -702,24 +1301,48 @@
             if (duration > 6) totalFinal += (duration - 6) * 5;
             if (isNextDay) totalFinal += 10;
             totalFinal += monitorsCount * monitorHours * 30;
+
+            // Lógica de Frete com MEUCLUB
             let deliveryFee = (selectedBairro ? BAIRROS[selectedBairro] : 0);
-            if (couponCode === "FRETE10" && deliveryFee > 0) deliveryFee = Math.max(0, deliveryFee - 15);
-            totalFinal += (insuranceEnabled ? 14.90 : 0) + deliveryFee;
-            if (couponIsValid) {
-                if (couponCode === "MEGAPROMO") totalFinal *= 0.8;
-                else if (couponCode.startsWith("DESCONTO")) {
-                    let perc = parseInt(couponCode.replace("DESCONTO", ""));
-                    if (!isNaN(perc)) totalFinal *= (1 - perc/100);
-                }
-                else if (COUPONS_DB[couponCode] && COUPONS_DB[couponCode].includes("10%")) totalFinal *= 0.9;
+            if (couponCode === "MEUCLUB" && deliveryFee > 0) {
+                deliveryFee = Math.max(0, deliveryFee - 15);
             }
+            totalFinal += (insuranceEnabled ? 14.90 : 0) + deliveryFee;
+
+            // Lógica de Cupons de Porcentagem
+            if (couponIsValid) {
+                if (couponCode === "FIVEHUND") totalFinal *= 0.95;
+                else if (couponCode === "DEZZOFF") totalFinal *= 0.90;
+                else if (["UIOU321", "3U2O1IU", "U3O1I2U", "21O3OI3", "12O3123", "OU1IO33", "13O2I3U", "0132139", "MEGAPROMO30"].includes(couponCode)) {
+                    totalFinal *= 0.70;
+                }
+            }
+
+            // Cálculo da Economia (Diferença entre o preço bruto original unitário x dias e o preço final praticado)
+            let fullPriceTheoretical = (fullPriceItemsSum * extraDays) + (selectedBairro ? BAIRROS[selectedBairro] : 0) + (insuranceEnabled ? 14.90 : 0);
+            let savings = Math.max(0, fullPriceTheoretical - totalFinal);
+
             const totalStr = "R$ " + totalFinal.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
             document.getElementById('totalValueText').innerText = totalStr;
             document.getElementById('pixFinalTotalDisplay').innerText = totalStr;
+
+            // Atualiza texto de economia
+            const savingsEl = document.getElementById('savingsText');
+            if (savings > 0.5) {
+                savingsEl.innerText = `Você economizou R$ ${savings.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+                savingsEl.classList.remove('hidden');
+            } else {
+                savingsEl.classList.add('hidden');
+            }
+
+            // Atualiza texto de entrega
             const delEl = document.getElementById('deliveryText');
-            if (selectedBairro) delEl.innerHTML = deliveryFee === 0 ? '<span class="text-green-500 font-black">FRETE GRÁTIS</span>' : `TAXA R$ ${deliveryFee.toFixed(2).replace('.',',')}`;
-            else delEl.innerText = "";
+            if (selectedBairro) {
+                delEl.innerHTML = deliveryFee === 0 ? '<span class="text-green-500 font-black">FRETE GRÁTIS</span>' : `TAXA DE ENTREGA R$ ${deliveryFee.toFixed(2).replace('.',',')} REAIS`;
+            } else delEl.innerText = "";
+
             document.getElementById('mainBtn').disabled = cart.length === 0;
+
             if (currentStep === 'summary') {
                 const list = document.getElementById('orderDetailList');
                 if (list) list.innerHTML = cart.map(i => `<div class='text-slate-800 font-bold py-0.5 text-sm uppercase font-black'>${i.qty}x ${i.name}</div>`).join('');
@@ -729,7 +1352,6 @@
         async function sendToSheet() {
             if (!API_URL) return;
             const payload = {
-                id: "ID",                               
                 evento: normalizeDate(selectedDate),    
                 diaAnt: deliveryPreviousDay ? "Sim" : "Não", 
                 inicio: startTime,                      
@@ -844,10 +1466,13 @@
 
         function nextStep() {
             if (currentStep === 'toys') {
-                if (cart.length === 0) { showToast("Selecione um brinquedo!"); return; }
+                if (cart.length === 0) { showToast("Selecione um brinquedo primeiro!"); return; }
                 currentStep = 'id';
                 closeSheet();
-                setTimeout(() => { renderForm(); openSheet('formSheet'); }, 200);
+                setTimeout(() => { 
+                    renderForm(); 
+                    openSheet('formSheet'); 
+                }, 200);
                 return;
             }
             if (!validateCurrentStep()) return;
@@ -858,7 +1483,12 @@
             if (next) {
                 currentStep = next;
                 closeSheet(); 
-                setTimeout(() => { renderForm(); openSheet('formSheet'); const sheet = document.getElementById('formSheet'); if(sheet) sheet.scrollTop = 0; }, 200);
+                setTimeout(() => { 
+                    renderForm();
+                    openSheet('formSheet');
+                    const sheet = document.getElementById('formSheet');
+                    if(sheet) sheet.scrollTop = 0;
+                }, 200);
             }
         }
 
@@ -892,6 +1522,16 @@
         function checkCoupon(val) {
             if (couponIsValid) return;
             let code = val.toUpperCase().trim();
+            
+            if (code === "MEUCLUB" && selectedBairro) {
+                let fee = BAIRROS[selectedBairro];
+                if (fee <= 0) {
+                    showToast("Este cupom é apenas para fretes pagos!");
+                    document.getElementById('couponInput').value = "";
+                    return;
+                }
+            }
+
             if (COUPONS_DB[code]) {
                 couponCode = code; couponIsValid = true; updateSummary(); renderForm();
             }
@@ -900,31 +1540,31 @@
         function renderForm() {
             const container = document.getElementById('formContent');
             if(!container) return;
-            const h = (t) => `<h3 class="text-xl font-bold text-[#003399] uppercase tracking-tighter mb-6 font-black">${t}</h3>`;
-            const likedLabel = (t) => `<label class="text-[10px] font-bold text-[#003399] uppercase ml-1 mb-1 block font-black">${t}</label>`;
+            const h = (t) => `<h3 class="text-xl font-bold text-[#003399] uppercase tracking-tighter mb-6 font-black font-black font-black font-black font-black font-black">${t}</h3>`;
+            const likedLabel = (t) => `<label class="text-[10px] font-bold text-[#003399] uppercase ml-1 mb-1 block font-black font-black font-black font-black font-black font-black font-black">${t}</label>`;
             const spacer = '<div class="h-40"></div>';
 
             if (currentStep === 'id') {
-                container.innerHTML = `${h('Seus Dados')}<div class="mb-4">${likedLabel('Nome')}<input type='text' id='userName' value='${userName}' placeholder='Seu primeiro nome' maxlength='20' oninput='formatName(this)' class='w-full p-5 bg-slate-50 rounded-2xl outline-none border-2 border-transparent focus:border-blue-500 font-bold'></div><div class="mb-4"><div class="flex items-center gap-1 mb-1 ml-1"><i class="fab fa-whatsapp text-green-500 text-xs"></i><label class="text-[10px] font-bold text-[#003399] uppercase font-black">WhatsApp</label></div><input type='tel' id='userZap' value='${userZap}' placeholder='(xx) xxxxx-xxxx' oninput='maskZap(this)' class='w-full p-5 bg-slate-50 rounded-2xl outline-none border-2 border-transparent focus:border-blue-500 font-bold'></div><div class="mt-8 p-6 bg-blue-50/50 rounded-3xl border border-blue-100 flex gap-4"><div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-blue-600 shadow-sm shrink-0"><i class="fas fa-shield-alt"></i></div><div><p class="text-[11px] font-black text-blue-900 uppercase mb-1 text-left font-black">Segurança Garantida</p><p class="text-[10px] text-blue-800 leading-relaxed text-left font-bold">Seus dados são processados em ambiente seguro para confirmar sua reserva.</p></div></div>${spacer}`;
+                container.innerHTML = `${h('Seus Dados')}<div class="mb-4 font-black">${likedLabel('Nome')}<input type='text' id='userName' value='${userName}' placeholder='Seu primeiro nome' maxlength='20' oninput='formatName(this)' class='w-full p-5 bg-slate-50 rounded-2xl outline-none border-2 border-transparent focus:border-blue-500 font-bold'></div><div class="mb-4 font-black"><div class="flex items-center gap-1 mb-1 ml-1"><i class="fab fa-whatsapp text-green-500 text-xs"></i><label class="text-[10px] font-bold text-[#003399] uppercase font-black font-black font-black font-black">WhatsApp</label></div><input type='tel' id='userZap' value='${userZap}' placeholder='(xx) xxxxx-xxxx' oninput='maskZap(this)' class='w-full p-5 bg-slate-50 rounded-2xl outline-none border-2 border-transparent focus:border-blue-500 font-bold'></div><div class="mt-8 p-6 bg-blue-50/50 rounded-3xl border border-blue-100 flex gap-4"><div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-blue-600 shadow-sm shrink-0"><i class="fas fa-shield-alt"></i></div><div><p class="text-[11px] font-black text-blue-900 uppercase mb-1 text-left font-black font-black font-black font-black">Segurança Garantida</p><p class="text-[10px] text-blue-800 leading-relaxed text-left font-bold font-black font-black font-black font-black font-black">Seus dados são processados em ambiente seguro para confirmar sua reserva.</p></div></div>${spacer}`;
             }
             else if (currentStep === 'address') {
-                container.innerHTML = `${h('Endereço')}<select id='userBairro' onchange='selectedBairro=this.value;updateSummary()' class='w-full p-5 bg-slate-50 rounded-2xl mb-4 font-bold outline-none font-black'><option value=''>Selecione o Bairro</option>${Object.keys(BAIRROS).map(b => `<option value="${b}" ${selectedBairro===b?'selected':''}>${b}</option>`)}</select><div class="relative mb-4"><input type="text" id="userRuaGhost" class="w-full p-5 bg-slate-50 rounded-2xl absolute inset-0 text-slate-300 pointer-events-none font-bold outline-none border-2 border-transparent" disabled><input type='text' id='userRua' value='${userRua}' placeholder='Nome da Rua' oninput='handleStreetInput(this)' onkeydown="handleStreetKeydown(event)" class='w-full p-5 bg-transparent rounded-2xl relative font-bold outline-none border-2 border-transparent focus:border-blue-500'></div><div id='streetSuggestionsContainer'></div><div class='flex gap-2 mb-4'><input type='text' id='userNum' value='${userSN ? "S/N" : userNum}' ${userSN ? "disabled" : ""} maxlength='4' placeholder='${userSN ? "S/N" : "N° da casa"}' oninput='this.value=this.value.replace(/\\D/g,"");userNum=this.value' class='w-full p-5 bg-slate-50 rounded-2xl font-bold outline-none font-black ${userSN ? "opacity-50" : ""}'> <div class='flex items-center gap-2 p-3 bg-slate-50 rounded-2xl flex-grow cursor-pointer font-black' onclick='userSN=!userSN;renderForm()'><div class='toggle-switch ${userSN?"on":""}'><div class='toggle-knob'></div></div><span class='text-[9px] font-medium text-slate-600 uppercase font-black'>sem número</span></div></div><input type='text' id='userDetails' value='${userDetails}' placeholder='Cor da casa, muro, etc' oninput='userDetails=this.value' class='w-full p-5 bg-slate-50 rounded-2xl font-bold outline-none font-black'>${spacer}`;
+                container.innerHTML = `${h('Endereço')}<select id='userBairro' onchange='selectedBairro=this.value;updateSummary()' class='w-full p-5 bg-slate-50 rounded-2xl mb-4 font-bold outline-none font-black font-black font-black font-black font-black'><option value=''>Selecione o Bairro</option>${Object.keys(BAIRROS).map(b => `<option value="${b}" ${selectedBairro===b?'selected':''}>${b}</option>`)}</select><div class="relative mb-4 font-black"><input type="text" id="userRuaGhost" class="w-full p-5 bg-slate-50 rounded-2xl absolute inset-0 text-slate-300 pointer-events-none font-bold outline-none border-2 border-transparent" disabled><input type='text' id='userRua' value='${userRua}' placeholder='Nome da Rua' oninput='handleStreetInput(this)' onkeydown="handleStreetKeydown(event)" class='w-full p-5 bg-transparent rounded-2xl relative font-bold outline-none border-2 border-transparent focus:border-blue-500'></div><div id='streetSuggestionsContainer'></div><div class='flex gap-2 mb-4 font-black'><input type='text' id='userNum' value='${userSN ? "S/N" : userNum}' ${userSN ? "disabled" : ""} maxlength='4' placeholder='${userSN ? "S/N" : "N° da casa"}' oninput='this.value=this.value.replace(/\\D/g,"");userNum=this.value' class='w-full p-5 bg-slate-50 rounded-2xl font-bold outline-none font-black font-black font-black font-black font-black ${userSN ? "opacity-50" : ""}'> <div class='flex items-center gap-2 p-3 bg-slate-50 rounded-2xl flex-grow cursor-pointer font-black font-black font-black font-black font-black font-black' onclick='userSN=!userSN;renderForm()'><div class='toggle-switch ${userSN?"on":""}'><div class='toggle-knob'></div></div><span class='text-[9px] font-medium text-slate-600 uppercase font-black'>sem número</span></div></div><input type='text' id='userDetails' value='${userDetails}' placeholder='Cor da casa, muro, etc' oninput='userDetails=this.value' class='w-full p-5 bg-slate-50 rounded-2xl font-bold outline-none font-black font-black font-black font-black font-black font-black font-black'>${spacer}`;
             }
             else if (currentStep === 'party') {
                 const dayDiscounts = ["", "0%", "15%", "23%", "30%", "36%"];
                 let startInt = parseInt(startTime.split(':')[0]);
-                container.innerHTML = `${h('Duração')}<p class='text-[10px] font-bold text-slate-400 mb-2 uppercase font-black'>Quantos dias de diversão?</p><div class='flex gap-2 mb-6'>${[1,2,3,4,5].map(d => `<button onclick="setExtraDays(${d})" class='flex-1 py-3 rounded-xl font-bold border-2 ${extraDays===d?"border-blue-600 bg-blue-50 text-blue-800 font-black":"border-slate-100 text-slate-800 font-black"} flex flex-col items-center'><span class='text-lg'>${d}${d>1?"d":""}</span><span class='text-[10px] text-green-500 font-black font-black'>-${dayDiscounts[d]}</span></button>`).join('')}</div><div class='flex gap-3 mb-6'><div class='flex-1'>${likedLabel('Início')}<select onchange="startTime=this.value;renderForm();updateSummary()" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-sm outline-none font-black">${["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00"].map(h => `<option value="${h}" ${startTime===h?'selected':''}>${h}</option>`).join('')}</select></div><div class='flex-1'>${likedLabel('Término')}<select id="partyEndTime" onchange="endTime=this.value;updateSummary()" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-sm outline-none font-black">${["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"].filter(h => parseInt(h.split(':')[0]) > startInt).map(h => `<option value="${h}" ${endTime===h?'selected':''}>${h}</option>`).join('')}<option value="NEXT_DAY" ${endTime==='NEXT_DAY'?'selected':''}>DIA SEGUINTE</option></select></div></div><div class='p-5 bg-blue-50 rounded-2xl mb-4 flex justify-between font-black' onclick='deliveryPreviousDay=!deliveryPreviousDay;renderForm()'><div><p class='text-[11px] font-bold text-blue-800 uppercase font-black'>Entregar um dia antes?</p><p class='text-[9px] text-blue-600 font-medium font-black'>Mesmo valor!</p></div><div class='toggle-switch ${deliveryPreviousDay?"on":""}'><div class='toggle-knob'></div></div></div>${spacer}`;
+                container.innerHTML = `${h('Duração')}<p class='text-[10px] font-bold text-slate-400 mb-2 uppercase font-black font-black font-black font-black font-black'>Quantos dias de diversão?</p><div class='flex gap-2 mb-6 font-black font-black font-black font-black font-black'>${[1,2,3,4,5].map(d => `<button onclick="setExtraDays(${d})" class='flex-1 py-3 rounded-xl font-bold border-2 ${extraDays===d?"border-blue-600 bg-blue-50 text-blue-800 font-black":"border-slate-100 text-slate-800 font-black"} flex flex-col items-center'><span class='text-lg'>${d}${d>1?"d":""}</span>${d > 1 ? `<span class='text-[10px] text-green-500 font-black font-black font-black font-black'>-${dayDiscounts[d]}</span>` : ""}</button>`).join('')}</div><div class='flex gap-3 mb-6 font-black font-black font-black font-black font-black'><div class='flex-1'>${likedLabel('Início')}<select onchange="startTime=this.value;renderForm();updateSummary()" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-sm outline-none font-black font-black font-black font-black font-black font-black">${["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00"].map(h => `<option value="${h}" ${startTime===h?'selected':''}>${h}</option>`).join('')}</select></div><div class='flex-1'>${likedLabel('Término')}<select id="partyEndTime" onchange="endTime=this.value;updateSummary()" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-sm outline-none font-black font-black font-black font-black font-black">${["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"].filter(h => parseInt(h.split(':')[0]) > startInt).map(h => `<option value="${h}" ${endTime===h?'selected':''}>${h}</option>`).join('')}<option value="NEXT_DAY" ${endTime==='NEXT_DAY'?'selected':''}>DIA SEGUINTE</option></select></div></div><div class='p-5 bg-blue-50 rounded-2xl mb-4 flex justify-between font-black font-black font-black font-black font-black font-black' onclick='deliveryPreviousDay=!deliveryPreviousDay;renderForm()'><div><p class='text-[11px] font-bold text-blue-800 uppercase font-black font-black font-black font-black font-black'>Entregar um dia antes?</p><p class='text-[9px] text-blue-600 font-medium font-black font-black font-black font-black font-black font-black font-black'>Mesmo valor!</p></div><div class='toggle-switch ${deliveryPreviousDay?"on":""}'><div class='toggle-knob'></div></div></div>${spacer}`;
             }
             else if (currentStep === 'details') {
-                container.innerHTML = `${h('Preferências')}<div class='p-6 bg-slate-50 rounded-3xl mb-12 text-center'><p class='text-[11px] font-black text-blue-700 mb-2 uppercase font-black'>A piscina fica coberta?</p><p class='text-[9px] text-blue-500 font-bold mb-4 font-black'>Só selecione "Sim" se não molhar nada</p><div class='flex gap-2 mb-10 font-black'>${["sim","não"].map(o => `<button onclick="piscinaCovered='${o}';renderForm()" class='flex-1 py-2 rounded-xl border-2 ${piscinaCovered===o?"border-blue-600 bg-blue-600 text-white":"bg-white text-slate-800 font-bold"}'>${o.toUpperCase()}</button>`).join('')}</div><p class='text-[11px] font-black text-[#003399] mb-1 uppercase font-black'>Monitor?</p><div class='flex gap-2 mb-4 font-black font-black'><button onclick="monitorsCount=0;renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===0?"border-blue-600 bg-blue-600 text-white":"bg-white font-bold font-black"}'>NÃO</button><button onclick="monitorsCount=1;renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===1?"border-blue-600 bg-blue-600 text-white":"bg-white font-bold font-black"}'>1 MON.</button><button onclick="monitorsCount=2;renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===2?"border-blue-600 bg-blue-600 text-white":"bg-white font-bold font-black"}'>2 MON.</button></div>${monitorsCount > 0 ? `<select onchange="monitorHours=parseInt(this.value);updateSummary()" class="w-full p-3 bg-white rounded-xl font-bold border border-slate-200 font-black">${[2,3,4,5,6].map(h => `<option value="${h}" ${monitorHours===h?'selected':''}>${h} HORAS</option>`).join('')}</select>` : ''}</div>
+                container.innerHTML = `${h('Preferências')}<div class='p-6 bg-slate-50 rounded-3xl mb-12 text-center font-black font-black'><p class='text-[11px] font-black text-blue-700 mb-2 uppercase font-black font-black font-black font-black font-black'>A piscina fica coberta?</p><p class='text-[9px] text-blue-500 font-bold mb-4 font-black font-black font-black font-black font-black font-black'>Só selecione "Sim" se ela não molhar nada</p><div class='flex gap-2 mb-10 font-black font-black font-black font-black font-black'>${["sim","não"].map(o => `<button onclick="piscinaCovered='${o}';renderForm()" class='flex-1 py-2 rounded-xl border-2 ${piscinaCovered===o?"border-blue-600 bg-blue-600 text-white font-black font-black":"bg-white text-slate-800 font-bold font-black font-black font-black font-black"}'>${o.toUpperCase()}</button>`).join('')}</div><p class='text-[11px] font-black text-[#003399] mb-1 uppercase font-black font-black font-black font-black font-black font-black'>Monitor?</p><div class='flex gap-2 mb-4 font-black font-black font-black font-black font-black font-black font-black'><button onclick="monitorsCount=0;renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===0?"border-blue-600 bg-blue-600 text-white font-black font-black font-black font-black":"bg-white font-bold font-black font-black font-black font-black font-black"}'>NÃO</button><button onclick="monitorsCount=1;renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===1?"border-blue-600 bg-blue-600 text-white font-black font-black font-black font-black":"bg-white font-bold font-black font-black font-black font-black font-black"}'>1 MON.</button><button onclick="monitorsCount=2;renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===2?"border-blue-600 bg-blue-600 text-white font-black font-black font-black font-black":"bg-white font-bold font-black font-black font-black font-black font-black"}'>2 MON.</button></div>${monitorsCount > 0 ? `<select onchange="monitorHours=parseInt(this.value);updateSummary()" class="w-full p-3 bg-white rounded-xl font-bold border border-slate-200 font-black font-black font-black font-black font-black font-black">${[2,3,4,5,6].map(h => `<option value="${h}" ${monitorHours===h?'selected':''}>${h} HORAS</option>`).join('')}</select>` : ''}</div>
                 ${cart.filter(t=>t.power).length > 0 ? `
-                    <div class="mb-8">
-                        <p class='text-[11px] font-black text-[#003399] mb-4 uppercase text-center font-black'>Qual a distância da tomada?</p>
-                        ${cart.filter(t=>t.power).map(t => `<div class="mb-4 bg-white p-5 rounded-2xl border border-slate-100 flex items-center justify-between"><p class="text-[10px] font-black text-[#003399] uppercase mr-4">DISTÂNCIA: ${t.name}</p><div class="flex items-center gap-2 font-black font-black font-black font-black"><input type="tel" maxlength="2" placeholder="0" value="${socketDistances[t.id] || ''}" oninput="socketDistances[${t.id}]=this.value" class="w-12 p-3 bg-slate-50 rounded-xl outline-none font-bold text-sm text-center border-2 focus:border-blue-500 font-black"><span class="text-[10px] font-black text-slate-400 font-black font-black font-black">M</span></div></div>`).join('')}
+                    <div class='mb-8 font-black font-black font-black font-black'>
+                        <p class='text-[11px] font-black text-[#003399] mb-4 uppercase text-center font-black font-black font-black font-black font-black font-black'>Qual a distância da tomada?</p>
+                        ${cart.filter(t=>t.power).map(t => `<div class="mb-4 bg-white p-5 rounded-2xl border border-slate-100 flex items-center justify-between font-black font-black font-black font-black font-black"><p class="text-[10px] font-black text-[#003399] uppercase mr-4 font-black font-black font-black font-black font-black">DISTÂNCIA: ${t.name}</p><div class="flex items-center gap-2 font-black font-black font-black font-black font-black font-black font-black"><input type="tel" maxlength="2" placeholder="0" value="${socketDistances[t.id] || ''}" oninput="socketDistances[${t.id}]=this.value" class="w-12 p-3 bg-slate-50 rounded-xl outline-none font-bold text-sm text-center border-2 focus:border-blue-500 font-black font-black font-black font-black font-black"><span class="text-[10px] font-black text-slate-400 font-black font-black font-black font-black font-black font-black font-black font-black font-black">M</span></div></div>`).join('')}
                     </div>` : ''}
                 ${spacer}`;
             }
-            else if (currentStep === 'summary') container.innerHTML = `${h('Finalizar')}<div class='p-6 bg-slate-50 rounded-[24px] mb-4 font-black'>${likedLabel('Possui cupom?')}<input type="text" id="couponInput" ${couponIsValid?'disabled':''} placeholder="${couponIsValid ? couponCode : 'DIGITE AQUI'}" value="${couponCode}" oninput="checkCoupon(this.value)" class="w-full p-4 rounded-xl outline-none font-bold uppercase tracking-widest font-black ${couponIsValid?'border-2 border-green-500 bg-green-50':'bg-white shadow-inner'}"><div class="mt-8 font-black">${likedLabel('Nota Fiscal?')}<div class="flex gap-2 mb-4 font-black font-black font-black font-black">${[{v:true,l:"SIM"},{v:false,l:"NÃO"}].map(opt => `<button onclick="needsInvoice=${opt.v};renderForm()" class="flex-1 py-3 rounded-xl border-2 font-black ${needsInvoice===opt.v?'border-[#003399] bg-[#003399] text-white':'border-white bg-white text-slate-300 shadow-sm'} text-xs font-bold font-black font-black font-black font-black">${opt.l}</button>`).join('')}</div>${needsInvoice ? `<div class="space-y-4 pt-2 font-black"><div>${likedLabel('CNPJ')} <input type="tel" id="userCNPJ" value="${userCNPJ}" placeholder="00.000.000/0000-00" oninput="maskCNPJ(this)" class="w-full p-4 bg-white rounded-xl outline-none text-sm font-bold shadow-inner font-black font-black font-black font-black"></div><div>${likedLabel('CEP')} <input type="tel" id="userCEP" value="${userCEP}" placeholder="00.000-000" oninput="maskCEP(this)" class="w-full p-4 bg-white rounded-xl outline-none text-sm font-bold shadow-inner font-black font-black font-black font-black"></div></div>` : ''}</div></div><div class='p-5 bg-green-50 rounded-3xl mb-4 border border-green-100 flex justify-between gap-4 shadow-sm font-black' onclick='insuranceEnabled=!insuranceEnabled;updateSummary();renderForm()'><div class="flex-grow font-black font-black font-black font-black"><p class='text-[11px] font-black text-green-800 uppercase font-black'>Seguro Diversão Isenta - R$ 14,90</p><p class='text-[9px] text-green-700 font-medium leading-tight font-black font-black font-black font-black'>Alugue com paz! Isenção de taxas em caso de rasgos acidentais.</p></div><div class="shrink-0 flex items-center"><div class='toggle-switch ${insuranceEnabled?"on":""}'><div class='toggle-knob'></div></div></div></div><div class="p-5 bg-slate-50 rounded-3xl border border-slate-100 font-black"><div id="orderDetailList" class="space-y-1 font-black"></div></div>${spacer}`;
+            else if (currentStep === 'summary') container.innerHTML = `${h('Finalizar')}<div class='p-6 bg-slate-50 rounded-[24px] mb-4 font-black font-black font-black font-black font-black font-black'>${likedLabel('Possui cupom?')}<input type="text" id="couponInput" ${couponIsValid?'disabled':''} placeholder="${couponCode || 'DIGITE AQUI'}" value="${couponCode}" oninput="checkCoupon(this.value)" class="w-full p-4 rounded-xl outline-none font-bold uppercase tracking-widest font-black font-black font-black font-black font-black font-black ${couponIsValid?'border-2 border-green-500 bg-green-50':'bg-white shadow-inner font-black font-black font-black font-black'}">${couponIsValid?`<p class="text-green-600 text-[10px] font-black mt-2 font-black font-black font-black font-black font-black"><i class="fas fa-check-circle mr-1"></i> Aplicado!</p>`:''}<div class="mt-8 font-black font-black font-black font-black font-black font-black">${likedLabel('Nota Fiscal?')}<div class="flex gap-2 mb-4 font-black font-black font-black font-black font-black font-black">${[{v:true,l:"SIM"},{v:false,l:"NÃO"}].map(opt => `<button onclick="needsInvoice=${opt.v};renderForm()" class="flex-1 py-3 rounded-xl border-2 font-black font-black font-black font-black font-black font-black ${needsInvoice===opt.v?'border-[#003399] bg-[#003399] text-white font-black font-black font-black font-black font-black':'border-white bg-white text-slate-300 shadow-sm font-black font-black font-black font-black font-black'} text-xs font-bold font-black font-black font-black font-black font-black font-black font-black">${opt.l}</button>`).join('')}</div>${needsInvoice ? `<div class="space-y-4 pt-2 font-black font-black font-black font-black font-black font-black"><div>${likedLabel('CNPJ')} <input type="tel" id="userCNPJ" value="${userCNPJ}" placeholder="00.000.000/0000-00" oninput="maskCNPJ(this)" class="w-full p-4 bg-white rounded-xl outline-none text-sm font-bold shadow-inner font-black font-black font-black font-black font-black font-black font-black"></div><div>${likedLabel('CEP')} <input type="tel" id="userCEP" value="${userCEP}" placeholder="00.000-000" oninput="maskCEP(this)" class="w-full p-4 bg-white rounded-xl outline-none text-sm font-bold shadow-inner font-black font-black font-black font-black font-black font-black font-black"></div></div>` : ''}</div></div><div class='p-5 bg-green-50 rounded-3xl mb-4 border border-green-100 flex justify-between gap-4 shadow-sm font-black font-black font-black font-black font-black' onclick='insuranceEnabled=!insuranceEnabled;updateSummary();renderForm()'><div class="flex-grow font-black font-black font-black font-black font-black font-black font-black font-black font-black"><p class='text-[11px] font-black text-green-800 uppercase font-black font-black font-black font-black font-black font-black font-black font-black'>Seguro Diversão Isenta - R$ 14,90</p><p class='text-[9px] text-green-700 font-medium leading-tight font-black font-black font-black font-black font-black font-black font-black font-black font-black'>Alugue com paz absoluta! Com o seguro você fica isento de taxas.</p></div><div class="shrink-0 flex items-center font-black font-black font-black font-black font-black font-black"><div class='toggle-switch ${insuranceEnabled?"on":""}'><div class='toggle-knob'></div></div></div></div><div class="p-5 bg-slate-50 rounded-3xl border border-slate-100 font-black font-black font-black font-black font-black font-black font-black font-black"><div id="orderDetailList" class="space-y-1 font-black font-black font-black font-black font-black font-black font-black font-black"></div></div>${spacer}`;
         }
 
         function setExtraDays(d) { extraDays = d; updateSummary(); renderForm(); }
