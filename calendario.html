@@ -7,7 +7,7 @@
     <title>Encanto Festas - Locação de Brinquedos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-blue: #003399; /* Azul Royal Profundo */
@@ -17,7 +17,7 @@
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Quicksand', sans-serif;
             background-color: var(--light-bg);
             color: var(--text-main);
             overflow-x: hidden;
@@ -29,7 +29,8 @@
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
+            gap: 6px; /* Ajustado de 10px para 6px para mobile */
+            width: 100%;
         }
 
         .day-cell {
@@ -38,8 +39,8 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            border-radius: 16px;
-            font-size: 1.1rem;
+            border-radius: 12px; /* Reduzido para mobile */
+            font-size: 0.95rem; /* Reduzido de 1.1rem para mobile */
             font-weight: 700;
             position: relative;
             transition: all 0.2s;
@@ -50,9 +51,9 @@
         .day-cell.active:active { transform: scale(0.95); }
         
         .price-indicator {
-            font-size: 0.65rem;
+            font-size: 0.55rem; /* Ajustado para caber em telas menores */
             font-weight: 500; 
-            margin-top: 2px;
+            margin-top: 1px;
         }
 
         .bottom-sheet {
@@ -191,6 +192,9 @@
             opacity: 0;
             pointer-events: none;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-align: center;
+            width: fit-content;
+            white-space: nowrap;
         }
         #cartToast.show {
             opacity: 1;
@@ -226,8 +230,8 @@
         <h1 class="text-2xl font-bold text-[#003399] tracking-tight">Escolha a data</h1>
     </header>
 
-    <main class="px-5">
-        <div class="bg-white rounded-[24px] p-6 shadow-sm border border-slate-100 mt-2 min-h-[400px]">
+    <main class="px-3 sm:px-5">
+        <div class="bg-white rounded-[24px] p-4 sm:p-6 shadow-sm border border-slate-100 mt-2 min-h-[400px]">
             <div id="calendarLoader" class="hidden flex flex-col items-center justify-center py-20">
                 <div class="w-10 h-10 border-4 border-[#003399] border-t-transparent rounded-full animate-spin"></div>
                 <p class="text-[10px] font-bold text-slate-400 mt-6 uppercase tracking-widest text-center">Verificando brinquedos disponíveis</p>
@@ -235,9 +239,9 @@
 
             <div id="calendarContent">
                 <div class="flex justify-between items-center mb-8">
-                    <button onclick="changeMonth(-1)" class="w-12 h-12 flex items-center justify-center rounded-full bg-slate-50 text-[#003399]"><i class="fas fa-chevron-left"></i></button>
-                    <h2 id="currentMonthLabel" class="font-bold text-[#003399] text-xl tracking-tight uppercase">...</h2>
-                    <button onclick="changeMonth(1)" class="w-12 h-12 flex items-center justify-center rounded-full bg-slate-50 text-[#003399]"><i class="fas fa-chevron-right"></i></button>
+                    <button onclick="changeMonth(-1)" class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-slate-50 text-[#003399]"><i class="fas fa-chevron-left"></i></button>
+                    <h2 id="currentMonthLabel" class="font-bold text-[#003399] text-base sm:text-xl tracking-tight uppercase">...</h2>
+                    <button onclick="changeMonth(1)" class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-slate-50 text-[#003399]"><i class="fas fa-chevron-right"></i></button>
                 </div>
 
                 <div class="calendar-grid mb-6" id="calendarGrid"></div>
@@ -376,9 +380,21 @@
         var userCEP = "";
 
         const COUPONS_DB = {
+            "FRETE10": "R$ 15,00 de desconto no frete aplicado!",
+            "MIXCASTLE": "Castelinho por R$ 180,00 aplicado!",
             "MEGAPROMO": "20% de desconto aplicado!",
             "ENCANTO": "10% de desconto aplicado!",
-            "CLUBEDEZ": "10% de desconto aplicado!"
+            "CLUBEDEZ": "10% de desconto aplicado!",
+            "DESCONTO1": "1% de desconto aplicado!",
+            "DESCONTO2": "2% de desconto aplicado!",
+            "DESCONTO3": "3% de desconto aplicado!",
+            "DESCONTO4": "4% de desconto aplicado!",
+            "DESCONTO5": "5% de desconto aplicado!",
+            "DESCONTO6": "6% de desconto aplicado!",
+            "DESCONTO7": "7% de desconto aplicado!",
+            "DESCONTO8": "8% de desconto aplicado!",
+            "DESCONTO9": "9% de desconto aplicado!",
+            "DESCONTO10": "10% de desconto aplicado!"
         };
 
         const TOYS_DB = [
@@ -535,7 +551,6 @@
             const g = Math.round(197 + (68 - 197) * ratio);
             const b = Math.round(94 + (68 - 94) * ratio);
             
-            // Garantir que mesmo 1 locado fique bem visível mudando o tom
             return `background-color: rgb(${r}, ${g}, ${b}); color: white; border: 2px solid rgba(255,255,255,0.4); box-shadow: 0 4px 10px rgba(0,0,0,0.1);`;
         }
 
@@ -565,7 +580,11 @@
 
         function showToast(msg) {
             const t = document.getElementById('cartToast');
-            if (t) { t.innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
+            if (t) { 
+                t.innerText = msg; 
+                t.classList.add('show'); 
+                setTimeout(() => t.classList.remove('show'), 2000); 
+            }
         }
 
         function selectDate(date) {
@@ -618,11 +637,14 @@
                 let isMotorLock = motorGrandeNames.includes(toy.name) && (isMotorGrandeBooked || (cartHasMotorGrande && inCart.qty === 0));
                 let isBlocked = isOut || isMotorLock;
                 let price = toy.price * mult;
+                
                 const card = document.createElement('div');
                 card.className = `toy-card flex p-4 relative ${isBlocked ? 'disabled' : ''}`;
+                const imgClass = "w-full h-full object-cover transition-opacity duration-300";
+                
                 card.innerHTML = `
-                    <div class="w-20 h-20 rounded-xl overflow-hidden mr-4 shrink-0 bg-slate-100 flex items-center justify-center relative img-skeleton">
-                        <img src="${toy.photo}" class="w-full h-full object-cover opacity-0 transition-opacity duration-300" onload="this.classList.remove('opacity-0'); this.parentElement.classList.remove('img-skeleton')"><div class="age-badge bg-blue-500">${toy.age}</div>
+                    <div class="w-20 h-20 rounded-xl overflow-hidden mr-4 shrink-0 bg-slate-100 flex items-center justify-center relative">
+                        <img src="${toy.photo}" class="${imgClass}" onload="this.parentElement.classList.remove('img-skeleton')"><div class="age-badge bg-blue-500">${toy.age}</div>
                     </div>
                     <div class="flex-grow">
                         <h4 class="font-bold text-slate-800 text-sm leading-tight">${toy.name}</h4>
@@ -644,7 +666,10 @@
             const realStockAvailable = getToyStockForDate(toy.id, dateStr);
             let item = cart.find(c => c.id === id);
             if (!item && delta > 0) { 
-                if(realStockAvailable > 0) { cart.push({ ...toy, qty: 1 }); showToast("Adicionado ao carrinho"); } 
+                if(realStockAvailable > 0) { 
+                    cart.push({ ...toy, qty: 1 }); 
+                    showToast("Adicionado ao carrinho"); 
+                } 
             }
             else if (item) {
                 let oldQty = item.qty;
@@ -665,6 +690,12 @@
             let countCombo = 0;
             cart.forEach(i => {
                 let priceItem = i.price * plMult;
+                
+                // Coupon Logic for Castelinho
+                if (couponCode === "MIXCASTLE" && i.id === 7) {
+                    priceItem = 180;
+                }
+
                 totalBrinquedos += priceItem * i.qty;
                 fullPriceTotal += i.price * i.qty * extraDays;
                 if (i.category !== 'mesa_comer') countCombo += i.qty;
@@ -672,11 +703,14 @@
 
             // Descontos de Combo
             let comboDiscount = 1.0;
+            const badge = document.getElementById('discountBadge');
             if (countCombo >= 2) {
+                const discPerc = pl === '$' ? 5 : 10;
                 comboDiscount = pl === '$' ? 0.95 : 0.90;
-                document.getElementById('discountBadge').classList.remove('hidden');
+                badge.innerText = `COMBO ${discPerc}%!`;
+                badge.classList.remove('hidden');
             } else {
-                document.getElementById('discountBadge').classList.add('hidden');
+                badge.classList.add('hidden');
             }
             totalBrinquedos *= comboDiscount;
 
@@ -689,6 +723,7 @@
             let isNextDay = endTime === "NEXT_DAY";
             let endInt = isNextDay ? 22 : parseInt(endTime.split(':')[0]);
             let duration = endInt - startInt;
+            
             if (duration > 6) totalFinal += (duration - 6) * 5;
             if (isNextDay) totalFinal += 10;
 
@@ -696,20 +731,27 @@
             let monitorTotal = monitorsCount * monitorHours * 30;
             totalFinal += monitorTotal;
             
-            // Seguro e Bairro
-            totalFinal += (insuranceEnabled ? 14.90 : 0) + (selectedBairro ? BAIRROS[selectedBairro] : 0);
+            // Taxa de Bairro com Desconto de Frete
+            let deliveryFee = (selectedBairro ? BAIRROS[selectedBairro] : 0);
+            if (couponCode === "FRETE10" && deliveryFee > 0) {
+                deliveryFee = Math.max(0, deliveryFee - 15);
+            }
+            totalFinal += (insuranceEnabled ? 14.90 : 0) + deliveryFee;
 
-            // Cupom
+            // Cupom de Porcentagem
             if (couponIsValid) {
-                if (COUPONS_DB[couponCode].includes("20%")) totalFinal *= 0.8;
-                else totalFinal *= 0.9;
+                if (couponCode === "MEGAPROMO") totalFinal *= 0.8;
+                else if (couponCode.startsWith("DESCONTO")) {
+                    let perc = parseInt(couponCode.replace("DESCONTO", ""));
+                    if (!isNaN(perc)) totalFinal *= (1 - perc/100);
+                }
+                else if (COUPONS_DB[couponCode] && COUPONS_DB[couponCode].includes("10%")) totalFinal *= 0.9;
             }
 
             const totalStr = "R$ " + totalFinal.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
             document.getElementById('totalValueText').innerText = totalStr;
             document.getElementById('pixFinalTotalDisplay').innerText = totalStr;
             
-            // Economia
             let savings = Math.max(0, fullPriceTotal - totalFinal);
             const savingsEl = document.getElementById('savingsText');
             if (savings > 1) {
@@ -717,11 +759,10 @@
                 savingsEl.classList.remove('hidden');
             } else savingsEl.classList.add('hidden');
 
-            // Frete
             const delEl = document.getElementById('deliveryText');
             if (selectedBairro) {
-                const fee = BAIRROS[selectedBairro];
-                delEl.innerHTML = fee === 0 ? '<span class="text-green-500">FRETE GRÁTIS</span>' : `TAXA R$ ${fee.toFixed(2).replace('.',',')}`;
+                const feeDisplay = deliveryFee;
+                delEl.innerHTML = feeDisplay === 0 ? '<span class="text-green-500 font-black">FRETE GRÁTIS</span>' : `TAXA R$ ${feeDisplay.toFixed(2).replace('.',',')}`;
             } else delEl.innerText = "";
 
             document.getElementById('mainBtn').disabled = cart.length === 0;
@@ -729,10 +770,7 @@
             if (currentStep === 'summary') {
                 const list = document.getElementById('orderDetailList');
                 if (list) {
-                    let itemsHTML = cart.map(i => `<div class='flex justify-between py-1 text-slate-600'><span>${i.qty}x ${i.name}</span><span>R$ ${(i.price*plMult*i.qty*multDays*comboDiscount).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span></div>`).join('');
-                    if (monitorsCount > 0) itemsHTML += `<div class='flex justify-between py-1 text-slate-600'><span>${monitorsCount}x Monitores (${monitorHours}h)</span><span>R$ ${monitorTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span></div>`;
-                    if (insuranceEnabled) itemsHTML += `<div class='flex justify-between py-1 text-green-600'><span>Seguro Adicional</span><span>R$ 14,90</span></div>`;
-                    if (selectedBairro) itemsHTML += `<div class='flex justify-between py-1'><span>Entrega (${selectedBairro})</span><span>${BAIRROS[selectedBairro] === 0 ? 'Grátis' : 'R$ '+BAIRROS[selectedBairro].toFixed(2)}</span></div>`;
+                    let itemsHTML = cart.map(i => `<div class='text-slate-800 font-bold py-0.5 text-sm uppercase'>${i.qty}x ${i.name}</div>`).join('');
                     list.innerHTML = itemsHTML;
                 }
             }
@@ -740,7 +778,7 @@
 
         async function sendToSheet() {
             if (!API_URL) return;
-            const payload = { userName, userZap, selectedDate: normalizeDate(selectedDate), deliveryPreviousDay: deliveryPreviousDay ? "Sim" : "Não", selectedBairro, userRua, userNum: userSN ? "S/N" : userNum, userDetails, userObs, extraDays, startTime, endTime: endTime==="NEXT_DAY"?"Manhã Seguinte":endTime, monitorsCount, monitorHours, socketDistances, couponCode, total: document.getElementById('totalValueText').innerText, toysFormattedList: cart.map(i => `${i.qty}x ${i.name}`).join("\n") };
+            const payload = { userName, userZap, selectedDate: normalizeDate(selectedDate), deliveryPreviousDay: deliveryPreviousDay ? "Sim" : "Não", selectedBairro, userRua, userNum: userSN ? "S/N" : userNum, userDetails, userObs, extraDays, startTime, endTime: endTime==="NEXT_DAY"?"Dia Seg.":endTime, monitorsCount, monitorHours, socketDistances, couponCode, total: document.getElementById('totalValueText').innerText, toysFormattedList: cart.map(i => `${i.qty}x ${i.name}`).join("\n") };
             try { await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) }); } catch (e) {}
         }
 
@@ -765,13 +803,33 @@
 
         function validateCurrentStep() {
             document.querySelectorAll('input, select, textarea').forEach(el => el.classList.remove('border-error'));
+            if (currentStep === 'toys') {
+                if (cart.length === 0) { showToast("Selecione ao menos um item!"); return false; }
+            }
             if (currentStep === 'id') {
                 if (!userName || userName.trim().length < 2) { document.getElementById('userName').classList.add('border-error'); return false; }
-                if (!userZap || userZap.length < 14) { document.getElementById('userZap').classList.add('border-error'); return false; }
+                if (!userZap || userZap.length < 15) { document.getElementById('userZap').classList.add('border-error'); return false; }
             } else if (currentStep === 'address') {
                 if (!selectedBairro) { document.getElementById('userBairro').classList.add('border-error'); return false; }
                 if (!userRua || userRua.trim().length < 3) { document.getElementById('userRua').classList.add('border-error'); return false; }
                 if (!userSN && !userNum) { document.getElementById('userNum').classList.add('border-error'); return false; }
+                if (!userDetails || userDetails.trim().length < 2) { document.getElementById('userDetails').classList.add('border-error'); return false; }
+                
+                // REGRA BAR DA TWO
+                if (selectedBairro === "Ervino") {
+                    const checkStr = (userRua + " " + userDetails).toUpperCase();
+                    if (checkStr.includes("TWO")) {
+                        const modal = document.createElement('div');
+                        modal.className = "fixed inset-0 bg-black/60 z-[300] flex items-center justify-center p-6";
+                        modal.innerHTML = `<div class="bg-white p-8 rounded-3xl text-center shadow-2xl max-w-xs">
+                            <i class="fas fa-exclamation-triangle text-orange-500 text-4xl mb-4"></i>
+                            <p class="font-bold text-slate-800">Não entregamos no Bar da Two, por motivos internos.</p>
+                            <button onclick="this.parentElement.parentElement.remove()" class="mt-6 w-full btn-primary py-3 rounded-xl uppercase">Entendido</button>
+                        </div>`;
+                        document.body.appendChild(modal);
+                        return false;
+                    }
+                }
             }
             return true;
         }
@@ -781,11 +839,18 @@
             const steps = ['toys', 'id', 'address', 'party', 'details', 'summary'];
             const idx = steps.indexOf(currentStep);
             if (currentStep === 'summary') { sendToSheet(); document.getElementById('pixPopup').classList.remove('hidden'); return; }
-            currentStep = steps[idx + 1]; closeSheet(); setTimeout(() => { openSheet('formSheet'); renderForm(); }, 300);
+            currentStep = steps[idx + 1]; 
+            closeSheet(); 
+            setTimeout(() => { 
+                openSheet('formSheet'); 
+                renderForm(); 
+                document.getElementById('formSheet').scrollTop = 0; // Sobe para o topo
+            }, 300);
         }
 
         function formatName(i) { 
-            let v = i.value.toLowerCase().replace(/(^\w|\s\w)/g, m => m.toUpperCase());
+            // Remove números e capitaliza a primeira letra de cada palavra
+            let v = i.value.replace(/[0-9]/g, "").toLowerCase().replace(/(^\w|\s\w)/g, m => m.toUpperCase());
             i.value = v; userName = v; 
         }
 
@@ -819,6 +884,10 @@
                 couponIsValid = true;
                 updateSummary();
                 renderForm();
+                setTimeout(() => {
+                    const inp = document.getElementById('couponInput');
+                    if(inp) inp.classList.add('border-success');
+                }, 50);
             }
         }
 
@@ -828,27 +897,96 @@
             const likedLabel = (t) => `<label class="text-[10px] font-bold text-[#003399] uppercase ml-1 mb-1 block">${t}</label>`;
             const spacer = '<div class="h-40"></div>';
 
-            if (currentStep === 'id') container.innerHTML = `${h('Seus Dados')}<div class="mb-4">${likedLabel('Nome')}<input type='text' id='userName' value='${userName}' maxlength='20' oninput='formatName(this)' class='w-full p-5 bg-slate-50 rounded-2xl outline-none border-2 border-transparent focus:border-blue-500'></div><div class="mb-4">${likedLabel('WhatsApp')} <i class="fab fa-whatsapp text-green-500"></i><input type='tel' id='userZap' value='${userZap}' oninput='maskZap(this)' class='w-full p-5 bg-slate-50 rounded-2xl outline-none border-2 border-transparent focus:border-blue-500'></div><p class='text-[10px] text-blue-800 font-medium'>Seus dados são usados exclusivamente pela Encanto Festas para realizar sua locação com segurança.</p>${spacer}`;
-            else if (currentStep === 'address') container.innerHTML = `${h('Endereço')}<select id='userBairro' onchange='selectedBairro=this.value;updateSummary()' class='w-full p-5 bg-slate-50 rounded-2xl mb-4'><option value=''>Selecione o Bairro</option>${Object.keys(BAIRROS).map(b => `<option value="${b}" ${selectedBairro===b?'selected':''}>${b}</option>`)}</select><input type='text' id='userRua' value='${userRua}' placeholder='Rua' oninput='handleStreetInput(this)' class='w-full p-5 bg-slate-50 rounded-2xl mb-4'><div id='streetSuggestionsContainer'></div><div class='flex gap-2 mb-4'><input type='text' id='userNum' value='${userSN ? "S/N" : userNum}' ${userSN ? "disabled" : ""} maxlength='4' placeholder='N°' oninput='this.value=this.value.replace(/\\D/g,"");userNum=this.value' class='w-20 p-5 bg-slate-50 rounded-2xl ${userSN ? "opacity-50" : ""}'> <div class='flex items-center gap-2 p-3 bg-slate-50 rounded-2xl flex-grow cursor-pointer' onclick='userSN=!userSN;renderForm()'><div class='toggle-switch ${userSN?"on":""}'><div class='toggle-knob'></div></div><span class='text-[9px] font-medium text-slate-600 uppercase'>sem número</span></div></div><input type='text' id='userDetails' value='${userDetails}' placeholder='Detalhes da casa' oninput='userDetails=this.value' class='w-full p-5 bg-slate-50 rounded-2xl'>${spacer}`;
+            if (currentStep === 'id') {
+                container.innerHTML = `
+                    ${h('Seus Dados')}
+                    <div class="mb-4">
+                        ${likedLabel('Nome')}
+                        <input type='text' id='userName' value='${userName}' placeholder='Seu primeiro nome' maxlength='20' oninput='formatName(this)' class='w-full p-5 bg-slate-50 rounded-2xl outline-none border-2 border-transparent focus:border-blue-500 font-bold'>
+                    </div>
+                    <div class="mb-4">
+                        <div class="flex items-center gap-1 mb-1 ml-1">
+                            <i class="fab fa-whatsapp text-green-500 text-xs"></i>
+                            <label class="text-[10px] font-bold text-[#003399] uppercase">WhatsApp</label>
+                        </div>
+                        <input type='tel' id='userZap' value='${userZap}' placeholder='(xx) xxxxx-xxxx' oninput='maskZap(this)' class='w-full p-5 bg-slate-50 rounded-2xl outline-none border-2 border-transparent focus:border-blue-500 font-bold'>
+                    </div>
+                    
+                    <div class="mt-8 p-6 bg-blue-50/50 rounded-3xl border border-blue-100 flex gap-4">
+                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-blue-600 shadow-sm shrink-0">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div>
+                            <p class="text-[11px] font-black text-blue-900 uppercase mb-1 text-left">Segurança Garantida</p>
+                            <p class="text-[10px] text-blue-800 leading-relaxed text-left">Fique tranquilo! Seus dados são processados em ambiente seguro e usados exclusivamente pela <b>Encanto Festas</b> para confirmar sua reserva.</p>
+                        </div>
+                    </div>
+                    ${spacer}
+                `;
+            }
+            else if (currentStep === 'address') container.innerHTML = `${h('Endereço')}<select id='userBairro' onchange='selectedBairro=this.value;updateSummary()' class='w-full p-5 bg-slate-50 rounded-2xl mb-4 font-bold outline-none'><option value=''>Selecione o Bairro</option>${Object.keys(BAIRROS).map(b => `<option value="${b}" ${selectedBairro===b?'selected':''}>${b}</option>`)}</select><input type='text' id='userRua' value='${userRua}' placeholder='Nome da Rua' oninput='handleStreetInput(this)' class='w-full p-5 bg-slate-50 rounded-2xl mb-4 font-bold outline-none'><div id='streetSuggestionsContainer'></div><div class='flex gap-2 mb-4'><input type='text' id='userNum' value='${userSN ? "S/N" : userNum}' ${userSN ? "disabled" : ""} maxlength='4' placeholder='${userSN ? "S/N" : "N° da casa"}' oninput='this.value=this.value.replace(/\\D/g,"");userNum=this.value' class='w-full p-5 bg-slate-50 rounded-2xl font-bold outline-none ${userSN ? "opacity-50" : ""}'> <div class='flex items-center gap-2 p-3 bg-slate-50 rounded-2xl flex-grow cursor-pointer' onclick='userSN=!userSN;renderForm()'><div class='toggle-switch ${userSN?"on":""}'><div class='toggle-knob'></div></div><span class='text-[9px] font-medium text-slate-600 uppercase font-black'>sem número</span></div></div><input type='text' id='userDetails' value='${userDetails}' placeholder='Detalhes (Cor da casa, muro, etc)' oninput='userDetails=this.value' class='w-full p-5 bg-slate-50 rounded-2xl font-bold outline-none'>${spacer}`;
             else if (currentStep === 'party') {
                 const dayDiscounts = ["", "0%", "15%", "23%", "30%", "36%"];
                 let startInt = parseInt(startTime.split(':')[0]);
                 container.innerHTML = `${h('Duração')}<p class='text-[10px] font-bold text-slate-400 mb-2 uppercase tracking-wide'>Quantos dias de diversão?</p><div class='flex gap-2 mb-6'>${[1,2,3,4,5].map(d => `<button onclick="setExtraDays(${d})" class='flex-1 py-3 rounded-xl font-bold border-2 ${extraDays===d?"border-blue-600 bg-blue-50 text-blue-800":"border-slate-100 text-slate-800"} flex flex-col items-center'><span class='text-lg'>${d}${d>1?"d":""}</span><span class='text-[10px] text-green-500 font-black'>-${dayDiscounts[d]}</span></button>`).join('')}</div>
                 <div class='flex gap-3 mb-6'>
                     <div class='flex-1'>${likedLabel('Início')}<select onchange="startTime=this.value;renderForm();updateSummary()" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-sm outline-none">${["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00"].map(h => `<option value="${h}" ${startTime===h?'selected':''}>${h}</option>`).join('')}</select></div>
-                    <div class='flex-1'>${likedLabel('Término')}<select id="partyEndTime" onchange="endTime=this.value;updateSummary()" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-sm outline-none">${["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"].filter(h => parseInt(h.split(':')[0]) > startInt).map(h => `<option value="${h}" ${endTime===h?'selected':''}>${h}</option>`).join('')}<option value="NEXT_DAY" ${endTime==='NEXT_DAY'?'selected':''}>BUSCAR AMANHÃ (MANHÃ)</option></select></div>
+                    <div class='flex-1'>${likedLabel('Término')}<select id="partyEndTime" onchange="endTime=this.value;updateSummary()" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-sm outline-none">${["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"].filter(h => parseInt(h.split(':')[0]) > startInt).map(h => `<option value="${h}" ${endTime===h?'selected':''}>${h}</option>`).join('')}<option value="NEXT_DAY" ${endTime==='NEXT_DAY'?'selected':''}>DIA SEGUINTE (PELA MANHÃ)</option></select></div>
                 </div>
-                <div class='p-5 bg-blue-50 rounded-2xl mb-4 flex justify-between' onclick='deliveryPreviousDay=!deliveryPreviousDay;renderForm()'><div><p class='text-[11px] font-bold text-blue-800 uppercase'>Entregar um dia antes pelo mesmo valor?</p></div><div class='toggle-switch ${deliveryPreviousDay?"on":""}'><div class='toggle-knob'></div></div></div><p class='text-[10px] font-bold text-blue-600 text-center uppercase'>6 horas inclusas, +R$ 5,00 por hora extra</p>${spacer}`;
+                <div class='p-5 bg-blue-50 rounded-2xl mb-4 flex justify-between' onclick='deliveryPreviousDay=!deliveryPreviousDay;renderForm()'><div><p class='text-[11px] font-bold text-blue-800 uppercase'>Entregar um dia antes pelo mesmo valor?</p><p class='text-[9px] text-blue-600 font-medium'>Não é certeza mas uma possibilidade!</p></div><div class='toggle-switch ${deliveryPreviousDay?"on":""}'><div class='toggle-knob'></div></div></div><p class='text-[10px] font-bold text-blue-600 text-center uppercase tracking-wide'>6 Horas Gratis / Extra 1h = 5,00</p>${spacer}`;
             }
             else if (currentStep === 'details') {
-                container.innerHTML = `${h('Preferências')}<div class='p-6 bg-slate-50 rounded-3xl mb-4 text-center'><p class='text-[10px] font-black text-slate-400 mb-4 uppercase tracking-widest'>Em caso de chuva, a piscina fica 100% coberta?</p><div class='flex gap-2 mb-8'>${["sim","não"].map(o => `<button onclick="piscinaCovered='${o}';renderForm()" class='flex-1 py-2 rounded-xl border-2 ${piscinaCovered===o?"border-blue-600 bg-blue-600 text-white":"bg-white text-slate-800 font-bold"}'>${o.toUpperCase()}</button>`).join('')}</div>
-                <p class='text-[10px] font-black text-[#003399] mb-4 uppercase tracking-widest'>Precisa de monitores? <span class="text-[8px] block text-slate-400">R$ 30,00 por hora/cada</span></p>
-                <div class='flex gap-2 mb-4'><button onclick="monitorsCount=0;renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===0?"border-blue-600 bg-blue-600 text-white":"bg-white font-bold"}'>NÃO</button><button onclick="monitorsCount=1;renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===1?"border-blue-600 bg-blue-600 text-white":"bg-white font-bold"}'>1 MONITOR</button><button onclick="monitorsCount=2;renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===2?"border-blue-600 bg-blue-600 text-white":"bg-white font-bold"}'>2 MONITORES</button></div>
-                ${monitorsCount > 0 ? `<select onchange="monitorHours=parseInt(this.value);updateSummary()" class="w-full p-3 bg-white rounded-xl font-bold">${[2,3,4,5,6].map(h => `<option value="${h}" ${monitorHours===h?'selected':''}>${h} HORAS</option>`).join('')}</select>` : ''}</div>
-                ${cart.filter(t=>t.power).map(t => `<div class="mb-4 bg-white p-4 rounded-2xl border border-slate-100"><p class="text-[10px] font-bold text-[#003399] mb-2 uppercase">Distância tomada: ${t.name}</p><input type="tel" placeholder="Metros" value="${socketDistances[t.id] || ''}" oninput="socketDistances[${t.id}]=this.value" class="w-full p-3 bg-slate-50 rounded-xl outline-none font-bold text-sm"></div>`).join('')}${spacer}`;
+                container.innerHTML = `
+                    ${h('Preferências')}
+                    <div class='p-6 bg-slate-50 rounded-3xl mb-12 text-center'>
+                        <p class='text-[11px] font-black text-blue-700 mb-2 uppercase tracking-tight'>Em caso de chuva, a piscina fica 100% coberta?</p>
+                        <p class='text-[9px] text-blue-500 font-bold mb-4 uppercase'>Só selecione "Sim" se ela não molhar de jeito nenhum</p>
+                        <div class='flex gap-2 mb-10'>${["sim","não"].map(o => `<button onclick="piscinaCovered='${o}';renderForm()" class='flex-1 py-2 rounded-xl border-2 ${piscinaCovered===o?"border-blue-600 bg-blue-600 text-white":"bg-white text-slate-800 font-bold"}'>${o.toUpperCase()}</button>`).join('')}</div>
+                        
+                        <p class='text-[11px] font-black text-[#003399] mb-1 uppercase tracking-tight'>Contratar monitor?</p>
+                        <p class='text-[9px] text-slate-500 leading-tight mb-4 px-2'>Com monitores, eles ficam responsáveis pelas crianças em festas médias ou grandes, garantindo a <b>segurança dos pequenos</b> e a tranquilidade total da sua festa.</p>
+                        
+                        <div class='flex gap-2 mb-4'><button onclick="monitorsCount=0;renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===0?"border-blue-600 bg-blue-600 text-white":"bg-white font-bold"}'>NÃO</button><button onclick="monitorsCount=1;renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===1?"border-blue-600 bg-blue-600 text-white":"bg-white font-bold"}'>1 MONITOR</button><button onclick="monitorsCount=2;renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===2?"border-blue-600 bg-blue-600 text-white":"bg-white font-bold"}'>2 MONITORES</button></div>
+                        ${monitorsCount > 0 ? `<select onchange="monitorHours=parseInt(this.value);updateSummary()" class="w-full p-3 bg-white rounded-xl font-bold border border-slate-200 font-bold">${[2,3,4,5,6].map(h => `<option value="${h}" ${monitorHours===h?'selected':''}>${h} HORAS</option>`).join('')}</select>` : ''}
+                    </div>
+                    ${cart.filter(t=>t.power).map(t => `<div class="mb-4 bg-white p-5 rounded-2xl border border-slate-100 flex items-center justify-between"><p class="text-[10px] font-black text-[#003399] uppercase mr-4">DISTÂNCIA DA TOMADA: ${t.name}</p><div class="flex items-center gap-2"><input type="tel" maxlength="2" placeholder="0" value="${socketDistances[t.id] || ''}" oninput="socketDistances[${t.id}]=this.value" class="w-12 p-3 bg-slate-50 rounded-xl outline-none font-bold text-sm text-center border-2 focus:border-blue-500 font-bold"><span class="text-[10px] font-black text-slate-400">M</span></div></div>`).join('')}${spacer}`;
             }
-            else if (currentStep === 'summary') container.innerHTML = `${h('Finalizar')}<div class='p-6 bg-slate-50 rounded-[24px] mb-4'>${likedLabel('Possui cupom?')}<input type="text" ${couponIsValid?'disabled':''} placeholder="DIGITE AQUI" oninput="checkCoupon(this.value)" class="w-full p-4 rounded-xl outline-none font-bold uppercase tracking-widest ${couponIsValid?'border-2 border-green-500 bg-green-50':'bg-white'}">${couponIsValid?`<p class="text-green-500 text-[10px] font-black mt-2 uppercase tracking-tighter">Aplicado com Sucesso: ${COUPONS_DB[couponCode]}</p>`:''}<div class="mt-6">${likedLabel('Deseja emitir Nota Fiscal?')}<div class="flex gap-2 mb-4">${[{v:true,l:"SIM"},{v:false,l:"NÃO"}].map(opt => `<button onclick="needsInvoice=${opt.v};renderForm()" class="flex-1 py-3 rounded-xl border-2 ${needsInvoice===opt.v?'border-[#003399] bg-[#003399] text-white':'border-white bg-white text-slate-300'} text-xs">${opt.l}</button>`).join('')}</div>${needsInvoice ? `<div class="space-y-4 pt-2"><div>${likedLabel('CNPJ')}<input type="tel" id="userCNPJ" value="${userCNPJ}" placeholder="00.000.000/0000-00" oninput="maskCNPJ(this)" class="w-full p-4 bg-white rounded-xl outline-none text-sm font-bold"></div><div>${likedLabel('CEP')}<input type="tel" id="userCEP" value="${userCEP}" placeholder="00.000-000" oninput="maskCEP(this)" class="w-full p-4 bg-white rounded-xl outline-none text-sm font-bold"></div></div>` : ''}</div></div><div class='p-5 bg-green-50 rounded-2xl mb-4 flex justify-between shadow-sm' onclick='insuranceEnabled=!insuranceEnabled;updateSummary();renderForm()'><div><p class='text-[11px] font-bold text-green-800 uppercase tracking-tighter'>Seguro Diversão Isenta - R$ 14,90</p><p class='text-[9px] text-green-600 font-medium leading-tight mt-0.5'>Fique 100% tranquilo! Com o seguro, você fica isento de taxas em caso de rasgos ou quebras acidentais. Sem ele, reparos podem chegar a R$ 300,00!</p></div><div class='toggle-switch ${insuranceEnabled?"on":""}'><div class='toggle-knob'></div></div></div><div class="p-5 bg-slate-50 rounded-2xl"><p class="text-[10px] font-bold text-slate-400 mb-2 uppercase tracking-widest">Resumo do Pedido</p><div id="orderDetailList" class="space-y-1"></div></div>${spacer}`;
+            else if (currentStep === 'summary') container.innerHTML = `
+                ${h('Finalizar')}
+                <div class='p-6 bg-slate-50 rounded-[24px] mb-4'>
+                    ${likedLabel('Possui cupom?')}
+                    <input type="text" id="couponInput" ${couponIsValid?'disabled':''} placeholder="${couponIsValid ? couponCode : 'DIGITE AQUI'}" value="${couponCode}" oninput="checkCoupon(this.value)" class="w-full p-4 rounded-xl outline-none font-bold uppercase tracking-widest ${couponIsValid?'border-2 border-green-500 bg-green-50 font-bold':'bg-white shadow-inner font-bold'}">
+                    ${couponIsValid?`<p class="text-green-600 text-[10px] font-black mt-2 uppercase tracking-tighter font-bold"><i class="fas fa-check-circle mr-1"></i> Aplicado com Sucesso: ${COUPONS_DB[couponCode]}</p>`:''}
+                    
+                    <div class="mt-8">
+                        ${likedLabel('Deseja emitir Nota Fiscal?')}
+                        <div class="flex gap-2 mb-4">${[{v:true,l:"SIM"},{v:false,l:"NÃO"}].map(opt => `<button onclick="needsInvoice=${opt.v};renderForm()" class="flex-1 py-3 rounded-xl border-2 ${needsInvoice===opt.v?'border-[#003399] bg-[#003399] text-white':'border-white bg-white text-slate-300 shadow-sm'} text-xs font-bold">${opt.l}</button>`).join('')}</div>
+                        ${needsInvoice ? `
+                            <div class="space-y-4 pt-2 animate-in fade-in slide-in-from-top-2">
+                                <div>${likedLabel('CNPJ')} <input type="tel" id="userCNPJ" value="${userCNPJ}" placeholder="00.000.000/0000-00" oninput="maskCNPJ(this)" class="w-full p-4 bg-white rounded-xl outline-none text-sm font-bold shadow-inner font-bold"></div>
+                                <div>${likedLabel('CEP')} <input type="tel" id="userCEP" value="${userCEP}" placeholder="00.000-000" oninput="maskCEP(this)" class="w-full p-4 bg-white rounded-xl outline-none text-sm font-bold shadow-inner font-bold"></div>
+                            </div>` : ''}
+                    </div>
+                </div>
+                
+                <div class='p-5 bg-green-50 rounded-3xl mb-4 border border-green-100 flex justify-between gap-4 shadow-sm' onclick='insuranceEnabled=!insuranceEnabled;updateSummary();renderForm()'>
+                    <div class="flex-grow">
+                        <p class='text-[11px] font-black text-green-800 uppercase tracking-tighter font-bold'>Seguro Diversão Isenta - R$ 14,90</p>
+                        <p class='text-[9px] text-green-700 font-medium leading-tight mt-1 text-left font-bold'>Alugue com paz absoluta! Com o seguro você fica <b>isento de taxas</b> em caso de rasgos ou quebras acidentais. Sem ele, reparos podem custar até R$ 300,00.</p>
+                    </div>
+                    <div class="shrink-0 flex items-center">
+                        <div class='toggle-switch ${insuranceEnabled?"on":""}'><div class='toggle-knob'></div></div>
+                    </div>
+                </div>
+                
+                <div class="p-5 bg-slate-50 rounded-3xl border border-slate-100">
+                    <div id="orderDetailList" class="space-y-1"></div>
+                </div>
+                ${spacer}
+            `;
         }
+
+        function setExtraDays(d) { extraDays = d; updateSummary(); renderForm(); }
     </script>
 </body>
 </html>
