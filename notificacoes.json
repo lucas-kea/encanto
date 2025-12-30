@@ -1,1 +1,29 @@
-[{"id": 1,"titulo": "Promoção de Natall Encanto ⚡","mensagem": "Aproveite Clique para reservar.","tipo": "alerta","lida": false,"data": "2025-12-24T20:35:00Z","link": "https://www.google.com/search?q=promoção+natal"},{"id": 2,"titulo": "Reserva Confirmada ✨","mensagem": "A sua festa de amanhã já está na nossa agenda. Clique para ver os detalhes da montagem.","tipo": "sucesso","lida": false,"data": "2025-12-23T15:30:00Z","link": "https://www.google.com/search?q=detalhes+reserva"}]
+[
+  {
+    "id": 1,
+    "titulo": "BEM VINDO A ENCANTO! ✨",
+    "mensagem": "Você pode fazer reservas aqui pelo site, verificar itens disponíveis e muito mais.",
+    "tipo": "sucesso",
+    "lida": false,
+    "data": "2025-12-29T21:08:00Z",
+    "link": ""
+  },
+  {
+    "id": 2,
+    "titulo": "NOSSO SITE ESTÁ EM CONSTRUÇÃO",
+    "mensagem": "Pode ser que algumas abas como 'Parceiros' e 'Perfil' não funcionem corretamente, porém para fazer a reserva está funcionando 100!",
+    "tipo": "aviso",
+    "lida": false,
+    "data": "2025-12-29T21:08:00Z",
+    "link": ""
+  },
+  {
+    "id": 3,
+    "titulo": "Conheça nosso instagram!",
+    "mensagem": "Clique aqui e conheça-nos mais.",
+    "tipo": "info",
+    "lida": false,
+    "data": "2025-12-29T21:08:00Z",
+    "link": "https://instagram.com/encantofestas.sc"
+  }
+]
