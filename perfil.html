@@ -55,6 +55,20 @@
         .confetti-float { animation: floatConfetti 3s ease-in-out infinite; }
         @keyframes floatConfetti { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-5px) rotate(5deg); } }
 
+        /* Novas Animações da Capa */
+        @keyframes floatBalloon {
+            0%, 100% { transform: translateY(0) rotate(-3deg); }
+            50% { transform: translateY(-15px) rotate(3deg); }
+        }
+        .animate-balloon { animation: floatBalloon 4s ease-in-out infinite; }
+        
+        @keyframes shimmerParty {
+            0% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 0.5; transform: scale(1.1); }
+            100% { opacity: 0.2; transform: scale(0.8); }
+        }
+        .animate-shimmer { animation: shimmerParty 3s ease-in-out infinite; }
+
         .item-card {
             transition: transform 0.25s ease-out, opacity 0.25s ease-out;
             animation: fadeIn 0.4s ease-out forwards;
@@ -428,7 +442,7 @@
         <div class="text-blue-600 font-medium text-sm animate-pulse tracking-widest uppercase">Carregando...</div>
     </div>
 
-    <!-- Conteúdo principal - Linha 157 -->
+    <!-- Conteúdo principal -->
     <main class="flex-grow w-full pt-0 pb-48 flex flex-col items-center relative z-0">
         
         <!-- Auth View -->
@@ -498,9 +512,33 @@
         <section id="profileView" class="hidden w-full max-w-lg mx-auto px-0 fade-in flex flex-col items-center" style="padding-top: var(--espaco-topo-perfil);">
             
             <div class="h-44 w-full relative shrink-0 overflow-hidden bg-gradient-to-br from-blue-600 to-indigo-700">
+                <!-- Elementos de Design de Festa -->
                 <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-                <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
-                <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/20 rounded-full blur-3xl transform translate-x-10 -translate-y-10"></div>
+                
+                <!-- Círculos de Brilho Animados -->
+                <div class="absolute top-2 left-[20%] w-16 h-16 bg-white/10 rounded-full blur-xl animate-shimmer"></div>
+                <div class="absolute bottom-5 right-[15%] w-24 h-24 bg-yellow-400/10 rounded-full blur-2xl animate-shimmer" style="animation-delay: 1.5s;"></div>
+
+                <!-- Balões Animados (SVG) -->
+                <div class="absolute -bottom-2 left-6 opacity-40 animate-balloon">
+                    <svg width="40" height="50" viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 0C9.5 0 1 8.5 1 19C1 29.5 9.5 38 20 38C30.5 38 39 29.5 39 19C39 8.5 30.5 0 20 0Z" fill="white"/>
+                        <path d="M20 38V50" stroke="white" stroke-width="2"/>
+                    </svg>
+                </div>
+                <div class="absolute -bottom-6 right-10 opacity-30 animate-balloon" style="animation-delay: 2s;">
+                    <svg width="50" height="65" viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 0C9.5 0 1 8.5 1 19C1 29.5 9.5 38 20 38C30.5 38 39 29.5 39 19C39 8.5 30.5 0 20 0Z" fill="#FACC15"/>
+                        <path d="M20 38V50" stroke="#FACC15" stroke-width="2"/>
+                    </svg>
+                </div>
+
+                <!-- Confetes e Serpentinas -->
+                <div class="absolute top-4 left-[40%] w-1 h-8 bg-pink-400/40 rounded-full rotate-45"></div>
+                <div class="absolute top-10 right-[30%] w-1 h-6 bg-blue-300/40 rounded-full -rotate-12"></div>
+                <div class="absolute top-6 left-[10%] w-2.5 h-2.5 bg-yellow-300 rounded-full opacity-80 animate-bounce" style="animation-duration: 3s;"></div>
+                <div class="absolute top-10 left-[15%] w-1.5 h-3 bg-pink-300 rotate-45 opacity-70 confetti-float"></div>
+                <div class="absolute top-4 right-[20%] w-2.5 h-2.5 bg-blue-300 rounded-sm rotate-12 opacity-80 confetti-float" style="animation-delay: 1s;"></div>
                 
                 <!-- Botões Sair e Prêmios DENTRO da área azul -->
                 <button onclick="openLogoutModal()" class="absolute top-3 left-4 z-30 bg-white/20 backdrop-blur-md p-2 rounded-full text-white hover:bg-white hover:text-red-600 transition shadow-lg border border-white/30 group">
@@ -613,50 +651,47 @@
     <div id="profileEditModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md modal-enter max-h-[90vh] flex flex-col overflow-hidden">
             <div class="flex justify-between items-center p-5 border-b border-gray-100 shrink-0 bg-white z-10"><h2 class="text-lg font-bold text-gray-800">Editar Perfil</h2><button onclick="closeProfileEditModal()" class="p-2 bg-gray-50 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button></div>
-            <div class="p-6 overflow-y-auto"><div class="space-y-5"><div class="space-y-1"><label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">Nome Completo</label><input type="text" id="editName" oninput="forceTwoWords(this)" maxlength="18" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Seu nome"></div><div class="space-y-1"><label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">WhatsApp / Telefone</label><input type="tel" id="editPhone" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="(xx) xxxxx-xxxx" maxlength="15" oninput="formatPhone(this)"></div><div class="space-y-1"><label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">Email</label><div class="relative"><input type="email" id="editEmail" class="w-full pl-4 pr-10 py-3 rounded-xl bg-gray-100 text-gray-500 border border-gray-200 cursor-not-allowed select-none" disabled><div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg></div></div></div><div class="py-2"><div class="h-px bg-gray-100"></div></div><h3 class="text-sm font-bold text-blue-600 uppercase tracking-wide">Endereço</h3><div class="space-y-1"><label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">Bairro</label><div class="relative"><select id="editNeighborhood" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 focus:bg-white focus:ring-2 focus:ring-blue-500 transition-all outline-none appearance-none"><option value="">Selecione...</option><option value="Acaraí">Acaraí</option><option value="Água Branca">Água Branca</option><option value="Capri">Capri</option><option value="Centro - Sfs">Centro - Sfs</option><option value="Centro Histórico">Centro Histórico</option><option value="Enseada">Enseada</option><option value="Ervino">Ervino</option><option value="Iperoba">Iperoba</option><option value="Itaguaçu">Itaguaçu</option><option value="Laranjeiras">Laranjeiras</option><option value="Majorca">Majorca</option><option value="Miranda">Miranda</option><option value="Morro Grande">Morro Grande</option><option value="Paulas">Paulas</option><option value="Praia Grande">Praia Grande</option><option value="Reta">Reta</option><option value="Ribeira">Ribeira</option><option value="Rocio Grande">Rocio Grande</option><option value="Rocio Pequeno">Rocio Pequeno</option><option value="Sandra Regina">Sandra Regina</option><option value="Tapera">Tapera</option><option value="Ubatuba">Ubatuba</option><option value="Vila da Glória">Vila da Glória</option></select><div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500"><svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></div></div></div><div class="grid grid-cols-3 gap-3"><div class="col-span-2 space-y-1"><label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">Rua</label><input type="text" id="editStreet" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 focus:bg-white focus:ring-2 focus:ring-blue-500 transition-all outline-none" placeholder="Nome da rua"></div><div class="space-y-1"><label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">Nº</label><div class="relative"><input type="text" id="editHouseNumber" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 focus:bg-white focus:ring-2 focus:ring-blue-500 transition-all outline-none" placeholder="123"></div><div class="flex items-center mt-1.5 ml-1"><input type="checkbox" id="noNumberCheckbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" onchange="toggleHouseNumber()"><label for="noNumberCheckbox" class="ml-1.5 text-xs text-gray-500 font-medium cursor-pointer">Sem número (S/N)</label></div></div></div></div></div>
-            <div class="p-5 border-t border-gray-100 bg-gray-50 shrink-0 z-10 rounded-b-3xl"><div class="flex gap-3"><button onclick="closeProfileEditModal()" class="flex-1 px-4 py-3.5 bg-white border border-gray-200 font-bold text-gray-700 rounded-xl hover:bg-gray-100 active:scale-95 transition shadow-sm">Cancelar</button><button onclick="saveProfileChanges()" class="flex-1 px-4 py-3.5 bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 active:scale-95 transition">Salvar</button></div></div>
+            <div class="p-6 overflow-y-auto flex-1">
+                <div class="space-y-5">
+                    <div class="space-y-1"><label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">Nome Completo</label><input type="text" id="editName" oninput="forceTwoWords(this)" maxlength="18" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Seu nome"></div>
+                    <div class="space-y-1"><label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">WhatsApp / Telefone</label><input type="tel" id="editPhone" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="(xx) xxxxx-xxxx" maxlength="15" oninput="formatPhone(this)"></div>
+                    <div class="space-y-1"><label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">Email</label><div class="relative"><input type="email" id="editEmail" class="w-full pl-4 pr-10 py-3 rounded-xl bg-gray-100 text-gray-500 border border-gray-200 cursor-not-allowed select-none" disabled><div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg></div></div></div>
+                    <div class="py-2"><div class="h-px bg-gray-100"></div></div>
+                    <h3 class="text-sm font-bold text-blue-600 uppercase tracking-wide">Endereço</h3>
+                    <div class="space-y-1"><label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">Bairro</label>
+                        <div class="relative">
+                            <select id="editNeighborhood" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 focus:bg-white focus:ring-2 focus:ring-blue-500 transition-all outline-none appearance-none"><option value="">Selecione...</option><option value="Acaraí">Acaraí</option><option value="Água Branca">Água Branca</option><option value="Capri">Capri</option><option value="Centro - Sfs">Centro - Sfs</option><option value="Centro Histórico">Centro Histórico</option><option value="Enseada">Enseada</option><option value="Ervino">Ervino</option><option value="Iperoba">Iperoba</option><option value="Itaguaçu">Itaguaçu</option><option value="Laranjeiras">Laranjeiras</option><option value="Majorca">Majorca</option><option value="Miranda">Miranda</option><option value="Morro Grande">Morro Grande</option><option value="Paulas">Paulas</option><option value="Praia Grande">Praia Grande</option><option value="Reta">Reta</option><option value="Ribeira">Ribeira</option><option value="Rocio Grande">Rocio Grande</option><option value="Rocio Pequeno">Rocio Pequeno</option><option value="Sandra Regina">Sandra Regina</option><option value="Tapera">Tapera</option><option value="Ubatuba">Ubatuba</option><option value="Vila da Glória">Vila da Glória</option></select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500"><svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="col-span-2 space-y-1"><label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">Rua</label><input type="text" id="editStreet" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 focus:bg-white focus:ring-2 focus:ring-blue-500 transition-all outline-none" placeholder="Nome da rua"></div>
+                        <div class="space-y-1"><label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">Nº</label><div class="relative"><input type="text" id="editHouseNumber" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 focus:bg-white focus:ring-2 focus:ring-blue-500 transition-all outline-none" placeholder="123"></div><div class="flex items-center mt-1.5 ml-1"><input type="checkbox" id="noNumberCheckbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" onchange="toggleHouseNumber()"><label for="noNumberCheckbox" class="ml-1.5 text-xs text-gray-500 font-medium cursor-pointer">Sem número (S/N)</label></div></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Container de botões com padding-bottom extra para ficar mais em cima (pb-16) -->
+            <div class="p-5 pb-16 border-t border-gray-100 bg-gray-50 shrink-0 z-10 rounded-b-3xl">
+                <div class="flex gap-3">
+                    <button onclick="closeProfileEditModal()" class="flex-1 px-4 py-3.5 bg-white border border-gray-200 font-bold text-gray-700 rounded-xl hover:bg-gray-100 active:scale-95 transition shadow-sm">Cancelar</button>
+                    <button onclick="saveProfileChanges()" class="flex-1 px-4 py-3.5 bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 active:scale-95 transition">Salvar</button>
+                </div>
+            </div>
         </div>
     </div>
     
-    <!-- MODAL DE CROPPER MELHORADO (UX MARKETING) -->
+    <!-- MODAL DE CROPPER -->
     <div id="cropperModal" class="fixed inset-0 z-[60] bg-zinc-950 hidden flex-col justify-center p-0 md:p-6 transition-opacity duration-300 overflow-hidden">
         <div class="w-full max-w-2xl mx-auto flex flex-col h-full md:h-auto md:max-h-[90vh] bg-zinc-900 rounded-2xl overflow-hidden relative shadow-2xl">
-            <!-- Header do Cropper -->
             <div class="flex justify-between items-center p-5 z-10 bg-zinc-900/90 backdrop-blur-md border-b border-zinc-800">
                 <div>
-                    <h3 class="text-lg font-bold text-white leading-none mb-1">Ajustar Foto</h3>
+                    <h3 class="text-lg font-bold text-white mb-1">Ajustar Foto</h3>
                     <p class="text-[10px] text-zinc-500 uppercase tracking-widest font-medium">Formato Quadrado 1:1</p>
                 </div>
-                <button onclick="closeCropper()" class="p-2 rounded-full bg-white/5 text-zinc-400 hover:text-white transition-colors active:scale-90">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
+                <button onclick="closeCropper()" class="p-2 rounded-full bg-white/5 text-zinc-400 hover:text-white transition-colors active:scale-90"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg></button>
             </div>
-
-            <!-- Área da Imagem -->
-            <div class="flex-1 bg-black relative flex items-center justify-center overflow-hidden min-h-[350px]">
-                <img id="imageToCrop" class="max-w-full max-h-full block">
-                
-                <!-- Botões de Controle de Zoom (UX Mobile) -->
-                <div class="absolute bottom-6 right-6 z-20 flex flex-col gap-3">
-                    <button onclick="cropper.zoom(0.1)" class="w-12 h-12 rounded-full bg-blue-600 text-white shadow-xl flex items-center justify-center active:scale-90 transition-transform">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke-width="2.5" stroke-linecap="round"></path></svg>
-                    </button>
-                    <button onclick="cropper.zoom(-0.1)" class="w-12 h-12 rounded-full bg-zinc-800 text-white shadow-xl flex items-center justify-center active:scale-90 transition-transform">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14" stroke-width="2.5" stroke-linecap="round"></path></svg>
-                    </button>
-                </div>
-                
-                <!-- Label de Instrução -->
-                <div class="absolute top-4 left-0 right-0 z-20 pointer-events-none flex justify-center">
-                    <span class="bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-[10px] text-white/80 font-semibold uppercase tracking-wider">Arraste e redimensione a caixa</span>
-                </div>
-            </div>
-
-            <!-- Footer do Cropper -->
-            <div class="p-6 bg-zinc-900 flex justify-between items-center gap-4 border-t border-zinc-800">
-                <button onclick="closeCropper()" class="flex-1 px-6 py-4 rounded-xl font-bold text-zinc-400 border border-zinc-700 hover:bg-zinc-800 transition active:scale-95">Cancelar</button>
-                <button onclick="cropImage()" class="flex-1 px-6 py-4 bg-blue-600 text-white font-black rounded-xl shadow-lg shadow-blue-600/20 active:scale-95 transition-all uppercase tracking-wider text-sm">Aplicar Corte</button>
-            </div>
+            <div class="flex-1 bg-black relative flex items-center justify-center overflow-hidden min-h-[350px]"><img id="imageToCrop" class="max-w-full max-h-full block"><div class="absolute bottom-6 right-6 z-20 flex flex-col gap-3"><button onclick="cropper.zoom(0.1)" class="w-12 h-12 rounded-full bg-blue-600 text-white shadow-xl flex items-center justify-center active:scale-90"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke-width="2.5" stroke-linecap="round"></path></svg></button><button onclick="cropper.zoom(-0.1)" class="w-12 h-12 rounded-full bg-zinc-800 text-white shadow-xl flex items-center justify-center active:scale-90"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14" stroke-width="2.5" stroke-linecap="round"></path></svg></button></div></div>
+            <div class="p-6 bg-zinc-900 flex justify-between items-center gap-4 border-t border-zinc-800"><button onclick="closeCropper()" class="flex-1 px-6 py-4 rounded-xl font-bold text-zinc-400 border border-zinc-700 active:scale-95">Cancelar</button><button onclick="cropImage()" class="flex-1 px-6 py-4 bg-blue-600 text-white font-black rounded-xl active:scale-95 transition-all">Aplicar Corte</button></div>
         </div>
     </div>
 
@@ -703,7 +738,7 @@
         function confirmDialogAction() { if (currentDialogCallback) currentDialogCallback(); closeDialog(); }
         
         function switchAuthTab(tab) {
-            const loginForm = document.getElementById('loginForm'); const registerForm = document.getElementById('registerForm');
+            const loginForm = document.getElementById('loginEmail').closest('form'); const registerForm = document.getElementById('regName').closest('form');
             const btnLogin = document.getElementById('tabLogin'); const btnRegister = document.getElementById('tabRegister');
             if(tab === 'login') {
                 loginForm.classList.remove('hidden'); registerForm.classList.add('hidden');
@@ -738,12 +773,39 @@
         function closeProfileEditModal() { toggleModal('profileEditModal', false); }
         function closeFilterModal() { toggleModal('filterModal', false); }
 
-        // Helper para formatar nome em Title Case
         function formatToTitleCase(str) {
             if (!str) return "";
             return str.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
         }
         window.formatToTitleCase = formatToTitleCase;
+
+        window.openProfileEditModal = () => {
+            const data = window.userData || {};
+            const editName = document.getElementById('editName');
+            const editPhone = document.getElementById('editPhone');
+            const editEmail = document.getElementById('editEmail');
+            const editNeighborhood = document.getElementById('editNeighborhood');
+            const editStreet = document.getElementById('editStreet');
+            const editHouseNumber = document.getElementById('editHouseNumber');
+            const noNumChk = document.getElementById('noNumberCheckbox');
+
+            if (editName) editName.value = data.name || "";
+            if (editPhone) editPhone.value = data.phone || "";
+            if (editEmail) editEmail.value = data.email || "";
+            if (editNeighborhood) editNeighborhood.value = data.address?.neighborhood || "";
+            if (editStreet) editStreet.value = data.address?.street || "";
+            
+            if (editHouseNumber) {
+                if (data.address?.number === "S/N") {
+                    editHouseNumber.value = "S/N"; editHouseNumber.disabled = true; editHouseNumber.classList.add('bg-gray-100', 'text-gray-500');
+                    if (noNumChk) noNumChk.checked = true;
+                } else {
+                    editHouseNumber.value = data.address?.number || ""; editHouseNumber.disabled = false; editHouseNumber.classList.remove('bg-gray-100', 'text-gray-500');
+                    if (noNumChk) noNumChk.checked = false;
+                }
+            }
+            toggleModal('profileEditModal', true);
+        };
     </script>
 
     <script type="module">
@@ -768,10 +830,7 @@
                         loading.classList.add('opacity-0', 'pointer-events-none');
                         authView.classList.add('hidden'); profile.classList.remove('hidden'); profile.classList.add('flex');
                         initUI(); 
-                    } else { 
-                        // Sincronização automática para logins sociais
-                        await createDefaultUserDoc(user); 
-                    }
+                    } else { await createDefaultUserDoc(user); }
                 });
             } else {
                 currentUser = null; window.userData = null;
@@ -784,13 +843,11 @@
             try {
                 const userRef = doc(db, "users", user.uid);
                 const docSnap = await getDoc(userRef);
-                
-                // Formatação: Primeira letra de cada palavra em maiúsculo
                 const finalName = formatToTitleCase(nameOverride || user.displayName || "Usuário");
-
+                
                 if (docSnap.exists()) {
-                    // Se o documento existe mas o nome for genérico ou vazio, atualiza com o novo nome formatado
                     const currentData = docSnap.data();
+                    // Se o nome atual for genérico ou estiver vazio, atualizamos
                     if (!currentData.name || currentData.name === "Usuário") {
                         await updateDoc(userRef, { name: finalName });
                     }
@@ -814,7 +871,6 @@
         window.handleGoogleLogin = async () => { 
             try { 
                 const result = await signInWithPopup(auth, googleProvider);
-                // No Google, garantimos a sincronização do nome do perfil formatado
                 await createDefaultUserDoc(result.user, result.user.displayName); 
             } 
             catch (error) { console.error("Erro Google:", error); } 
@@ -833,7 +889,6 @@
                     const rawName = document.getElementById('regName').value;
                     const formattedName = formatToTitleCase(rawName);
                     const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
-                    // Salva o nome exatamente como preenchido (e formatado) no banco e no perfil de auth
                     await updateProfile(userCredential.user, { displayName: formattedName }); 
                     await createDefaultUserDoc(userCredential.user, formattedName);
                 }
@@ -845,9 +900,7 @@
         window.saveProfileChanges = async () => {
             if(!currentUser) return;
             const phone = document.getElementById('editPhone').value;
-            const rawName = document.getElementById('editName').value;
-            const formattedName = formatToTitleCase(rawName);
-
+            const formattedName = formatToTitleCase(document.getElementById('editName').value);
             if (phone.length > 0 && phone.length < 15) { showDialog({ title: "Telefone Incompleto", message: "O número deve ter o formato (xx) xxxxx-xxxx.", type: "error" }); return; }
             try {
                 const userRef = doc(db, "users", currentUser.uid);
@@ -899,25 +952,6 @@
         }
 
         window.openRewardsModal = () => { window.renderRewards(); toggleModal('rewardsModal', true); };
-
-        window.openProfileEditModal = () => {
-            const data = window.userData || {};
-            document.getElementById('editName').value = data.name || "";
-            document.getElementById('editPhone').value = data.phone || "";
-            document.getElementById('editEmail').value = data.email || "";
-            document.getElementById('editNeighborhood').value = data.address?.neighborhood || "";
-            document.getElementById('editStreet').value = data.address?.street || "";
-            const editHouseNumber = document.getElementById('editHouseNumber');
-            const noNumChk = document.getElementById('noNumberCheckbox');
-            if (data.address?.number === "S/N") {
-                editHouseNumber.value = "S/N"; editHouseNumber.disabled = true; editHouseNumber.classList.add('bg-gray-100', 'text-gray-500');
-                if (noNumChk) noNumChk.checked = true;
-            } else {
-                editHouseNumber.value = data.address?.number || ""; editHouseNumber.disabled = false; editHouseNumber.classList.remove('bg-gray-100', 'text-gray-500');
-                if (noNumChk) noNumChk.checked = false;
-            }
-            toggleModal('profileEditModal', true);
-        };
 
         window.openAvatarModal = () => {
             const modalImg = document.getElementById('modalAvatarImage');
@@ -989,8 +1023,6 @@
         function initUI() {
             const data = window.userData || {};
             const stats = data.stats || { points: 0, balance: 0, parties: 0 };
-            
-            // Lógica: Se houver nome de bairro preenchido no histórico, cada um conta como 1 festa
             const computedParties = (data.history || []).filter(item => item.neighborhood && item.neighborhood.trim() !== "").length;
             
             document.getElementById('userNameDisplay').textContent = data.name || "Usuário";
@@ -1001,7 +1033,12 @@
             
             const notice = document.getElementById('addressNotice'); 
             if (notice) { 
-                if (computedParties > 0) notice.classList.add('hidden'); else notice.classList.remove('hidden'); 
+                const addressFilled = data.address?.neighborhood && data.address?.street && data.address.neighborhood.trim() !== "" && data.address.street.trim() !== "";
+                if (computedParties > 0 || addressFilled) {
+                    notice.classList.add('hidden'); 
+                } else {
+                    notice.classList.remove('hidden'); 
+                }
             }
 
             if (data.avatar) {
