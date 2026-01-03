@@ -39,7 +39,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: clamp(0.7rem, 3.5vw, 0.95rem); /* Fonte adaptável ao tamanho da tela */
             font-weight: 700;
             position: relative;
@@ -72,7 +72,7 @@
             right: 0;
             background: white;
             z-index: 50;
-            border-radius: 24px 24px 0 0;
+            border-radius: 32px 32px 0 0;
             transform: translateY(100%);
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             max-height: 85vh;
@@ -109,7 +109,7 @@
 
         .toy-card {
             background: white;
-            border-radius: 16px;
+            border-radius: 20px;
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
             transition: all 0.3s;
         }
@@ -127,9 +127,9 @@
             bottom: 6px;
             right: 6px;
             padding: 2px 6px;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 0.6rem;
-            font-weight: 800;
+            font-weight: 700;
             color: white;
             z-index: 5;
         }
@@ -825,7 +825,7 @@
     <div id="cartToast">Adicionado ao carrinho</div>
 
     <header class="pt-24 pb-4 text-center bg-white border-b border-slate-50">
-        <h1 class="text-xl font-black text-[#003399] tracking-tighter uppercase">SELECIONE A DATA</h1>
+        <h1 class="text-lg font-bold text-[#003399] tracking-tight uppercase">SELECIONE A DATA</h1>
     </header>
 
     <main class="px-3 sm:px-5">
@@ -833,10 +833,10 @@
             <!-- Alterado: Removido 'hidden' do Loader para aparecer primeiro -->
             <div id="calendarLoader" class="flex flex-col items-center justify-center py-20">
                 <div class="w-10 h-10 border-4 border-[#003399] border-t-transparent rounded-full animate-spin"></div>
-                <p class="text-[10px] font-bold text-slate-400 mt-6 uppercase tracking-widest text-center font-black">VERIFICANDO BRINQUEDOS DISPONÍVEIS</p>
+                <p class="text-[10px] font-bold text-slate-400 mt-6 uppercase tracking-widest text-center">VERIFICANDO BRINQUEDOS DISPONÍVEIS</p>
                 <div class="mt-8 px-4 max-w-[320px] text-center bg-blue-50/30 p-6 rounded-[24px] border border-blue-100/50">
-                    <p class="text-[13px] font-black text-[#003399] uppercase mb-2 tracking-tighter">VOCÊ SABIA?</p>
-                    <p id="triviaText" class="text-[12px] font-bold text-slate-500 leading-relaxed"></p>
+                    <p class="text-[13px] font-bold text-[#003399] uppercase mb-2 tracking-tighter">VOCÊ SABIA?</p>
+                    <p id="triviaText" class="text-[12px] font-medium text-slate-500 leading-relaxed"></p>
                 </div>
             </div>
 
@@ -844,7 +844,7 @@
             <div id="calendarContent" class="hidden">
                 <div class="flex justify-between items-center mb-8">
                     <button id="prevMonthBtn" onclick="changeMonth(-1)" class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-slate-50 text-[#003399] transition-colors"><i class="fas fa-chevron-left"></i></button>
-                    <h2 id="currentMonthLabel" class="font-bold text-[#003399] text-base sm:text-xl tracking-tight uppercase">...</h2>
+                    <h2 id="currentMonthLabel" class="font-bold text-[#003399] text-base sm:text-lg tracking-tight uppercase">...</h2>
                     <button id="nextMonthBtn" onclick="changeMonth(1)" class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-slate-50 text-[#003399] transition-colors"><i class="fas fa-chevron-right"></i></button>
                 </div>
 
@@ -879,11 +879,11 @@
             </div>
 
             <div class="flex gap-2 mt-4 overflow-x-auto no-scrollbar">
-                <select id="sortFilter" onchange="renderToys()" class="p-3 bg-slate-100 rounded-xl text-xs font-bold outline-none border-none font-black uppercase">
+                <select id="sortFilter" onchange="renderToys()" class="p-3 bg-slate-100 rounded-xl text-xs font-bold outline-none border-none uppercase">
                     <option value="relevance">RELEVÂNCIA</option>
                     <option value="az">NOME A-Z</option>
                 </select>
-                <select id="ageFilter" onchange="renderToys()" class="p-3 bg-slate-100 rounded-xl text-xs font-bold outline-none border-none font-black uppercase">
+                <select id="ageFilter" onchange="renderToys()" class="p-3 bg-slate-100 rounded-xl text-xs font-bold outline-none border-none uppercase">
                     <option value="all">TODAS IDADES</option>
                     <option value="L">LIVRE</option>
                     <option value="-6">ATÉ 6 ANOS</option>
@@ -910,12 +910,12 @@
                 <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">TOTAL</span>
                 <div class="flex items-center">
                     <span class="text-2xl font-bold text-[#003399]" id="totalValueText">R$ 0,00</span>
-                    <span id="discountBadge" class="hidden ml-2 bg-green-500 text-white text-[8px] px-2 py-0.5 rounded-lg font-black shadow-sm uppercase">COMBO</span>
+                    <span id="discountBadge" class="hidden ml-2 bg-green-500 text-white text-[8px] px-2 py-0.5 rounded-lg font-bold shadow-sm uppercase">COMBO</span>
                 </div>
-                <span id="savingsText" class="hidden text-[9px] text-green-500 font-bold leading-none mt-1 uppercase font-black">Você economizou R$ 0,00</span>
+                <span id="savingsText" class="hidden text-[9px] text-green-500 font-bold leading-none mt-1 uppercase">Você economizou R$ 0,00</span>
             </div>
             <div class="text-right">
-                <span id="deliveryText" class="text-[8px] font-bold uppercase tracking-tighter font-black"></span>
+                <span id="deliveryText" class="text-[8px] font-bold uppercase tracking-tighter"></span>
             </div>
         </div>
         <button id="mainBtn" onclick="nextStep()" class="w-full btn-primary py-4 rounded-2xl text-lg shadow-xl active:scale-95 transition-all uppercase">
@@ -928,12 +928,12 @@
             <div class="w-20 h-20 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
                 <i class="fas fa-calendar-check text-3xl"></i>
             </div>
-            <h4 class="text-2xl font-black text-slate-800 mb-2 uppercase font-black">Reservado!</h4>
+            <h4 class="text-2xl font-bold text-slate-800 mb-2 uppercase">Reservado!</h4>
             <p class="text-slate-500 text-sm mb-2 leading-relaxed font-bold">Para manter sua reserva, pedimos um pequeno sinal de <b>R$ 25,00</b> e o restante no dia da montagem.</p>
             
             <div class="bg-blue-50/50 py-3 px-4 rounded-2xl mb-6 inline-block">
-                <p class="text-[10px] font-black text-[#003399] uppercase tracking-widest mb-1 font-black">VALOR TOTAL</p>
-                <p class="text-[#003399] font-black text-3xl tracking-tighter" id="pixFinalTotalDisplay">R$ 0,00</p>
+                <p class="text-[10px] font-bold text-[#003399] uppercase tracking-widest mb-1">VALOR TOTAL</p>
+                <p class="text-[#003399] font-bold text-3xl tracking-tighter" id="pixFinalTotalDisplay">R$ 0,00</p>
             </div>
             
             <div class="bg-slate-50 p-4 rounded-2xl mb-6 border-2 border-dashed border-slate-200 relative">
@@ -941,15 +941,15 @@
                 <code class="text-blue-900 font-mono font-bold" id="pixKey">57.545.647/0001-16</code>
             </div>
 
-            <button id="pixBtn" onclick="copyPixOnly()" class="w-full btn-primary py-4 rounded-2xl mb-4 uppercase font-black">COPIAR CHAVE PIX</button>
-            <button onclick="location.reload()" class="text-slate-400 text-xs font-bold uppercase tracking-widest font-black">Sair</button>
+            <button id="pixBtn" onclick="copyPixOnly()" class="w-full btn-primary py-4 rounded-2xl mb-4 uppercase">COPIAR CHAVE PIX</button>
+            <button onclick="location.reload()" class="text-slate-400 text-xs font-bold uppercase tracking-widest">Sair</button>
         </div>
     </div>
 
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbwdUg2e6m0Nf96QW7w2pcTB_fTPcaHpSyY4vlFVMnZ5yImFFxnlhOcPyRH7f7pmPvd_/exec"; 
         
-        // --- CONFIGURAÇÃO TELEGRAM CORRIGIDA ---
+        // --- CONFIGURAÇÃO TELEGRAM ---
         const TELEGRAM_TOKEN = "7731612058:AAEPNWozAfXa5J1mKwfFNCjBwBijrIvOlr8"; 
         const TELEGRAM_CHAT_ID = "6791831671"; 
         
@@ -1034,7 +1034,6 @@
         window.onload = async () => {
             currentMonth = new Date().getMonth();
             currentYear = new Date().getFullYear();
-            // Alterado: Removido renderCalendar inicial para evitar que o calendário apareça antes do loader
             fetchData();
             loadStreets();
             document.getElementById('summaryFooter').style.display = 'none';
@@ -1167,7 +1166,7 @@
             if (date.getTime() === today.getTime()) {
                 const modal = document.createElement('div');
                 modal.className = "fixed inset-0 bg-black/60 z-[300] flex items-center justify-center p-6";
-                modal.innerHTML = `<div class="bg-white p-8 rounded-3xl text-center shadow-2xl max-w-xs font-black"><i class="fas fa-exclamation-triangle text-orange-500 text-4xl mb-4"></i><p class="font-bold text-slate-800">Atenção, como a reserva é hoje, pode ser que não dê tempo de visualizar seu agendamento, após preencher nos confirme o mais rápido possível :)</p><p class="text-green-600 font-black mt-4">(47) 99227-7324</p><button onclick="this.parentElement.parentElement.remove()" class="mt-6 w-full btn-primary py-3 rounded-xl uppercase font-black">Entendido</button></div>`;
+                modal.innerHTML = `<div class="bg-white p-8 rounded-3xl text-center shadow-2xl max-w-xs font-bold"><i class="fas fa-exclamation-triangle text-orange-500 text-4xl mb-4"></i><p class="font-bold text-slate-800">Atenção, como a reserva é hoje, pode ser que não dê tempo de visualizar seu agendamento, após preencher nos confirme o mais rápido possível :)</p><p class="text-green-600 font-bold mt-4">(47) 99227-7324</p><button onclick="this.parentElement.parentElement.remove()" class="mt-6 w-full btn-primary py-3 rounded-xl uppercase font-bold">Entendido</button></div>`;
                 document.body.appendChild(modal);
             }
             selectedDate = date; 
@@ -1176,10 +1175,10 @@
             document.getElementById('toySheetTitle').innerText = `Disponíveis em ${normalizeDate(date)}`;
             const pl = getPriceLevel(date);
             const plLabel = document.getElementById('priceLevelLabel');
-            if (pl === '$') plLabel.innerHTML = `<span class="text-green-600 font-black">Data pouco requisitada</span><br><span class="text-[10px] text-green-500 font-black uppercase font-black">PREÇOS MAIS BAIXO QUE O NORMAL</span>`;
-            else if (pl === '$$') plLabel.innerHTML = `<span class="text-slate-400 font-black uppercase font-black font-black">Data Padrão</span>`;
-            else if (pl === '$$$') plLabel.innerHTML = `<span class="text-yellow-600 font-black">Data bem procurada</span><br><span class="text-[10px] text-yellow-500 font-black uppercase font-black font-black">VALORES UM POUCO MAIS ALTO QUE O NORMAL</span>`;
-            else if (pl === '$$$$') plLabel.innerHTML = `<span class="text-orange-600 font-black">Data com alta demanda</span><br><span class="text-[10px] text-orange-500 font-black uppercase font-black font-black font-black font-black font-black font-black">VALORES BEM MAIS ALTO QUE O NORMAL</span>`;
+            if (pl === '$') plLabel.innerHTML = `<span class="text-green-600 font-bold">Data pouco requisitada</span><br><span class="text-[10px] text-green-500 font-bold uppercase">PREÇOS MAIS BAIXO QUE O NORMAL</span>`;
+            else if (pl === '$$') plLabel.innerHTML = `<span class="text-slate-400 font-bold uppercase">Data Padrão</span>`;
+            else if (pl === '$$$') plLabel.innerHTML = `<span class="text-yellow-600 font-bold">Data bem procurada</span><br><span class="text-[10px] text-yellow-500 font-bold uppercase">VALORES UM POUCO MAIS ALTO QUE O NORMAL</span>`;
+            else if (pl === '$$$$') plLabel.innerHTML = `<span class="text-orange-600 font-bold">Data com alta demanda</span><br><span class="text-[10px] text-orange-500 font-bold uppercase">VALORES BEM MAIS ALTO QUE O NORMAL</span>`;
             cart = []; 
             renderToys(); 
             updateSummary();
@@ -1209,8 +1208,6 @@
             }
 
             try {
-                loader.classList.remove('hidden');
-                content.classList.add('hidden');
                 const res = await fetch(API_URL);
                 const data = await res.json();
                 sheetData = Array.isArray(data) ? data : [];
@@ -1289,28 +1286,27 @@
                 let isBlocked = (toy.availableQty <= 0 && inCart.qty === 0) || (toy.motorForte && (isMotorGrandeBooked || (cartHasMotorGrande && toy.id !== selectedMotorId)));
                 let price = (toy.category === 'mesa_comer') ? toy.price : toy.price * mult;
                 
-                // Lógica de cores para o selo de idade
-                let ageColorClass = 'bg-blue-500'; // Padrão azul (ex: para idade 6)
+                let ageColorClass = 'bg-blue-500'; 
                 if (toy.age === 'L') {
-                    ageColorClass = 'bg-green-500'; // Livre = Verde
+                    ageColorClass = 'bg-green-500'; 
                 } else if (toy.age === '14') {
-                    ageColorClass = 'bg-orange-500'; // 14 anos = Laranja
+                    ageColorClass = 'bg-orange-500'; 
                 }
 
                 const card = document.createElement('div');
                 card.className = `toy-card flex p-4 relative ${isBlocked ? 'disabled' : ''}`;
                 card.innerHTML = `
                     <div class="w-20 h-20 rounded-xl overflow-hidden mr-4 shrink-0 bg-slate-100 flex items-center justify-center relative img-skeleton">
-                        <img src="${toy.photo}" class="w-full h-full object-cover opacity-0 transition-opacity duration-300" onload="this.classList.remove('opacity-0'); this.parentElement.classList.remove('img-skeleton')" onerror="this.src='https://via.placeholder.com/150?text=Indispon%C3%ADvel'; this.classList.remove('opacity-0'); this.parentElement.classList.remove('img-skeleton')"><div class="age-badge ${ageColorClass} font-black">${toy.age}</div>
+                        <img src="${toy.photo}" class="w-full h-full object-cover opacity-0 transition-opacity duration-300" onload="this.classList.remove('opacity-0'); this.parentElement.classList.remove('img-skeleton')" onerror="this.src='https://via.placeholder.com/150?text=Indispon%C3%ADvel'; this.classList.remove('opacity-0'); this.parentElement.classList.remove('img-skeleton')"><div class="age-badge ${ageColorClass} font-bold">${toy.age}</div>
                     </div>
                     <div class="flex-grow">
-                        <h4 class="font-bold text-slate-800 text-sm leading-tight uppercase font-black">${toy.name}</h4>
+                        <h4 class="font-bold text-slate-800 text-sm leading-tight uppercase">${toy.name}</h4>
                         <p class="text-[10px] text-slate-400 mt-1 uppercase font-semibold">${toy.size}</p>
-                        <p class="${mult < 1.0 && toy.category !== 'mesa_comer' ? 'text-green-500' : (mult > 1.0 && toy.category !== 'mesa_comer' ? 'text-red-500' : 'text-[#003399]')} font-black mt-1">R$ ${price.toLocaleString('pt-BR', {minimumFractionDigits: 0})}</p>
+                        <p class="${mult < 1.0 && toy.category !== 'mesa_comer' ? 'text-green-500' : (mult > 1.0 && toy.category !== 'mesa_comer' ? 'text-red-500' : 'text-[#003399]')} font-bold mt-1">R$ ${price.toLocaleString('pt-BR', {minimumFractionDigits: 0})}</p>
                         <div class="flex items-center mt-2 gap-3">
-                            <button onclick="changeQty(${toy.id}, -1)" class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 border border-slate-100 font-black">-</button>
-                            <span class="font-bold text-sm w-4 text-center font-black">${inCart.qty}</span>
-                            <button onclick="changeQty(${toy.id}, 1)" class="w-8 h-8 rounded-full bg-[#003399] text-white flex items-center justify-center font-black">+</button>
+                            <button onclick="changeQty(${toy.id}, -1)" class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 border border-slate-100 font-bold">-</button>
+                            <span class="font-bold text-sm w-4 text-center">${inCart.qty}</span>
+                            <button onclick="changeQty(${toy.id}, 1)" class="w-8 h-8 rounded-full bg-[#003399] text-white flex items-center justify-center font-bold">+</button>
                         </div>
                     </div>`;
                 list.appendChild(card);
@@ -1341,15 +1337,12 @@
         function checkAvailabilityForDays(daysCount) {
             let start = new Date(selectedDate);
             let conflicts = [];
-            // O loop começa em 1 porque o dia 0 já é validado na seleção.
-            // Percorre até extraDays - 1 (os dias subsequentes).
             for (let i = 1; i < daysCount; i++) {
                 let checkDate = new Date(start);
                 checkDate.setDate(start.getDate() + i);
                 let dateStr = normalizeDate(checkDate);
                 cart.forEach(item => {
                     let stock = getToyStockForDate(item.id, dateStr);
-                    // Bloqueia apenas se o estoque total disponível para aquele dia for menor que o solicitado.
                     if (stock < item.qty) conflicts.push({ name: item.name, date: dateStr });
                 });
             }
@@ -1411,15 +1404,15 @@
                 savingsEl.classList.remove('hidden');
             } else savingsEl.classList.add('hidden');
             const delEl = document.getElementById('deliveryText');
-            if (selectedBairro) delEl.innerHTML = deliveryFee === 0 ? '<span class="text-green-500 font-black">FRETE GRÁTIS</span>' : `TAXA DE ENTREGA R$ ${deliveryFee.toFixed(2).replace('.',',')} REAIS`;
+            if (selectedBairro) delEl.innerHTML = deliveryFee === 0 ? '<span class="text-green-500 font-bold">FRETE GRÁTIS</span>' : `TAXA DE ENTREGA R$ ${deliveryFee.toFixed(2).replace('.',',')} REAIS`;
             else delEl.innerText = "";
             document.getElementById('mainBtn').disabled = cart.length === 0;
             if (currentStep === 'summary') {
                 const list = document.getElementById('orderDetailList');
                 if (list) {
-                    let itemsHtml = cart.map(i => `<div class='flex justify-between text-slate-800 font-bold py-0.5 text-[10px] uppercase font-black'><span>${i.qty}x ${i.name}</span><span>R$ ${(i.price * i.qty * extraDays).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></div>`).join('');
-                    itemsHtml += `<div class='border-t border-slate-200 mt-2 pt-2 flex justify-between text-[9px] font-black text-slate-400 uppercase tracking-tighter'><span>VALOR SEM DESCONTO</span><span>R$ ${((fullPriceItemsSum * extraDays) + (selectedBairro ? BAIRROS[selectedBairro] : 0) + (insuranceEnabled ? 14.90 : 0)).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></div>`;
-                    itemsHtml += `<div class='flex justify-between text-[9px] font-black text-green-500 uppercase tracking-tighter'><span>DESCONTOS</span><span>- R$ ${savings.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></div>`;
+                    let itemsHtml = cart.map(i => `<div class='flex justify-between text-slate-800 font-bold py-0.5 text-[10px] uppercase'><span>${i.qty}x ${i.name}</span><span>R$ ${(i.price * i.qty * extraDays).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></div>`).join('');
+                    itemsHtml += `<div class='border-t border-slate-200 mt-2 pt-2 flex justify-between text-[9px] font-bold text-slate-400 uppercase tracking-tighter'><span>VALOR SEM DESCONTO</span><span>R$ ${((fullPriceItemsSum * extraDays) + (selectedBairro ? BAIRROS[selectedBairro] : 0) + (insuranceEnabled ? 14.90 : 0)).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></div>`;
+                    itemsHtml += `<div class='flex justify-between text-[9px] font-bold text-green-500 uppercase tracking-tighter'><span>DESCONTOS</span><span>- R$ ${savings.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></div>`;
                     list.innerHTML = itemsHtml;
                 }
             }
@@ -1427,48 +1420,26 @@
 
         async function sendToSheet() {
             if (!API_URL) return;
-
-            // Pega o valor total atual e remove formatação para dividir
             const totalStr = document.getElementById('totalValueText').innerText.replace('R$ ', '').replace(/\./g, '').replace(',', '.');
             const totalTotal = parseFloat(totalStr);
             const valorPorDia = totalTotal / extraDays;
             const valorPorDiaFormatado = "R$ " + valorPorDia.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
 
-            // 1. Notificação para o Telegram (Enviada apenas UMA vez por reserva para não spammar)
             if (TELEGRAM_TOKEN && TELEGRAM_CHAT_ID) {
                 const itemsList = cart.map(item => `• ${item.qty}x ${item.name}`).join("\n");
-                const telegramMsg = `🚀 *NOVA RESERVA RECEBIDA*\n\n` +
-                                    `👤 *Cliente:* ${userName}\n` +
-                                    `📱 *WhatsApp:* ${userZap}\n\n` +
-                                    `📅 *Data Inicial:* ${normalizeDate(selectedDate)}\n` +
-                                    `🔢 *Duração:* ${extraDays} dia(s)\n` +
-                                    `⏰ *Horário:* ${startTime} às ${endTime === 'NEXT_DAY' ? 'Dia Seg.' : endTime}\n\n` +
-                                    `📍 *Bairro:* ${selectedBairro}\n` +
-                                    `🏠 *Rua:* ${userRua}, ${userNum}\n\n` +
-                                    `📦 *Brinquedos:*\n${itemsList}\n\n` +
-                                    `💰 *Valor Total:* R$ ${totalTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\n\n` +
-                                    `⚙️ _Detalhes enviados para a Planilha_`;
-
+                const telegramMsg = `🚀 *NOVA RESERVA RECEBIDA*\n\n👤 *Cliente:* ${userName}\n📱 *WhatsApp:* ${userZap}\n\n📅 *Data Inicial:* ${normalizeDate(selectedDate)}\n🔢 *Duração:* ${extraDays} dia(s)\n⏰ *Horário:* ${startTime} às ${endTime === 'NEXT_DAY' ? 'Dia Seg.' : endTime}\n\n📍 *Bairro:* ${selectedBairro}\n🏠 *Rua:* ${userRua}, ${userNum}\n\n📦 *Brinquedos:*\n${itemsList}\n\n💰 *Valor Total:* R$ ${totalTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\n\n⚙️ _Detalhes enviados para a Planilha_`;
                 try {
                     fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            chat_id: TELEGRAM_CHAT_ID,
-                            text: telegramMsg,
-                            parse_mode: 'Markdown'
-                        })
+                        body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: telegramMsg, parse_mode: 'Markdown' })
                     });
-                } catch (e) {
-                    console.error("Erro ao enviar para Telegram:", e);
-                }
+                } catch (e) { console.error("Erro Telegram:", e); }
             }
 
-            // 2. Loop para criar as linhas no Google Sheets (Continua igual, enviando uma linha por dia)
             for (let i = 0; i < extraDays; i++) {
                 let dataLinha = new Date(selectedDate);
                 dataLinha.setDate(selectedDate.getDate() + i);
-
                 const randomLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
                 const payload = {
                     id: randomLetter,
@@ -1499,17 +1470,7 @@
                     cep: userCEP || "N/A",
                     referral: referralSource === "OUTROS" ? referralOther : referralSource
                 };
-
-                try { 
-                    await fetch(API_URL, { 
-                        method: 'POST', 
-                        mode: 'no-cors', 
-                        headers: { 'Content-Type': 'application/json' }, 
-                        body: JSON.stringify(payload) 
-                    }); 
-                } catch (e) {
-                    console.error("Erro ao enviar linha para o Sheets:", e);
-                }
+                try { await fetch(API_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); } catch (e) { console.error("Erro Sheets:", e); }
             }
         }
 
@@ -1559,20 +1520,13 @@
                 if (!userDetails.trim()) { showToast("Informe detalhes da casa para ajudar na entrega"); return; }
             }
             if (currentStep === 'party') {
-                // Nova Validação pedida: Verificar disponibilidade para diárias extras
                 if (extraDays > 1) {
                     const conflicts = checkAvailabilityForDays(extraDays);
                     if (conflicts.length > 0) {
                         const conflict = conflicts[0];
                         const modal = document.createElement('div');
                         modal.className = "fixed inset-0 bg-black/60 z-[400] flex items-center justify-center p-6";
-                        modal.innerHTML = `
-                            <div class="bg-white p-8 rounded-3xl text-center shadow-2xl max-w-xs font-black">
-                                <i class="fas fa-calendar-times text-red-500 text-4xl mb-4"></i>
-                                <p class="font-bold text-slate-800 uppercase text-sm">Não é possível reservar ${extraDays} dias!</p>
-                                <p class="text-slate-500 text-xs mt-3 font-bold leading-relaxed uppercase">O brinquedo <span class="text-red-500">${conflict.name}</span> já está totalmente reservado no dia <span class="text-[#003399]">${conflict.date}</span>.</p>
-                                <button onclick="this.parentElement.parentElement.remove()" class="mt-6 w-full btn-primary py-3 rounded-xl uppercase font-black">Entendido</button>
-                            </div>`;
+                        modal.innerHTML = `<div class="bg-white p-8 rounded-3xl text-center shadow-2xl max-w-xs font-bold"><i class="fas fa-calendar-times text-red-500 text-4xl mb-4"></i><p class="font-bold text-slate-800 uppercase text-sm">Não é possível reservar ${extraDays} dias!</p><p class="text-slate-500 text-xs mt-3 font-bold leading-relaxed uppercase">O brinquedo <span class="text-red-500">${conflict.name}</span> já está totalmente reservado no dia <span class="text-[#003399]">${conflict.date}</span>.</p><button onclick="this.parentElement.parentElement.remove()" class="mt-6 w-full btn-primary py-3 rounded-xl uppercase font-bold">Entendido</button></div>`;
                         document.body.appendChild(modal);
                         return;
                     }
@@ -1596,23 +1550,23 @@
         function renderForm() {
             const container = document.getElementById('formContent');
             if(!container) return;
-            const h = (t) => `<h3 class="text-xl font-bold text-[#003399] uppercase mb-6 font-black">${t}</h3>`;
-            const likedLabel = (t) => `<label class="text-[10px] font-bold text-[#003399] uppercase ml-1 mb-1 block font-black">${t}</label>`;
-            const safetyMsg = `<div class="mt-8 pt-6 border-t border-slate-100 flex items-start gap-3 opacity-60"><i class="fas fa-shield-alt text-blue-500 text-sm mt-0.5"></i><p class="text-[10px] text-slate-500 font-bold leading-relaxed font-black">As informações fornecidas são utilizadas apenas para a realização da sua reserva e ficam totalmente protegidas.</p></div>`;
+            const h = (t) => `<h3 class="text-xl font-bold text-[#003399] uppercase mb-6">${t}</h3>`;
+            const likedLabel = (t) => `<label class="text-[10px] font-bold text-[#003399] uppercase ml-1 mb-1 block">${t}</label>`;
+            const safetyMsg = `<div class="mt-8 pt-6 border-t border-slate-100 flex items-start gap-3 opacity-60"><i class="fas fa-shield-alt text-blue-500 text-sm mt-0.5"></i><p class="text-[10px] text-slate-500 font-bold leading-relaxed">As informações fornecidas são utilizadas apenas para a realização da sua reserva e ficam totalmente protegidas.</p></div>`;
 
             if (currentStep === 'id') {
-                container.innerHTML = `${h('CONTATO')}<div class="mb-4 font-black">${likedLabel('Nome')}<input type='text' value='${userName}' placeholder='Primeiro nome' oninput='formatName(this)' class='w-full p-5 bg-slate-50 rounded-2xl outline-none border-2 border-transparent focus:border-blue-500 font-bold'></div>
-                <div class="mb-4 font-black">
+                container.innerHTML = `${h('CONTATO')}<div class="mb-4">${likedLabel('Nome')}<input type='text' value='${userName}' placeholder='Primeiro nome' oninput='formatName(this)' class='w-full p-5 bg-slate-50 rounded-2xl outline-none border-2 border-transparent focus:border-blue-500 font-bold'></div>
+                <div class="mb-4">
                     <div class="flex items-center gap-1 mb-1 ml-1">
                         <i class="fab fa-whatsapp text-green-500 text-xs"></i>
-                        <label class="text-[10px] font-bold text-[#003399] uppercase font-black">WhatsApp</label>
+                        <label class="text-[10px] font-bold text-[#003399] uppercase">WhatsApp</label>
                     </div>
                     <input type='tel' value='${userZap}' placeholder='(xx) xxxxx-xxxx' oninput='maskZap(this)' class='w-full p-5 bg-slate-50 rounded-2xl outline-none border-2 border-transparent focus:border-blue-500 font-bold'>
                 </div>
                 ${safetyMsg}<div class="h-40"></div>`;
             }
             else if (currentStep === 'address') {
-                container.innerHTML = `${h('Endereço')}<select onchange='selectedBairro=this.value;updateSummary()' class='w-full p-5 bg-slate-50 rounded-2xl mb-4 font-bold outline-none font-black'><option value=''>Selecione o Bairro</option>${Object.keys(BAIRROS).map(b => `<option value="${b}" ${selectedBairro===b?'selected':''}>${b}</option>`)}</select><div class="relative mb-4"><input type="text" id="userRuaGhost" class="w-full p-5 bg-slate-50 rounded-2xl absolute inset-0 text-slate-300 pointer-events-none font-bold outline-none" disabled><input type='text' id='userRua' value='${userRua}' placeholder='Nome da Rua' oninput='handleStreetInput(this)' onkeydown="handleStreetKeydown(event)" class='w-full p-5 bg-transparent rounded-2xl relative font-bold outline-none'></div><div id='streetSuggestionsContainer'></div><div class='flex gap-2 mb-4 font-black'><input type='text' value='${userSN ? "S/N" : userNum}' maxlength='4' placeholder='N°' oninput='this.value=this.value.replace(/\\D/g,""); userNum=this.value' class='w-28 p-5 bg-slate-50 rounded-2xl font-bold outline-none font-black ${userSN ? "opacity-50" : ""}'> <div class='flex items-center gap-2 p-3 bg-slate-50 rounded-2xl flex-1 cursor-pointer font-black' onclick='userSN=!userSN;renderForm()'><div class='toggle-switch ${userSN?"on":""}'><div class='toggle-knob'></div></div><span class='text-[10px] font-bold text-slate-600 uppercase font-black'>SEM NÚMERO</span></div></div><input type='text' value='${userDetails}' placeholder='Cor da casa, muro, etc' oninput='userDetails=this.value' class='w-full p-5 bg-slate-50 rounded-2xl font-bold outline-none font-black'>${safetyMsg}<div class="h-40"></div>`;
+                container.innerHTML = `${h('Endereço')}<select onchange='selectedBairro=this.value;updateSummary()' class='w-full p-5 bg-slate-50 rounded-2xl mb-4 font-bold outline-none'><option value=''>Selecione o Bairro</option>${Object.keys(BAIRROS).map(b => `<option value="${b}" ${selectedBairro===b?'selected':''}>${b}</option>`)}</select><div class="relative mb-4"><input type="text" id="userRuaGhost" class="w-full p-5 bg-slate-50 rounded-2xl absolute inset-0 text-slate-300 pointer-events-none font-bold outline-none" disabled><input type='text' id='userRua' value='${userRua}' placeholder='Nome da Rua' oninput='handleStreetInput(this)' onkeydown="handleStreetKeydown(event)" class='w-full p-5 bg-transparent rounded-2xl relative font-bold outline-none'></div><div id='streetSuggestionsContainer'></div><div class='flex gap-2 mb-4'><input type='text' value='${userSN ? "S/N" : userNum}' maxlength='4' placeholder='N°' oninput='this.value=this.value.replace(/\\D/g,""); userNum=this.value' class='w-28 p-5 bg-slate-50 rounded-2xl font-bold outline-none ${userSN ? "opacity-50" : ""}'> <div class='flex items-center gap-2 p-3 bg-slate-50 rounded-2xl flex-1 cursor-pointer' onclick='userSN=!userSN;renderForm()'><div class='toggle-switch ${userSN?"on":""}'><div class='toggle-knob'></div></div><span class='text-[10px] font-bold text-slate-600 uppercase'>SEM NÚMERO</span></div></div><input type='text' value='${userDetails}' placeholder='Cor da casa, muro, etc' oninput='userDetails=this.value' class='w-full p-5 bg-slate-50 rounded-2xl font-bold outline-none'>${safetyMsg}<div class="h-40"></div>`;
             }
             else if (currentStep === 'party') {
                 const hours = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"];
@@ -1621,50 +1575,47 @@
                 const endInt = isNextDay ? 22 : (parseInt(endTime.split(':')[0]) || 0);
                 const duration = endInt - startInt;
                 const extraPriceVal = (duration > 6 ? (duration - 6) * 5 : 0) + (isNextDay ? 10 : 0);
-                
-                // Alterado: Adicionado lógica de porcentagem de desconto para os botões de duração
-                container.innerHTML = `${h('Duração')}<div class='flex gap-2 mb-6 font-black'>${[1,2,3,4,5].map(d => {
+                container.innerHTML = `${h('Duração')}<div class='flex gap-2 mb-6'>${[1,2,3,4,5].map(d => {
                     let pct = "";
                     if(d===2) pct = "15% OFF";
                     if(d===3) pct = "23% OFF";
                     if(d===4) pct = "30% OFF";
                     if(d===5) pct = "36% OFF";
-                    return `<button onclick="extraDays=${d};renderForm();updateSummary()" class='flex-1 py-3 rounded-xl font-bold border-2 ${extraDays===d?"border-blue-600 bg-blue-50 text-blue-800":"border-slate-100 text-slate-800"} flex flex-col items-center'><span class='text-lg'>${d}d</span>${pct ? `<span class="text-[8px] text-green-600 font-black">${pct}</span>`:""}</button>`;
+                    return `<button onclick="extraDays=${d};renderForm();updateSummary()" class='flex-1 py-3 rounded-xl font-bold border-2 ${extraDays===d?"border-blue-600 bg-blue-50 text-blue-800":"border-slate-100 text-slate-800"} flex flex-col items-center'><span class='text-lg'>${d}d</span>${pct ? `<span class="text-[8px] text-green-600 font-bold">${pct}</span>`:""}</button>`;
                 }).join('')}</div>
-                <div class='flex gap-3 mb-2 font-black'>
-                    <div class='flex-1'>${likedLabel('Início')}<select onchange="startTime=this.value;renderForm();updateSummary()" class="w-full p-4 bg-slate-50 rounded-2xl font-bold outline-none font-black">${hours.map(h => `<option value="${h}" ${startTime===h?'selected':''}>${h}</option>`).join('')}</select></div>
-                    <div class='flex-1'>${likedLabel('Término')}<select onchange="endTime=this.value;renderForm();updateSummary()" class="w-full p-4 bg-slate-50 rounded-2xl font-bold outline-none font-black">${hours.filter(h => parseInt(h.split(':')[0]) > startInt).map(h => `<option value="${h}" ${endTime===h?'selected':''}>${h}</option>`).join('')}<option value="NEXT_DAY" ${endTime==='NEXT_DAY'?'selected':''}>DIA SEG.</option></select></div>
+                <div class='flex gap-3 mb-2'>
+                    <div class='flex-1'>${likedLabel('Início')}<select onchange="startTime=this.value;renderForm();updateSummary()" class="w-full p-4 bg-slate-50 rounded-2xl font-bold outline-none">${hours.map(h => `<option value="${h}" ${startTime===h?'selected':''}>${h}</option>`).join('')}</select></div>
+                    <div class='flex-1'>${likedLabel('Término')}<select onchange="endTime=this.value;renderForm();updateSummary()" class="w-full p-4 bg-slate-50 rounded-2xl font-bold outline-none">${hours.filter(h => parseInt(h.split(':')[0]) > startInt).map(h => `<option value="${h}" ${endTime===h?'selected':''}>${h}</option>`).join('')}<option value="NEXT_DAY" ${endTime==='NEXT_DAY'?'selected':''}>DIA SEG.</option></select></div>
                 </div>
-                <div class="text-center mb-6 font-black"><p class="text-[10px] uppercase tracking-tight text-blue-500 font-bold">${extraPriceVal > 0 ? `+ R$ ${extraPriceVal.toLocaleString('pt-BR', {minimumFractionDigits: 2})} EXTRA` : '6 Horas inclusas / +5h por hora extra'}</p></div>
-                <div class='p-5 bg-blue-50 rounded-2xl mb-4 flex justify-between font-black cursor-pointer' onclick='deliveryPreviousDay=!deliveryPreviousDay;renderForm()'><div class="flex items-center gap-3"><div class='toggle-switch ${deliveryPreviousDay?"on":""}'><div class='toggle-knob'></div></div><div class="flex flex-col"><p class='text-[10px] font-black text-blue-800 uppercase leading-tight'>ENTREGAR 1 DIA ANTES</p><p class='text-[8px] text-blue-600 font-medium uppercase leading-tight'>Não é certeza mas uma possibilidade</p></div></div></div>${safetyMsg}<div class="h-40"></div>`;
+                <div class="text-center mb-6"><p class="text-[10px] uppercase tracking-tight text-blue-500 font-bold">${extraPriceVal > 0 ? `+ R$ ${extraPriceVal.toLocaleString('pt-BR', {minimumFractionDigits: 2})} EXTRA` : '6 Horas inclusas / +5h por hora extra'}</p></div>
+                <div class='p-5 bg-blue-50 rounded-2xl mb-4 flex justify-between cursor-pointer' onclick='deliveryPreviousDay=!deliveryPreviousDay;renderForm()'><div class="flex items-center gap-3"><div class='toggle-switch ${deliveryPreviousDay?"on":""}'><div class='toggle-knob'></div></div><div class="flex flex-col"><p class='text-[10px] font-bold text-blue-800 uppercase leading-tight'>ENTREGAR 1 DIA ANTES</p><p class='text-[8px] text-blue-600 font-medium uppercase leading-tight'>Não é certeza mas uma possibilidade</p></div></div></div>${safetyMsg}<div class="h-40"></div>`;
             }
             else if (currentStep === 'details') {
-                // Alterado: hasPiscina agora verifica ID 3 e ID 9
                 const hasPiscina = cart.some(i => i.id === 3 || i.id === 9);
-                container.innerHTML = `${h('Preferências')}<div class='p-6 bg-slate-50 rounded-3xl mb-8 font-black'>
-                ${hasPiscina ? `<p class='text-[11px] font-black text-[#003399] mb-4 uppercase text-center font-black'>A piscina fica coberta?</p><div class='flex gap-2 mb-10 font-black'>${["sim","não"].map(o => `<button onclick="piscinaCovered='${o}';renderForm()" class='flex-1 py-2 rounded-xl border-2 ${piscinaCovered===o?"border-blue-600 bg-blue-600 text-white":"bg-white text-slate-800 font-bold"}'>${o.toUpperCase()}</button>`).join('')}</div>` : ''}
-                <p class='text-[11px] font-black text-[#003399] mb-1 uppercase text-center font-black'>Monitor?</p>
-                <div class='flex gap-2 mb-4 font-black'>${[0,1,2].map(m => `<button onclick="monitorsCount=${m};renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===m?"border-blue-600 bg-blue-600 text-white font-black":"bg-white font-bold"}'>${m===0?'NÃO':m+' MON.'}</button>`).join('')}</div>
-                ${monitorsCount > 0 ? `<div class="mt-4 font-black">${likedLabel('Quantas horas?')}<select onchange="monitorHours=parseInt(this.value);updateSummary()" class="w-full p-4 bg-white rounded-xl font-bold outline-none font-black">${[2,3,4,5,6,7,8].map(h => `<option value="${h}" ${monitorHours===h?'selected':''}>${h} HORAS</option>`).join('')}</select></div>` : ''}
+                container.innerHTML = `${h('Preferências')}<div class='p-6 bg-slate-50 rounded-3xl mb-8'>
+                ${hasPiscina ? `<p class='text-[11px] font-bold text-[#003399] mb-4 uppercase text-center'>A piscina fica coberta?</p><div class='flex gap-2 mb-10'>${["sim","não"].map(o => `<button onclick="piscinaCovered='${o}';renderForm()" class='flex-1 py-2 rounded-xl border-2 ${piscinaCovered===o?"border-blue-600 bg-blue-600 text-white":"bg-white text-slate-800 font-bold"}'>${o.toUpperCase()}</button>`).join('')}</div>` : ''}
+                <p class='text-[11px] font-bold text-[#003399] mb-1 uppercase text-center'>Monitor?</p>
+                <div class='flex gap-2 mb-4'>${[0,1,2].map(m => `<button onclick="monitorsCount=${m};renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===m?"border-blue-600 bg-blue-600 text-white":"bg-white font-bold"}'>${m===0?'NÃO':m+' MON.'}</button>`).join('')}</div>
+                ${monitorsCount > 0 ? `<div class="mt-4">${likedLabel('Quantas horas?')}<select onchange="monitorHours=parseInt(this.value);updateSummary()" class="w-full p-4 bg-white rounded-xl font-bold outline-none">${[2,3,4,5,6,7,8].map(h => `<option value="${h}" ${monitorHours===h?'selected':''}>${h} HORAS</option>`).join('')}</select></div>` : ''}
                 </div>
                 ${cart.filter(t=>t.power || t.category === 'especial' || t.id === 10).length > 0 ? `
-                    <div class='mb-8 font-black'>
-                        <p class='text-[11px] font-black text-[#003399] mb-4 uppercase text-center font-black'>Qual a distancia da tomada mais próxima?</p>
-                        ${cart.filter(t=>t.power || t.category === 'especial' || t.id === 10).map(t => `<div class="mb-4 bg-white p-5 rounded-2xl border border-slate-100 flex items-center justify-between font-black"><p class="text-[10px] font-black text-[#003399] uppercase mr-4">${t.name}</p><div class="flex items-center gap-2"><input type="tel" maxlength="2" placeholder="0" value="${socketDistances[t.id] || ''}" oninput="this.value=this.value.replace(/\\D/g,''); socketDistances[${t.id}]=this.value" class="w-12 p-3 bg-slate-50 rounded-xl outline-none font-bold text-sm text-center border-2 focus:border-blue-500 font-black"><span class="text-[10px] font-black text-slate-400">metros</span></div></div>`).join('')}
+                    <div class='mb-8'>
+                        <p class='text-[11px] font-bold text-[#003399] mb-4 uppercase text-center'>Qual a distancia da tomada mais próxima?</p>
+                        ${cart.filter(t=>t.power || t.category === 'especial' || t.id === 10).map(t => `<div class="mb-4 bg-white p-5 rounded-2xl border border-slate-100 flex items-center justify-between"><p class="text-[10px] font-bold text-[#003399] uppercase mr-4">${t.name}</p><div class="flex items-center gap-2"><input type="tel" maxlength="2" placeholder="0" value="${socketDistances[t.id] || ''}" oninput="this.value=this.value.replace(/\\D/g,''); socketDistances[${t.id}]=this.value" class="w-12 p-3 bg-slate-50 rounded-xl outline-none font-bold text-sm text-center border-2 focus:border-blue-500"><span class="text-[10px] font-bold text-slate-400">metros</span></div></div>`).join('')}
                     </div>` : ''}${safetyMsg}<div class="h-40"></div>`;
             }
             else if (currentStep === 'summary') {
-                container.innerHTML = `${h('Finalizar')}<div class='p-6 bg-slate-50 rounded-[24px] mb-4 font-black'>
-                ${likedLabel('Cupom?')}<input type="text" placeholder="CÓDIGO PROMOCIONAL" ${couponIsValid ? 'disabled' : ''} value="${couponCode}" oninput="checkCoupon(this.value)" class="w-full p-4 rounded-xl outline-none font-bold uppercase font-black ${couponIsValid?'border-2 border-green-500 bg-green-50':'bg-white shadow-inner'}">
-                ${couponIsValid ? `<p class="text-green-600 text-[10px] font-bold mt-2 font-black"><i class="fas fa-check-circle mr-1"></i> ${COUPONS_DB[couponCode]}</p>` : ''}
-                <div class="mt-8 font-black">${likedLabel('Nota Fiscal?')}<div class="flex gap-2 mb-4 font-black">${[true,false].map(opt => `<button onclick="needsInvoice=${opt};renderForm()" class="flex-1 py-3 rounded-xl border-2 ${needsInvoice===opt?'border-[#003399] bg-[#003399] text-white':'border-white bg-white text-slate-300'} text-xs font-bold font-black font-black">${opt?'SIM':'NÃO'}</button>`).join('')}</div>
-                ${needsInvoice ? `<div class="space-y-4 pt-2 font-black"><div>${likedLabel('CNPJ')} <input type="tel" oninput="maskCNPJ(this)" placeholder="00.000.000/0000-00" class="w-full p-4 bg-white rounded-xl outline-none font-bold shadow-inner font-black"></div><div>${likedLabel('CEP')} <input type="tel" oninput="maskCEP(this)" placeholder="00.000-000" class="w-full p-4 bg-white rounded-xl outline-none font-bold shadow-inner font-black"></div></div>` : ''}</div></div>
-                <div class='p-5 bg-green-50 rounded-3xl mb-4 flex justify-between gap-4 cursor-pointer font-black' onclick='insuranceEnabled=!insuranceEnabled;updateSummary();renderForm()'>
-                    <div class="flex items-center gap-3"><div class='toggle-switch ${insuranceEnabled?"on":""}'><div class='toggle-knob'></div></div><div class="flex flex-col"><p class='text-[10px] font-black text-green-800 uppercase leading-tight'>ADICIONAR SEGURO</p><p class='text-[8px] text-green-700 font-medium uppercase leading-tight'>Fique isento de reparos de até 300 reais caso o brinquedo seja danificado</p></div></div>
+                container.innerHTML = `${h('Finalizar')}<div class='p-6 bg-slate-50 rounded-[24px] mb-4'>
+                ${likedLabel('Cupom?')}<input type="text" placeholder="CÓDIGO PROMOCIONAL" ${couponIsValid ? 'disabled' : ''} value="${couponCode}" oninput="checkCoupon(this.value)" class="w-full p-4 rounded-xl outline-none font-bold uppercase ${couponIsValid?'border-2 border-green-500 bg-green-50':'bg-white shadow-inner'}">
+                ${couponIsValid ? `<p class="text-green-600 text-[10px] font-bold mt-2"><i class="fas fa-check-circle mr-1"></i> ${COUPONS_DB[couponCode]}</p>` : ''}
+                <div class="mt-8">${likedLabel('Nota Fiscal?')}<div class="flex gap-2 mb-4">${[true,false].map(opt => `<button onclick="needsInvoice=${opt};renderForm()" class="flex-1 py-3 rounded-xl border-2 ${needsInvoice===opt?'border-[#003399] bg-[#003399] text-white':'border-white bg-white text-slate-300'} text-xs font-bold">${opt?'SIM':'NÃO'}</button>`).join('')}</div>
+                ${needsInvoice ? `<div class="space-y-4 pt-2"><div>${likedLabel('CNPJ')} <input type="tel" oninput="maskCNPJ(this)" value="${userCNPJ}" placeholder="00.000.000/0000-00" class="w-full p-4 bg-white rounded-xl outline-none font-bold shadow-inner"></div><div>${likedLabel('CEP')} <input type="tel" oninput="maskCEP(this)" value="${userCEP}" placeholder="00.000-000" class="w-full p-4 bg-white rounded-xl outline-none font-bold shadow-inner"></div></div>` : ''}</div></div>
+                <div class='p-5 bg-green-50 rounded-3xl mb-4 flex justify-between gap-4 cursor-pointer' onclick='insuranceEnabled=!insuranceEnabled;updateSummary();renderForm()'>
+                    <div class="flex items-center gap-3"><div class='toggle-switch ${insuranceEnabled?"on":""}'><div class='toggle-knob'></div></div><div class="flex flex-col"><p class='text-[10px] font-bold text-green-800 uppercase leading-tight'>ADICIONAR SEGURO</p><p class='text-[8px] text-green-700 font-medium uppercase leading-tight'>Fique isento de reparos de até 300 reais caso o brinquedo seja danificado</p></div></div>
                 </div>
-                <div class="p-5 bg-slate-100 rounded-3xl border border-slate-200 font-black">
-                    <div class="mb-4 font-black">${likedLabel('Como conheceu a gente?')}
-                        <select onchange="referralSource=this.value;renderForm()" class="w-full p-4 bg-white rounded-xl font-bold text-xs outline-none shadow-inner font-black">
+                <div class="p-5 bg-slate-100 rounded-3xl border border-slate-200">
+                    <div class="mb-4">${likedLabel('Como conheceu a gente?')}
+                        <select onchange="referralSource=this.value;renderForm()" class="w-full p-4 bg-white rounded-xl font-bold text-xs outline-none shadow-inner">
                             <option value="" ${referralSource ? 'disabled' : ''}>${referralSource || 'SELECIONE'}</option>
                             <option value="MARKETPLACE" ${referralSource === 'MARKETPLACE' ? 'selected' : ''}>MARKETPLACE</option>
                             <option value="INSTAGRAM" ${referralSource === 'INSTAGRAM' ? 'selected' : ''}>INSTAGRAM</option>
@@ -1675,10 +1626,10 @@
                             <option value="INDICAÇÃO DE EMPRESA" ${referralSource === 'INDICAÇÃO DE EMPRESA' ? 'selected' : ''}>INDICAÇÃO DE EMPRESA</option>
                             <option value="OUTROS" ${referralSource === 'OUTROS' ? 'selected' : ''}>OUTROS</option>
                         </select>
-                        ${referralSource === 'OUTROS' ? `<input type="text" placeholder="Onde?" oninput="referralOther=this.value" class="w-full p-4 mt-2 bg-white rounded-xl font-bold text-xs border border-blue-100 font-black">` : ''}
+                        ${referralSource === 'OUTROS' ? `<input type="text" placeholder="Onde?" oninput="referralOther=this.value" class="w-full p-4 mt-2 bg-white rounded-xl font-bold text-xs border border-blue-100">` : ''}
                     </div>
-                    <div id="orderDetailList" class="space-y-1 font-black"></div>
-                </div>${safetyMsg}<div class="h-40 font-black"></div>`;
+                    <div id="orderDetailList" class="space-y-1"></div>
+                </div>${safetyMsg}<div class="h-40"></div>`;
             }
         }
 
