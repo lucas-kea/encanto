@@ -39,7 +39,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: clamp(0.7rem, 3.5vw, 0.95rem); /* Fonte adaptável ao tamanho da tela */
             font-weight: 700;
             position: relative;
@@ -72,7 +72,7 @@
             right: 0;
             background: white;
             z-index: 50;
-            border-radius: 24px 24px 0 0;
+            border-radius: 32px 32px 0 0;
             transform: translateY(100%);
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             max-height: 85vh;
@@ -109,7 +109,7 @@
 
         .toy-card {
             background: white;
-            border-radius: 16px;
+            border-radius: 20px;
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
             transition: all 0.3s;
         }
@@ -127,9 +127,9 @@
             bottom: 6px;
             right: 6px;
             padding: 2px 6px;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 0.6rem;
-            font-weight: 800;
+            font-weight: 700;
             color: white;
             z-index: 5;
         }
@@ -240,29 +240,611 @@
         .suggestion-item:active { background: #F1F5F9; }
     </style>
 </head>
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- Configuração da cor da barra do browser (Chrome, Safari, Samsung Internet, etc) -->
+    <meta name="theme-color" content="#2563eb">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="msapplication-navbutton-color" content="#2563eb">
+
+    <title>Encanto Festas - Header</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-blue: #2563eb;
+            --deep-blue: #1e3a8a;
+            --marketing-gold: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            --marketing-glow: 0 0 20px rgba(245, 158, 11, 0.5);
+            --tooltip-bg: linear-gradient(165deg, #2563eb 0%, #1e40af 100%);
+        }
+
+        html, body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        h1, h2, h3, h4, .brand-font {
+            font-family: 'Baloo 2', cursive;
+            line-height: 1.2;
+        }
+        
+        .glass-header {
+            background: #2563eb; 
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .item-card {
+            transition: transform 0.25s ease-out, opacity 0.25s ease-out;
+            animation: fadeIn 0.4s ease-out forwards;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            will-change: transform, opacity;
+            user-select: none;
+            touch-action: pan-y; 
+        }
+
+        /* Efeito Skeleton Loader */
+        .skeleton-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 1.5rem;
+            height: 110px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .shimmer-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.05) 50%, 
+                transparent 100%);
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes fadeIn {
+            from { transform: translateY(8px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .dismissing {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease !important;
+            transform: translateX(120%) !important;
+            opacity: 0 !important;
+            pointer-events: none;
+        }
+
+        .modal-view {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(100%);
+            background: linear-gradient(180deg, #2563eb 0%, #1e3a8a 100%);
+            background-attachment: fixed;
+            visibility: hidden;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+        }
+        .modal-view.active {
+            transform: translateY(0%);
+            visibility: visible;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Tooltip Premium v5 */
+        #marketingTooltip {
+            z-index: 100;
+            filter: drop-shadow(0 20px 45px rgba(0,0,0,0.5));
+            animation: elasticImpact 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            max-width: calc(100vw - 12px);
+            background: var(--tooltip-bg);
+            border: 1.5px solid rgba(255, 255, 255, 0.25);
+            position: absolute;
+            box-shadow: inset 0 0 25px rgba(255, 255, 255, 0.1);
+            transform-origin: top right;
+        }
+
+        @keyframes elasticImpact {
+            0% { 
+                opacity: 0; 
+                transform: scale(0.2) translateY(-60px) rotate(15deg); 
+                filter: blur(15px);
+            }
+            70% {
+                transform: scale(1.05) translateY(5px) rotate(-2deg);
+            }
+            100% { 
+                opacity: 1; 
+                transform: scale(1) translateY(0) rotate(0deg);
+                filter: blur(0);
+            }
+        }
+
+        .tooltip-arrow {
+            position: absolute;
+            top: -10px;
+            right: 18px;
+            width: 24px;
+            height: 12px;
+            z-index: 10;
+        }
+        .tooltip-arrow svg {
+            fill: #2563eb; 
+        }
+
+        .novidade-badge {
+            background: var(--marketing-gold);
+            color: #1e3a8a;
+            box-shadow: var(--marketing-glow);
+            animation: pulse-gold 2s infinite;
+        }
+
+        @keyframes pulse-gold {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.6); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); }
+        }
+
+        .month-divider {
+            position: sticky;
+            top: 0; 
+            z-index: 20;
+            background: #1e3a8a; 
+            margin: 0 -1rem 0.5rem -1rem;
+            padding: 0.75rem 1.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff !important; 
+            font-weight: 800;
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .search-area {
+            background: #1e3a8a;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            flex-shrink: 0;
+        }
+
+        .date-badge {
+            background: var(--marketing-gold);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 3.5rem; 
+            height: 3.5rem;
+            border-radius: 1rem;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="tooltipOverlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[45] hidden transition-opacity duration-300"></div>
+
+    <header id="mainHeader" class="fixed top-0 left-0 right-0 w-full glass-header z-[50] h-16">
+        <div class="max-w-xl mx-auto px-3 h-full flex justify-between items-center">
+            
+            <a href="index.html" class="flex items-center gap-2 active:scale-95 transition-transform outline-none text-decoration-none group">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdX7GkygoIKwK06MzeweiE0GPt5I1rsz808w&s" 
+                    class="w-10 h-10 rounded-full border-2 border-yellow-400 shadow-sm transition-transform group-hover:rotate-12"
+                    alt="Logo Encanto Festas">
+                
+                <div class="inline-flex flex-col items-start leading-none -mt-1.5 ml-0.5">
+                    <div class="text-xl font-bold brand-font tracking-tight">
+                        <span class="text-white">Encanto</span><span class="text-yellow-400">Festas</span>
+                    </div>
+                    <span class="text-[7.2px] font-black text-white/90 uppercase -mt-0.5 tracking-[0.15em] w-full text-justify ml-[2px]" style="text-align-last: justify;">
+                        LOCAÇÃO DE BRINQUEDOS
+                    </span>
+                </div>
+            </a>
+            
+            <div class="flex items-center gap-2">
+                <div class="relative">
+                    <button id="agendaBtn" class="p-2.5 bg-white/10 rounded-xl text-white hover:bg-white/20 transition-all active:scale-90 flex items-center justify-center outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y2="6"/><line x1="8" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/>
+                        </svg>
+                    </button>
+
+                    <div id="marketingTooltip" class="absolute top-14 -right-1 w-72 rounded-[2rem] overflow-visible hidden flex flex-col">
+                        <div class="tooltip-arrow">
+                            <svg viewBox="0 0 24 12" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 0L24 12H0L12 0Z"/>
+                            </svg>
+                        </div>
+                        
+                        <div class="p-7 flex flex-col gap-4 relative z-20">
+                            <div class="flex justify-between items-center">
+                                <div class="novidade-badge px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-[0.2em]">
+                                    NOVIDADE
+                                </div>
+                                <span class="text-2xl drop-shadow-lg">🎉</span>
+                            </div>
+                            
+                            <div class="space-y-1.5">
+                                <h4 class="text-xl font-black text-white leading-tight">
+                                    Painel de Agendamento
+                                </h4>
+                                <p class="text-[14px] text-blue-100 leading-relaxed font-medium">
+                                    Quer confirmar se a sua festa está agendada corretamente? Valide todos os itens e horários agora mesmo!
+                                </p>
+                            </div>
+
+                            <button id="closeMarketing" class="mt-2 w-max px-5 py-2 bg-white text-[#1e3a8a] text-[10px] font-black rounded-xl active:scale-95 transition-all shadow-lg uppercase tracking-widest self-end border-b-2 border-blue-200">
+                                Entendido!
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="notifBtn" class="relative p-2.5 bg-white/10 rounded-xl text-white hover:bg-white/20 transition-all active:scale-90 flex items-center justify-center outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                    </svg>
+                    <span id="notifBadge" class="hidden absolute top-2 right-2 w-2.5 h-2.5 bg-yellow-400 rounded-full border-2 border-blue-600 animate-pulse"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MODAL DE NOTIFICAÇÕES -->
+    <div id="notifModal" class="modal-view hidden flex flex-col">
+        <div class="px-5 py-3 border-b border-white/10 flex justify-between items-center bg-blue-900/40 backdrop-blur-xl">
+            <div class="flex items-center gap-4">
+                <button id="closeNotif" class="p-2 text-white/70 hover:text-white transition-colors bg-white/10 rounded-lg outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <h2 class="text-lg font-bold brand-font text-white">Notificações</h2>
+            </div>
+            <button id="markAllRead" class="text-[10px] font-bold uppercase tracking-widest text-blue-200 hover:text-white transition-colors outline-none">Limpar Tudo</button>
+        </div>
+        <div id="notifContainer" class="flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar pb-10"></div>
+    </div>
+
+    <!-- MODAL DE AGENDA -->
+    <div id="agendaModal" class="modal-view hidden flex flex-col">
+        <div class="px-5 py-3 border-b border-white/10 flex justify-between items-center bg-blue-900/60 backdrop-blur-xl flex-shrink-0">
+            <div class="flex items-center gap-4">
+                <button id="closeAgenda" class="p-2 text-white/70 hover:text-white transition-colors bg-white/10 rounded-lg outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <h2 class="text-lg font-bold brand-font text-white">Próximas Reservas</h2>
+            </div>
+            <div id="agendaCount" class="text-[10px] font-bold text-yellow-400 bg-white/10 px-2 py-1 rounded-full uppercase tracking-wider">Aguarde...</div>
+        </div>
+        <div class="search-area">
+            <div class="relative max-w-xl mx-auto">
+                <input type="text" id="agendaSearch" placeholder="Procurar por nome" class="w-full bg-white/10 border border-white/10 rounded-xl py-2.5 pl-9 pr-4 text-white placeholder-white/30 text-sm focus:outline-none focus:bg-white/20 focus:border-yellow-400/50 transition-all">
+                <div class="absolute left-3 top-1/2 -translate-y-1/2 text-white/30">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </div>
+            </div>
+        </div>
+        <div id="agendaContainer" class="flex-1 overflow-y-auto p-4 pt-0 space-y-4 no-scrollbar pb-10">
+            <div id="agendaLoading" class="flex flex-col gap-4 mt-4">
+                <div class="skeleton-card"><div class="shimmer-overlay"></div></div>
+                <div class="skeleton-card"><div class="shimmer-overlay"></div></div>
+                <div class="skeleton-card"><div class="shimmer-overlay"></div></div>
+            </div>
+        </div>
+        <div id="agendaPagination" class="px-5 py-4 border-t border-white/10 hidden bg-blue-900/40">
+            <button id="viewMoreAgenda" class="w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-2xl font-bold text-sm transition-all active:scale-95">Ver mais agendamentos</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, updateDoc, arrayUnion, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const fbConfigRaw = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const AGENDA_API = 'https://script.google.com/macros/s/AKfycbz_4NqmCf3iwAzXdBTUC-o1C9d_029b6g-HP6QyD8oEaHKt5eNjSd3eWsB9EaRJo9Nj/exec';
+        const NOTIF_URL = 'notificacoes.json';
+
+        let db, auth, user;
+        let readIds = JSON.parse(localStorage.getItem('encanto_read_ids') || '[]').map(id => Number(id)); 
+        let rawNotifications = [];
+        let agendaData = [];
+        let agendaVisibleLimit = 5;
+        let isLoadingAgenda = false;
+        let searchQuery = "";
+
+        const getEl = (id) => document.getElementById(id);
+
+        const init = async () => {
+            fetchNotifications();
+            handleMarketingTooltip();
+            if (fbConfigRaw) {
+                try {
+                    const app = initializeApp(JSON.parse(fbConfigRaw));
+                    auth = getAuth(app);
+                    db = getFirestore(app);
+                    await signInAnonymously(auth);
+                    onAuthStateChanged(auth, u => { if (u) { user = u; setupPersistenceListener(); } });
+                } catch (e) { console.warn("Firebase Offline"); }
+            }
+        };
+
+        function handleMarketingTooltip() {
+            const hasSeen = localStorage.getItem('encanto_marketing_v14');
+            const tooltip = getEl('marketingTooltip');
+            const overlay = getEl('tooltipOverlay');
+            const closeBtn = getEl('closeMarketing');
+            if (!hasSeen && tooltip && overlay) {
+                setTimeout(() => {
+                    overlay.classList.remove('hidden');
+                    tooltip.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
+                }, 800);
+                closeBtn.onclick = () => {
+                    tooltip.classList.add('hidden');
+                    overlay.classList.add('hidden');
+                    document.body.style.overflow = '';
+                    localStorage.setItem('encanto_marketing_v14', 'true');
+                };
+            }
+        }
+
+        const setupPersistenceListener = () => {
+            if (!user || !db) return;
+            const stateRef = doc(db, 'artifacts', appId, 'users', user.uid, 'notification_data', 'state');
+            onSnapshot(stateRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const cloudIds = (docSnap.data().readIds || []).map(id => Number(id));
+                    readIds = [...new Set([...readIds, ...cloudIds])];
+                    localStorage.setItem('encanto_read_ids', JSON.stringify(readIds));
+                    updateNotifUI();
+                }
+            });
+        };
+
+        async function fetchAgenda() {
+            if (isLoadingAgenda) return;
+            isLoadingAgenda = true;
+            const container = getEl('agendaContainer');
+            const countEl = getEl('agendaCount');
+            if (countEl) countEl.innerText = 'Consultando...';
+            container.innerHTML = `
+                <div class="flex flex-col gap-4 mt-4">
+                    <div class="skeleton-card"><div class="shimmer-overlay"></div></div>
+                    <div class="skeleton-card"><div class="shimmer-overlay"></div></div>
+                    <div class="skeleton-card"><div class="shimmer-overlay"></div></div>
+                </div>
+            `;
+            try {
+                const res = await fetch(AGENDA_API);
+                const data = await res.json();
+                const today = new Date();
+                today.setHours(0,0,0,0);
+                agendaData = data.filter(item => {
+                    const dateVal = item.EVENTO || item.dia || item.data;
+                    return parseSheetDate(dateVal) >= today;
+                }).sort((a, b) => parseSheetDate(a.EVENTO || a.dia) - parseSheetDate(b.EVENTO || b.dia));
+                renderAgenda();
+            } catch (e) {
+                container.innerHTML = `<p class="text-white/50 text-center py-10">Não foi possível carregar as reservas no momento.</p>`;
+                if (countEl) countEl.innerText = 'Erro';
+            } finally { 
+                isLoadingAgenda = false; 
+            }
+        }
+
+        function parseSheetDate(dateStr) {
+            if (!dateStr) return new Date();
+            if (String(dateStr).includes('-') && String(dateStr).includes('T')) return new Date(dateStr);
+            const parts = String(dateStr).split('/');
+            if (parts.length === 3) return new Date(parts[2], parts[1] - 1, parts[0]);
+            return new Date(dateStr);
+        }
+
+        function formatPhone(phone) {
+            if (!phone) return "(xx) xxxxx-x***";
+            let cleaned = ('' + phone).replace(/\D/g, '');
+            if (cleaned.length < 10) return phone;
+            return `(${cleaned.substring(0, 2)}) ${cleaned.substring(2, 7)}-${cleaned.substring(7, 8)}***`;
+        }
+
+        function renderAgenda() {
+            const container = getEl('agendaContainer');
+            const countEl = getEl('agendaCount');
+            if (!container) return;
+            const filtered = searchQuery.trim() === "" ? agendaData : agendaData.filter(item => {
+                const nome = (item.NOME || '').toLowerCase();
+                return nome.includes(searchQuery.toLowerCase());
+            });
+            if (countEl) countEl.innerText = searchQuery ? `${filtered.length} ENCONTRADOS` : `${agendaData.length} RESERVAS`;
+            const visibleItems = filtered.slice(0, searchQuery ? 100 : agendaVisibleLimit);
+            if (visibleItems.length === 0) {
+                container.innerHTML = `<div class="text-center py-20 opacity-30 text-white brand-font text-xl">${searchQuery ? 'Sem resultados.' : 'Sem reservas futuras.'}</div>`;
+                return;
+            }
+            const today = new Date(); today.setHours(0,0,0,0);
+            const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
+            let lastMonthYear = "";
+            let html = "";
+            visibleItems.forEach((item) => {
+                const date = parseSheetDate(item.EVENTO || item.dia || item.data);
+                const checkDate = new Date(date); checkDate.setHours(0,0,0,0);
+                const monthYearKey = `${date.getMonth()}-${date.getFullYear()}`;
+                if (monthYearKey !== lastMonthYear) {
+                    const monthName = date.toLocaleDateString('pt-PT', { month: 'long' });
+                    const isThisMonth = date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear();
+                    html += `<div class="month-divider">${isThisMonth ? 'ESTE MÊS' : monthName}</div>`;
+                    lastMonthYear = monthYearKey;
+                }
+                let dateBadgeHtml = "";
+                if (checkDate.getTime() === today.getTime()) {
+                    dateBadgeHtml = `<span class="text-[11px] font-black text-[#1e3a8a]">HOJE</span>`;
+                } else if (checkDate.getTime() === tomorrow.getTime()) {
+                    dateBadgeHtml = `<span class="text-[10px] font-black text-[#1e3a8a] leading-none uppercase text-center">AMA<br>NHÃ</span>`;
+                } else {
+                    dateBadgeHtml = `<span class="text-[10px] uppercase font-bold opacity-70 leading-none text-[#1e3a8a]/80">${date.toLocaleDateString('pt-PT', { month: 'short' }).replace('.','')}</span><span class="text-xl font-bold brand-font leading-none text-[#1e3a8a]">${date.getDate()}</span>`;
+                }
+                const itensRaw = item["ITENS LOCADOS"] || 'Equipamentos Diversos';
+                const itensList = itensRaw.split(',').map(i => i.trim()).join('<br>');
+                const bairro = item.BAIRRO || item.bairro || '';
+                html += `<div class="item-card p-4 rounded-[1.5rem] text-white shadow-lg flex flex-col gap-3"><div class="flex items-center gap-4"><div class="date-badge">${dateBadgeHtml}</div><div class="flex-1 min-w-0"><h3 class="font-bold text-sm leading-tight mb-0.5 truncate flex items-center gap-1.5">${item.NOME || 'Cliente Encanto'} ${bairro ? `<span class="text-[10px] font-medium text-slate-400 whitespace-nowrap opacity-90 tracking-tight">(${bairro})</span>` : ''}</h3><p class="text-[12px] text-blue-100/70 font-medium">${formatPhone(item.WHATSAPP || item.telefone)}</p></div></div><div class="pt-2 border-t border-white/5"><p class="text-[11px] text-yellow-400 font-bold italic leading-relaxed uppercase tracking-tight">${itensList}</p></div></div>`;
+            });
+            container.innerHTML = html;
+            const pagination = getEl('agendaPagination');
+            if (pagination) pagination.classList.toggle('hidden', searchQuery !== "" || agendaVisibleLimit >= agendaData.length);
+        }
+
+        async function fetchNotifications() {
+            try {
+                const response = await fetch(`${NOTIF_URL}?t=${new Date().getTime()}`);
+                if (response.ok) rawNotifications = await response.json();
+            } catch (e) {
+                rawNotifications = [{ id: 101, titulo: "Bem-vindo! 🎈", mensagem: "Confira as novidades no seu painel.", tipo: "info", data: new Date().toISOString() }];
+            }
+            updateNotifUI();
+        }
+
+        function updateNotifUI() {
+            const active = rawNotifications.filter(n => !readIds.includes(Number(n.id)));
+            active.sort((a, b) => new Date(b.data) - new Date(a.data));
+            const badge = getEl('notifBadge');
+            if (badge) badge.classList.toggle('hidden', active.length === 0);
+            renderNotifs(active);
+        }
+
+        function renderNotifs(list) {
+            const container = getEl('notifContainer');
+            if (!container) return;
+            if (list.length === 0) {
+                container.innerHTML = `<div class="text-center py-20 opacity-20 text-white brand-font text-xl">Tudo em dia!</div>`;
+                return;
+            }
+            container.innerHTML = '';
+            list.forEach(n => {
+                const card = document.createElement('div');
+                card.className = "item-card p-4 rounded-[1.5rem] text-white shadow-lg cursor-pointer";
+                card.innerHTML = `<div class="flex gap-3"><div class="w-10 h-10 shrink-0 rounded-xl bg-white/10 flex items-center justify-center text-xl shadow-inner pointer-events-none">${n.tipo === 'alerta' ? '⚡' : '✨'}</div><div class="flex-1 min-w-0 pointer-events-none"><h3 class="font-bold text-sm leading-tight mb-1 text-white">${n.titulo}</h3><p class="text-[13px] text-blue-50/80 mb-2 leading-relaxed line-clamp-msg">${n.mensagem}</p><button class="mark-btn text-[10px] font-bold text-blue-300 hover:text-white uppercase transition-colors pointer-events-auto">Marcar lido</button></div></div>`;
+                card.onclick = (e) => {
+                    if (e.target.classList.contains('mark-btn')) {
+                        e.stopPropagation(); if(card) card.classList.add('dismissing'); setTimeout(() => persistReadId(n.id), 450); return;
+                    }
+                    const msgPara = card.querySelector('.line-clamp-msg');
+                    if (msgPara) {
+                        const isTruncated = msgPara.scrollHeight > msgPara.clientHeight;
+                        if (isTruncated && !card.classList.contains('expanded')) { card.classList.add('expanded'); }
+                        else if (n.link) window.location.href = n.link;
+                    }
+                };
+                container.appendChild(card);
+            });
+        }
+
+        async function persistReadId(id) {
+            const nid = Number(id);
+            if (!readIds.includes(nid)) { readIds.push(nid); localStorage.setItem('encanto_read_ids', JSON.stringify(readIds)); }
+            updateNotifUI();
+            if (user && db) {
+                const stateRef = doc(db, 'artifacts', appId, 'users', user.uid, 'notification_data', 'state');
+                try { await updateDoc(stateRef, { readIds: arrayUnion(nid) }); } catch (e) { await setDoc(stateRef, { readIds }); }
+            }
+        }
+
+        async function markAllNotificationsAsRead() {
+            const newIds = rawNotifications.map(n => Number(n.id));
+            readIds = [...new Set([...readIds, ...newIds])];
+            localStorage.setItem('encanto_read_ids', JSON.stringify(readIds));
+            updateNotifUI();
+            if (user && db) {
+                const stateRef = doc(db, 'artifacts', appId, 'users', user.uid, 'notification_data', 'state');
+                try { await updateDoc(stateRef, { readIds: readIds }); } catch (e) { await setDoc(stateRef, { readIds: readIds }); }
+            }
+        }
+
+        const setupUIListeners = () => {
+            const btns = { notif: getEl('notifBtn'), agenda: getEl('agendaBtn'), closeNotif: getEl('closeNotif'), closeAgenda: getEl('closeAgenda'), viewMore: getEl('viewMoreAgenda'), markAll: getEl('markAllRead') };
+            const modals = { notif: getEl('notifModal'), agenda: getEl('agendaModal') };
+            const searchInput = getEl('agendaSearch');
+            if (btns.notif && modals.notif) {
+                btns.notif.onclick = () => { modals.notif.classList.remove('hidden'); setTimeout(() => modals.notif.classList.add('active'), 10); };
+            }
+            if (btns.agenda && modals.agenda) {
+                btns.agenda.onclick = () => { 
+                    modals.agenda.classList.remove('hidden'); 
+                    setTimeout(() => { 
+                        modals.agenda.classList.add('active'); 
+                        fetchAgenda(); 
+                        if (searchInput) searchInput.focus(); 
+                    }, 10); 
+                };
+            }
+            if (btns.closeNotif && modals.notif) {
+                btns.closeNotif.onclick = () => { modals.notif.classList.remove('active'); setTimeout(() => modals.notif.classList.add('hidden'), 400); };
+            }
+            if (btns.closeAgenda && modals.agenda) {
+                btns.closeAgenda.onclick = () => { modals.agenda.classList.remove('active'); setTimeout(() => modals.agenda.classList.add('hidden'), 400); };
+            }
+            if (btns.viewMore) {
+                btns.viewMore.onclick = () => { agendaVisibleLimit += 5; renderAgenda(); };
+            }
+            if (btns.markAll) {
+                btns.markAll.onclick = () => markAllNotificationsAsRead();
+            }
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => { searchQuery = e.target.value; renderAgenda(); });
+            }
+        };
+        setupUIListeners();
+        init();
+    </script>
+</body>
+</html>
 <body class="pb-32 bg-slate-50">
 
     <div id="cartToast">Adicionado ao carrinho</div>
 
     <header class="pt-24 pb-4 text-center bg-white border-b border-slate-50">
-        <h1 class="text-xl font-black text-[#003399] tracking-tighter uppercase">SELECIONE A DATA</h1>
+        <h1 class="text-lg font-bold text-[#003399] tracking-tight uppercase">SELECIONE A DATA</h1>
     </header>
 
     <main class="px-3 sm:px-5">
         <div class="bg-white rounded-[24px] p-4 sm:p-6 shadow-sm border border-slate-100 mt-2 min-h-[400px]">
-            <div id="calendarLoader" class="hidden flex flex-col items-center justify-center py-20">
+            <!-- Alterado: Removido 'hidden' do Loader para aparecer primeiro -->
+            <div id="calendarLoader" class="flex flex-col items-center justify-center py-20">
                 <div class="w-10 h-10 border-4 border-[#003399] border-t-transparent rounded-full animate-spin"></div>
-                <p class="text-[10px] font-bold text-slate-400 mt-6 uppercase tracking-widest text-center font-black">VERIFICANDO BRINQUEDOS DISPONÍVEIS</p>
+                <p class="text-[10px] font-bold text-slate-400 mt-6 uppercase tracking-widest text-center">VERIFICANDO BRINQUEDOS DISPONÍVEIS</p>
                 <div class="mt-8 px-4 max-w-[320px] text-center bg-blue-50/30 p-6 rounded-[24px] border border-blue-100/50">
-                    <p class="text-[13px] font-black text-[#003399] uppercase mb-2 tracking-tighter">VOCÊ SABIA?</p>
-                    <p id="triviaText" class="text-[12px] font-bold text-slate-500 leading-relaxed"></p>
+                    <p class="text-[13px] font-bold text-[#003399] uppercase mb-2 tracking-tighter">VOCÊ SABIA?</p>
+                    <p id="triviaText" class="text-[12px] font-medium text-slate-500 leading-relaxed"></p>
                 </div>
             </div>
 
-            <div id="calendarContent">
+            <!-- Alterado: Adicionado 'hidden' ao Content para iniciar escondido -->
+            <div id="calendarContent" class="hidden">
                 <div class="flex justify-between items-center mb-8">
                     <button id="prevMonthBtn" onclick="changeMonth(-1)" class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-slate-50 text-[#003399] transition-colors"><i class="fas fa-chevron-left"></i></button>
-                    <h2 id="currentMonthLabel" class="font-bold text-[#003399] text-base sm:text-xl tracking-tight uppercase">...</h2>
+                    <h2 id="currentMonthLabel" class="font-bold text-[#003399] text-base sm:text-lg tracking-tight uppercase">...</h2>
                     <button id="nextMonthBtn" onclick="changeMonth(1)" class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-slate-50 text-[#003399] transition-colors"><i class="fas fa-chevron-right"></i></button>
                 </div>
 
@@ -297,11 +879,11 @@
             </div>
 
             <div class="flex gap-2 mt-4 overflow-x-auto no-scrollbar">
-                <select id="sortFilter" onchange="renderToys()" class="p-3 bg-slate-100 rounded-xl text-xs font-bold outline-none border-none font-black uppercase">
+                <select id="sortFilter" onchange="renderToys()" class="p-3 bg-slate-100 rounded-xl text-xs font-bold outline-none border-none uppercase">
                     <option value="relevance">RELEVÂNCIA</option>
                     <option value="az">NOME A-Z</option>
                 </select>
-                <select id="ageFilter" onchange="renderToys()" class="p-3 bg-slate-100 rounded-xl text-xs font-bold outline-none border-none font-black uppercase">
+                <select id="ageFilter" onchange="renderToys()" class="p-3 bg-slate-100 rounded-xl text-xs font-bold outline-none border-none uppercase">
                     <option value="all">TODAS IDADES</option>
                     <option value="L">LIVRE</option>
                     <option value="-6">ATÉ 6 ANOS</option>
@@ -328,12 +910,12 @@
                 <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">TOTAL</span>
                 <div class="flex items-center">
                     <span class="text-2xl font-bold text-[#003399]" id="totalValueText">R$ 0,00</span>
-                    <span id="discountBadge" class="hidden ml-2 bg-green-500 text-white text-[8px] px-2 py-0.5 rounded-lg font-black shadow-sm uppercase">COMBO</span>
+                    <span id="discountBadge" class="hidden ml-2 bg-green-500 text-white text-[8px] px-2 py-0.5 rounded-lg font-bold shadow-sm uppercase">COMBO</span>
                 </div>
-                <span id="savingsText" class="hidden text-[9px] text-green-500 font-bold leading-none mt-1 uppercase font-black">Você economizou R$ 0,00</span>
+                <span id="savingsText" class="hidden text-[9px] text-green-500 font-bold leading-none mt-1 uppercase">Você economizou R$ 0,00</span>
             </div>
             <div class="text-right">
-                <span id="deliveryText" class="text-[8px] font-bold uppercase tracking-tighter font-black"></span>
+                <span id="deliveryText" class="text-[8px] font-bold uppercase tracking-tighter"></span>
             </div>
         </div>
         <button id="mainBtn" onclick="nextStep()" class="w-full btn-primary py-4 rounded-2xl text-lg shadow-xl active:scale-95 transition-all uppercase">
@@ -346,12 +928,12 @@
             <div class="w-20 h-20 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
                 <i class="fas fa-calendar-check text-3xl"></i>
             </div>
-            <h4 class="text-2xl font-black text-slate-800 mb-2 uppercase font-black">Reservado!</h4>
+            <h4 class="text-2xl font-bold text-slate-800 mb-2 uppercase">Reservado!</h4>
             <p class="text-slate-500 text-sm mb-2 leading-relaxed font-bold">Para manter sua reserva, pedimos um pequeno sinal de <b>R$ 25,00</b> e o restante no dia da montagem.</p>
             
             <div class="bg-blue-50/50 py-3 px-4 rounded-2xl mb-6 inline-block">
-                <p class="text-[10px] font-black text-[#003399] uppercase tracking-widest mb-1 font-black">VALOR TOTAL</p>
-                <p class="text-[#003399] font-black text-3xl tracking-tighter" id="pixFinalTotalDisplay">R$ 0,00</p>
+                <p class="text-[10px] font-bold text-[#003399] uppercase tracking-widest mb-1">VALOR TOTAL</p>
+                <p class="text-[#003399] font-bold text-3xl tracking-tighter" id="pixFinalTotalDisplay">R$ 0,00</p>
             </div>
             
             <div class="bg-slate-50 p-4 rounded-2xl mb-6 border-2 border-dashed border-slate-200 relative">
@@ -359,13 +941,17 @@
                 <code class="text-blue-900 font-mono font-bold" id="pixKey">57.545.647/0001-16</code>
             </div>
 
-            <button id="pixBtn" onclick="copyPixOnly()" class="w-full btn-primary py-4 rounded-2xl mb-4 uppercase font-black">COPIAR CHAVE PIX</button>
-            <button onclick="location.reload()" class="text-slate-400 text-xs font-bold uppercase tracking-widest font-black">Sair</button>
+            <button id="pixBtn" onclick="copyPixOnly()" class="w-full btn-primary py-4 rounded-2xl mb-4 uppercase">COPIAR CHAVE PIX</button>
+            <button onclick="location.reload()" class="text-slate-400 text-xs font-bold uppercase tracking-widest">Sair</button>
         </div>
     </div>
 
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbwdUg2e6m0Nf96QW7w2pcTB_fTPcaHpSyY4vlFVMnZ5yImFFxnlhOcPyRH7f7pmPvd_/exec"; 
+        
+        // --- CONFIGURAÇÃO TELEGRAM ---
+        const TELEGRAM_TOKEN = "7731612058:AAEPNWozAfXa5J1mKwfFNCjBwBijrIvOlr8"; 
+        const TELEGRAM_CHAT_ID = "6791831671"; 
         
         let currentDate = new Date();
         let selectedDate = null;
@@ -448,7 +1034,6 @@
         window.onload = async () => {
             currentMonth = new Date().getMonth();
             currentYear = new Date().getFullYear();
-            renderCalendar();
             fetchData();
             loadStreets();
             document.getElementById('summaryFooter').style.display = 'none';
@@ -485,15 +1070,28 @@
         }
 
         function getPriceLevel(date) {
-            if (!date) return '$';
+            if (!date) return '$$'; 
             const d = date.getDate();
             const m = date.getMonth() + 1;
             const dayOfWeek = date.getDay();
             const s = `${String(d).padStart(2,'0')}/${String(m).padStart(2,'0')}`;
-            if (["01/01", "01/05", "07/09", "12/10", "02/11", "15/11", "25/12"].includes(s)) return '$$$$';
-            const sBase = ["01/04", "31/12", "05/10", "12/10", "12/07", "31/08", "11/10", "29/06", "06/07", "20/07", "09/11", "07/06", "21/06", "28/06", "13/07", "02/08", "16/08", "17/08", "06/09", "13/09", "20/09", "28/09", "19/10", "26/10"];
+            
+            // 10, 11 e 12 de outubro é $$$$
+            if (s === "10/10" || s === "11/10" || s === "12/10") return '$$$$';
+            
+            // Feriados e datas especiais $$$$
+            if (["01/01", "01/05", "07/09", "02/11", "15/11", "25/12"].includes(s)) return '$$$$';
+
+            // 24 de dezembro é $$$
+            // 13 de outubro é $$$
+            // Todos os finais de semana de outubro novembro e dezembro é $$$
+            if (s === "24/12" || s === "13/10") return '$$$';
+            if ((m === 10 || m === 11 || m === 12) && (dayOfWeek === 0 || dayOfWeek === 6)) return '$$$';
+
+            const sBase = ["01/04", "31/12", "05/10", "12/07", "31/08", "11/10", "29/06", "06/07", "20/07", "09/11", "07/06", "21/06", "28/06", "13/07", "02/08", "16/08", "17/08", "06/09", "13/09", "20/09", "28/09", "19/10", "26/10"];
             if (sBase.includes(s)) return '$$$';
-            return (dayOfWeek === 0 || dayOfWeek === 6) ? '$$' : '$';
+
+            return '$$'; 
         }
 
         function getDayColorStyle(date) {
@@ -568,7 +1166,7 @@
             if (date.getTime() === today.getTime()) {
                 const modal = document.createElement('div');
                 modal.className = "fixed inset-0 bg-black/60 z-[300] flex items-center justify-center p-6";
-                modal.innerHTML = `<div class="bg-white p-8 rounded-3xl text-center shadow-2xl max-w-xs font-black"><i class="fas fa-exclamation-triangle text-orange-500 text-4xl mb-4"></i><p class="font-bold text-slate-800">Atenção, como a reserva é hoje, pode ser que não dê tempo de visualizar seu agendamento, após preencher nos confirme o mais rápido possível :)</p><p class="text-green-600 font-black mt-4">(47) 99227-7324</p><button onclick="this.parentElement.parentElement.remove()" class="mt-6 w-full btn-primary py-3 rounded-xl uppercase font-black">Entendido</button></div>`;
+                modal.innerHTML = `<div class="bg-white p-8 rounded-3xl text-center shadow-2xl max-w-xs font-bold"><i class="fas fa-exclamation-triangle text-orange-500 text-4xl mb-4"></i><p class="font-bold text-slate-800">Atenção, como a reserva é hoje, pode ser que não dê tempo de visualizar seu agendamento, após preencher nos confirme o mais rápido possível :)</p><p class="text-green-600 font-bold mt-4">(47) 99227-7324</p><button onclick="this.parentElement.parentElement.remove()" class="mt-6 w-full btn-primary py-3 rounded-xl uppercase font-bold">Entendido</button></div>`;
                 document.body.appendChild(modal);
             }
             selectedDate = date; 
@@ -577,10 +1175,10 @@
             document.getElementById('toySheetTitle').innerText = `Disponíveis em ${normalizeDate(date)}`;
             const pl = getPriceLevel(date);
             const plLabel = document.getElementById('priceLevelLabel');
-            if (pl === '$') plLabel.innerHTML = `<span class="text-green-600 font-black">Data pouco requisitada</span><br><span class="text-[10px] text-green-500 font-black uppercase font-black">PREÇOS MAIS BAIXO QUE O NORMAL</span>`;
-            else if (pl === '$$') plLabel.innerHTML = `<span class="text-slate-400 font-black uppercase font-black font-black">Data Padrão</span>`;
-            else if (pl === '$$$') plLabel.innerHTML = `<span class="text-yellow-600 font-black">Data bem procurada</span><br><span class="text-[10px] text-yellow-500 font-black uppercase font-black font-black">VALORES UM POUCO MAIS ALTO QUE O NORMAL</span>`;
-            else if (pl === '$$$$') plLabel.innerHTML = `<span class="text-orange-600 font-black">Data com alta demanda</span><br><span class="text-[10px] text-orange-500 font-black uppercase font-black font-black font-black font-black font-black font-black">VALORES BEM MAIS ALTO QUE O NORMAL</span>`;
+            if (pl === '$') plLabel.innerHTML = `<span class="text-green-600 font-bold">Data pouco requisitada</span><br><span class="text-[10px] text-green-500 font-bold uppercase">PREÇOS MAIS BAIXO QUE O NORMAL</span>`;
+            else if (pl === '$$') plLabel.innerHTML = `<span class="text-slate-400 font-bold uppercase">Data Padrão</span>`;
+            else if (pl === '$$$') plLabel.innerHTML = `<span class="text-yellow-600 font-bold">Data bem procurada</span><br><span class="text-[10px] text-yellow-500 font-bold uppercase">VALORES UM POUCO MAIS ALTO QUE O NORMAL</span>`;
+            else if (pl === '$$$$') plLabel.innerHTML = `<span class="text-orange-600 font-bold">Data com alta demanda</span><br><span class="text-[10px] text-orange-500 font-bold uppercase">VALORES BEM MAIS ALTO QUE O NORMAL</span>`;
             cart = []; 
             renderToys(); 
             updateSummary();
@@ -610,8 +1208,6 @@
             }
 
             try {
-                loader.classList.remove('hidden');
-                content.classList.add('hidden');
                 const res = await fetch(API_URL);
                 const data = await res.json();
                 sheetData = Array.isArray(data) ? data : [];
@@ -690,28 +1286,27 @@
                 let isBlocked = (toy.availableQty <= 0 && inCart.qty === 0) || (toy.motorForte && (isMotorGrandeBooked || (cartHasMotorGrande && toy.id !== selectedMotorId)));
                 let price = (toy.category === 'mesa_comer') ? toy.price : toy.price * mult;
                 
-                // Lógica de cores para o selo de idade
-                let ageColorClass = 'bg-blue-500'; // Padrão azul (ex: para idade 6)
+                let ageColorClass = 'bg-blue-500'; 
                 if (toy.age === 'L') {
-                    ageColorClass = 'bg-green-500'; // Livre = Verde
+                    ageColorClass = 'bg-green-500'; 
                 } else if (toy.age === '14') {
-                    ageColorClass = 'bg-orange-500'; // 14 anos = Laranja
+                    ageColorClass = 'bg-orange-500'; 
                 }
 
                 const card = document.createElement('div');
                 card.className = `toy-card flex p-4 relative ${isBlocked ? 'disabled' : ''}`;
                 card.innerHTML = `
                     <div class="w-20 h-20 rounded-xl overflow-hidden mr-4 shrink-0 bg-slate-100 flex items-center justify-center relative img-skeleton">
-                        <img src="${toy.photo}" class="w-full h-full object-cover opacity-0 transition-opacity duration-300" onload="this.classList.remove('opacity-0'); this.parentElement.classList.remove('img-skeleton')" onerror="this.src='https://via.placeholder.com/150?text=Indispon%C3%ADvel'; this.classList.remove('opacity-0'); this.parentElement.classList.remove('img-skeleton')"><div class="age-badge ${ageColorClass} font-black">${toy.age}</div>
+                        <img src="${toy.photo}" class="w-full h-full object-cover opacity-0 transition-opacity duration-300" onload="this.classList.remove('opacity-0'); this.parentElement.classList.remove('img-skeleton')" onerror="this.src='https://via.placeholder.com/150?text=Indispon%C3%ADvel'; this.classList.remove('opacity-0'); this.parentElement.classList.remove('img-skeleton')"><div class="age-badge ${ageColorClass} font-bold">${toy.age}</div>
                     </div>
                     <div class="flex-grow">
-                        <h4 class="font-bold text-slate-800 text-sm leading-tight uppercase font-black">${toy.name}</h4>
+                        <h4 class="font-bold text-slate-800 text-sm leading-tight uppercase">${toy.name}</h4>
                         <p class="text-[10px] text-slate-400 mt-1 uppercase font-semibold">${toy.size}</p>
-                        <p class="${mult < 1.0 && toy.category !== 'mesa_comer' ? 'text-green-500' : (mult > 1.0 && toy.category !== 'mesa_comer' ? 'text-red-500' : 'text-[#003399]')} font-black mt-1">R$ ${price.toLocaleString('pt-BR', {minimumFractionDigits: 0})}</p>
+                        <p class="${mult < 1.0 && toy.category !== 'mesa_comer' ? 'text-green-500' : (mult > 1.0 && toy.category !== 'mesa_comer' ? 'text-red-500' : 'text-[#003399]')} font-bold mt-1">R$ ${price.toLocaleString('pt-BR', {minimumFractionDigits: 0})}</p>
                         <div class="flex items-center mt-2 gap-3">
-                            <button onclick="changeQty(${toy.id}, -1)" class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 border border-slate-100 font-black">-</button>
-                            <span class="font-bold text-sm w-4 text-center font-black">${inCart.qty}</span>
-                            <button onclick="changeQty(${toy.id}, 1)" class="w-8 h-8 rounded-full bg-[#003399] text-white flex items-center justify-center font-black">+</button>
+                            <button onclick="changeQty(${toy.id}, -1)" class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 border border-slate-100 font-bold">-</button>
+                            <span class="font-bold text-sm w-4 text-center">${inCart.qty}</span>
+                            <button onclick="changeQty(${toy.id}, 1)" class="w-8 h-8 rounded-full bg-[#003399] text-white flex items-center justify-center font-bold">+</button>
                         </div>
                     </div>`;
                 list.appendChild(card);
@@ -809,15 +1404,15 @@
                 savingsEl.classList.remove('hidden');
             } else savingsEl.classList.add('hidden');
             const delEl = document.getElementById('deliveryText');
-            if (selectedBairro) delEl.innerHTML = deliveryFee === 0 ? '<span class="text-green-500 font-black">FRETE GRÁTIS</span>' : `TAXA DE ENTREGA R$ ${deliveryFee.toFixed(2).replace('.',',')} REAIS`;
+            if (selectedBairro) delEl.innerHTML = deliveryFee === 0 ? '<span class="text-green-500 font-bold">FRETE GRÁTIS</span>' : `TAXA DE ENTREGA R$ ${deliveryFee.toFixed(2).replace('.',',')} REAIS`;
             else delEl.innerText = "";
             document.getElementById('mainBtn').disabled = cart.length === 0;
             if (currentStep === 'summary') {
                 const list = document.getElementById('orderDetailList');
                 if (list) {
-                    let itemsHtml = cart.map(i => `<div class='flex justify-between text-slate-800 font-bold py-0.5 text-[10px] uppercase font-black'><span>${i.qty}x ${i.name}</span><span>R$ ${(i.price * i.qty * extraDays).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></div>`).join('');
-                    itemsHtml += `<div class='border-t border-slate-200 mt-2 pt-2 flex justify-between text-[9px] font-black text-slate-400 uppercase tracking-tighter'><span>VALOR SEM DESCONTO</span><span>R$ ${((fullPriceItemsSum * extraDays) + (selectedBairro ? BAIRROS[selectedBairro] : 0) + (insuranceEnabled ? 14.90 : 0)).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></div>`;
-                    itemsHtml += `<div class='flex justify-between text-[9px] font-black text-green-500 uppercase tracking-tighter'><span>DESCONTOS</span><span>- R$ ${savings.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></div>`;
+                    let itemsHtml = cart.map(i => `<div class='flex justify-between text-slate-800 font-bold py-0.5 text-[10px] uppercase'><span>${i.qty}x ${i.name}</span><span>R$ ${(i.price * i.qty * extraDays).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></div>`).join('');
+                    itemsHtml += `<div class='border-t border-slate-200 mt-2 pt-2 flex justify-between text-[9px] font-bold text-slate-400 uppercase tracking-tighter'><span>VALOR SEM DESCONTO</span><span>R$ ${((fullPriceItemsSum * extraDays) + (selectedBairro ? BAIRROS[selectedBairro] : 0) + (insuranceEnabled ? 14.90 : 0)).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></div>`;
+                    itemsHtml += `<div class='flex justify-between text-[9px] font-bold text-green-500 uppercase tracking-tighter'><span>DESCONTOS</span><span>- R$ ${savings.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></div>`;
                     list.innerHTML = itemsHtml;
                 }
             }
@@ -825,37 +1420,58 @@
 
         async function sendToSheet() {
             if (!API_URL) return;
-            const randomLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
-            const payload = {
-                id: randomLetter,
-                evento: normalizeDate(selectedDate) || "N/A",
-                diaAnt: deliveryPreviousDay ? "Sim" : "Não",
-                inicio: startTime || "N/A",
-                termino: (endTime === "NEXT_DAY" ? "Dia Seg." : endTime) || "N/A",
-                nome: userName || "N/A",
-                whatsapp: userZap || "N/A",
-                bairro: selectedBairro || "N/A",
-                rua: userRua || "N/A",
-                num: userSN ? "S/N" : (userNum || "N/A"),
-                pontoRef: userDetails || "N/A",
-                itens: cart.map(i => `${i.qty}x ${i.name}`).join("\n"),
-                cobert: piscinaCovered || "N/A",
-                monitores: monitorsCount > 0 ? `${monitorsCount} Mon. (${monitorHours}h)` : "Não",
-                extensao: Object.entries(socketDistances).map(([id, dist]) => {
-                    const toy = TOYS_DB.find(t => t.id == id);
-                    return toy ? `${toy.name}: ${dist}m` : `${dist}m`;
-                }).join("\n") || "N/A",
-                seguro: insuranceEnabled ? "Sim" : "Não",
-                nota: needsInvoice ? "Sim" : "Não",
-                diaria: extraDays || "N/A",
-                pago: "0,00",
-                total: document.getElementById('totalValueText').innerText || "N/A",
-                obs: "N/A",
-                cnpj: userCNPJ || "N/A",
-                cep: userCEP || "N/A",
-                referral: referralSource === "OUTROS" ? referralOther : referralSource
-            };
-            try { await fetch(API_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); } catch (e) {}
+            const totalStr = document.getElementById('totalValueText').innerText.replace('R$ ', '').replace(/\./g, '').replace(',', '.');
+            const totalTotal = parseFloat(totalStr);
+            const valorPorDia = totalTotal / extraDays;
+            const valorPorDiaFormatado = "R$ " + valorPorDia.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+
+            if (TELEGRAM_TOKEN && TELEGRAM_CHAT_ID) {
+                const itemsList = cart.map(item => `• ${item.qty}x ${item.name}`).join("\n");
+                const telegramMsg = `🚀 *NOVA RESERVA RECEBIDA*\n\n👤 *Cliente:* ${userName}\n📱 *WhatsApp:* ${userZap}\n\n📅 *Data Inicial:* ${normalizeDate(selectedDate)}\n🔢 *Duração:* ${extraDays} dia(s)\n⏰ *Horário:* ${startTime} às ${endTime === 'NEXT_DAY' ? 'Dia Seg.' : endTime}\n\n📍 *Bairro:* ${selectedBairro}\n🏠 *Rua:* ${userRua}, ${userNum}\n\n📦 *Brinquedos:*\n${itemsList}\n\n💰 *Valor Total:* R$ ${totalTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\n\n⚙️ _Detalhes enviados para a Planilha_`;
+                try {
+                    fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: telegramMsg, parse_mode: 'Markdown' })
+                    });
+                } catch (e) { console.error("Erro Telegram:", e); }
+            }
+
+            for (let i = 0; i < extraDays; i++) {
+                let dataLinha = new Date(selectedDate);
+                dataLinha.setDate(selectedDate.getDate() + i);
+                const randomLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+                const payload = {
+                    id: randomLetter,
+                    evento: normalizeDate(dataLinha) || "N/A",
+                    diaAnt: deliveryPreviousDay ? "Sim" : "Não",
+                    inicio: startTime || "N/A",
+                    termino: (endTime === "NEXT_DAY" ? "Dia Seg." : endTime) || "N/A",
+                    nome: userName || "N/A",
+                    whatsapp: userZap || "N/A",
+                    bairro: selectedBairro || "N/A",
+                    rua: userRua || "N/A",
+                    num: userSN ? "S/N" : (userNum || "N/A"),
+                    pontoRef: userDetails || "N/A",
+                    itens: cart.map(item => `${item.qty}x ${item.name}`).join("\n"),
+                    cobert: piscinaCovered || "N/A",
+                    monitores: monitorsCount > 0 ? `${monitorsCount} Mon. (${monitorHours}h)` : "Não",
+                    extensao: Object.entries(socketDistances).map(([id, dist]) => {
+                        const toy = TOYS_DB.find(t => t.id == id);
+                        return toy ? `${toy.name}: ${dist}m` : `${dist}m`;
+                    }).join("\n") || "N/A",
+                    seguro: insuranceEnabled ? "Sim" : "Não",
+                    nota: needsInvoice ? "Sim" : "Não",
+                    diaria: extraDays || "N/A",
+                    pago: "0,00",
+                    total: valorPorDiaFormatado,
+                    obs: i > 0 ? `Dia ${i+1} de aluguel` : "N/A",
+                    cnpj: userCNPJ || "N/A",
+                    cep: userCEP || "N/A",
+                    referral: referralSource === "OUTROS" ? referralOther : referralSource
+                };
+                try { await fetch(API_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); } catch (e) { console.error("Erro Sheets:", e); }
+            }
         }
 
         function showToast(msg) {
@@ -903,6 +1519,19 @@
                 if (!userSN && !userNum.trim()) { showToast("Informe o número ou marque 'Sem número'"); return; }
                 if (!userDetails.trim()) { showToast("Informe detalhes da casa para ajudar na entrega"); return; }
             }
+            if (currentStep === 'party') {
+                if (extraDays > 1) {
+                    const conflicts = checkAvailabilityForDays(extraDays);
+                    if (conflicts.length > 0) {
+                        const conflict = conflicts[0];
+                        const modal = document.createElement('div');
+                        modal.className = "fixed inset-0 bg-black/60 z-[400] flex items-center justify-center p-6";
+                        modal.innerHTML = `<div class="bg-white p-8 rounded-3xl text-center shadow-2xl max-w-xs font-bold"><i class="fas fa-calendar-times text-red-500 text-4xl mb-4"></i><p class="font-bold text-slate-800 uppercase text-sm">Não é possível reservar ${extraDays} dias!</p><p class="text-slate-500 text-xs mt-3 font-bold leading-relaxed uppercase">O brinquedo <span class="text-red-500">${conflict.name}</span> já está totalmente reservado no dia <span class="text-[#003399]">${conflict.date}</span>.</p><button onclick="this.parentElement.parentElement.remove()" class="mt-6 w-full btn-primary py-3 rounded-xl uppercase font-bold">Entendido</button></div>`;
+                        document.body.appendChild(modal);
+                        return;
+                    }
+                }
+            }
             if (currentStep === 'details') {
                 const needsPower = cart.filter(t=>t.power || t.category === 'especial' || t.id === 10);
                 if (needsPower.length > 0) {
@@ -921,23 +1550,23 @@
         function renderForm() {
             const container = document.getElementById('formContent');
             if(!container) return;
-            const h = (t) => `<h3 class="text-xl font-bold text-[#003399] uppercase mb-6 font-black">${t}</h3>`;
-            const likedLabel = (t) => `<label class="text-[10px] font-bold text-[#003399] uppercase ml-1 mb-1 block font-black">${t}</label>`;
-            const safetyMsg = `<div class="mt-8 pt-6 border-t border-slate-100 flex items-start gap-3 opacity-60"><i class="fas fa-shield-alt text-blue-500 text-sm mt-0.5"></i><p class="text-[10px] text-slate-500 font-bold leading-relaxed font-black">As informações fornecidas são utilizadas apenas para a realização da sua reserva e ficam totalmente protegidas.</p></div>`;
+            const h = (t) => `<h3 class="text-xl font-bold text-[#003399] uppercase mb-6">${t}</h3>`;
+            const likedLabel = (t) => `<label class="text-[10px] font-bold text-[#003399] uppercase ml-1 mb-1 block">${t}</label>`;
+            const safetyMsg = `<div class="mt-8 pt-6 border-t border-slate-100 flex items-start gap-3 opacity-60"><i class="fas fa-shield-alt text-blue-500 text-sm mt-0.5"></i><p class="text-[10px] text-slate-500 font-bold leading-relaxed">As informações fornecidas são utilizadas apenas para a realização da sua reserva e ficam totalmente protegidas.</p></div>`;
 
             if (currentStep === 'id') {
-                container.innerHTML = `${h('CONTATO')}<div class="mb-4 font-black">${likedLabel('Nome')}<input type='text' value='${userName}' placeholder='Primeiro nome' oninput='formatName(this)' class='w-full p-5 bg-slate-50 rounded-2xl outline-none border-2 border-transparent focus:border-blue-500 font-bold'></div>
-                <div class="mb-4 font-black">
+                container.innerHTML = `${h('CONTATO')}<div class="mb-4">${likedLabel('Nome')}<input type='text' value='${userName}' placeholder='Primeiro nome' oninput='formatName(this)' class='w-full p-5 bg-slate-50 rounded-2xl outline-none border-2 border-transparent focus:border-blue-500 font-bold'></div>
+                <div class="mb-4">
                     <div class="flex items-center gap-1 mb-1 ml-1">
                         <i class="fab fa-whatsapp text-green-500 text-xs"></i>
-                        <label class="text-[10px] font-bold text-[#003399] uppercase font-black">WhatsApp</label>
+                        <label class="text-[10px] font-bold text-[#003399] uppercase">WhatsApp</label>
                     </div>
                     <input type='tel' value='${userZap}' placeholder='(xx) xxxxx-xxxx' oninput='maskZap(this)' class='w-full p-5 bg-slate-50 rounded-2xl outline-none border-2 border-transparent focus:border-blue-500 font-bold'>
                 </div>
                 ${safetyMsg}<div class="h-40"></div>`;
             }
             else if (currentStep === 'address') {
-                container.innerHTML = `${h('Endereço')}<select onchange='selectedBairro=this.value;updateSummary()' class='w-full p-5 bg-slate-50 rounded-2xl mb-4 font-bold outline-none font-black'><option value=''>Selecione o Bairro</option>${Object.keys(BAIRROS).map(b => `<option value="${b}" ${selectedBairro===b?'selected':''}>${b}</option>`)}</select><div class="relative mb-4"><input type="text" id="userRuaGhost" class="w-full p-5 bg-slate-50 rounded-2xl absolute inset-0 text-slate-300 pointer-events-none font-bold outline-none" disabled><input type='text' id='userRua' value='${userRua}' placeholder='Nome da Rua' oninput='handleStreetInput(this)' onkeydown="handleStreetKeydown(event)" class='w-full p-5 bg-transparent rounded-2xl relative font-bold outline-none'></div><div id='streetSuggestionsContainer'></div><div class='flex gap-2 mb-4 font-black'><input type='text' value='${userSN ? "S/N" : userNum}' maxlength='4' placeholder='N°' oninput='userNum=this.value' class='w-28 p-5 bg-slate-50 rounded-2xl font-bold outline-none font-black ${userSN ? "opacity-50" : ""}'> <div class='flex items-center gap-2 p-3 bg-slate-50 rounded-2xl flex-1 cursor-pointer font-black' onclick='userSN=!userSN;renderForm()'><div class='toggle-switch ${userSN?"on":""}'><div class='toggle-knob'></div></div><span class='text-[10px] font-bold text-slate-600 uppercase font-black'>SEM NÚMERO</span></div></div><input type='text' value='${userDetails}' placeholder='Cor da casa, muro, etc' oninput='userDetails=this.value' class='w-full p-5 bg-slate-50 rounded-2xl font-bold outline-none font-black'>${safetyMsg}<div class="h-40"></div>`;
+                container.innerHTML = `${h('Endereço')}<select onchange='selectedBairro=this.value;updateSummary()' class='w-full p-5 bg-slate-50 rounded-2xl mb-4 font-bold outline-none'><option value=''>Selecione o Bairro</option>${Object.keys(BAIRROS).map(b => `<option value="${b}" ${selectedBairro===b?'selected':''}>${b}</option>`)}</select><div class="relative mb-4"><input type="text" id="userRuaGhost" class="w-full p-5 bg-slate-50 rounded-2xl absolute inset-0 text-slate-300 pointer-events-none font-bold outline-none" disabled><input type='text' id='userRua' value='${userRua}' placeholder='Nome da Rua' oninput='handleStreetInput(this)' onkeydown="handleStreetKeydown(event)" class='w-full p-5 bg-transparent rounded-2xl relative font-bold outline-none'></div><div id='streetSuggestionsContainer'></div><div class='flex gap-2 mb-4'><input type='text' value='${userSN ? "S/N" : userNum}' maxlength='4' placeholder='N°' oninput='this.value=this.value.replace(/\\D/g,""); userNum=this.value' class='w-28 p-5 bg-slate-50 rounded-2xl font-bold outline-none ${userSN ? "opacity-50" : ""}'> <div class='flex items-center gap-2 p-3 bg-slate-50 rounded-2xl flex-1 cursor-pointer' onclick='userSN=!userSN;renderForm()'><div class='toggle-switch ${userSN?"on":""}'><div class='toggle-knob'></div></div><span class='text-[10px] font-bold text-slate-600 uppercase'>SEM NÚMERO</span></div></div><input type='text' value='${userDetails}' placeholder='Cor da casa, muro, etc' oninput='userDetails=this.value' class='w-full p-5 bg-slate-50 rounded-2xl font-bold outline-none'>${safetyMsg}<div class="h-40"></div>`;
             }
             else if (currentStep === 'party') {
                 const hours = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"];
@@ -946,40 +1575,47 @@
                 const endInt = isNextDay ? 22 : (parseInt(endTime.split(':')[0]) || 0);
                 const duration = endInt - startInt;
                 const extraPriceVal = (duration > 6 ? (duration - 6) * 5 : 0) + (isNextDay ? 10 : 0);
-                container.innerHTML = `${h('Duração')}<div class='flex gap-2 mb-6 font-black'>${[1,2,3,4,5].map(d => `<button onclick="extraDays=${d};renderForm();updateSummary()" class='flex-1 py-3 rounded-xl font-bold border-2 ${extraDays===d?"border-blue-600 bg-blue-50 text-blue-800":"border-slate-100 text-slate-800"} flex flex-col items-center'><span class='text-lg'>${d}d</span></button>`).join('')}</div>
-                <div class='flex gap-3 mb-2 font-black'>
-                    <div class='flex-1'>${likedLabel('Início')}<select onchange="startTime=this.value;renderForm();updateSummary()" class="w-full p-4 bg-slate-50 rounded-2xl font-bold outline-none font-black">${hours.map(h => `<option value="${h}" ${startTime===h?'selected':''}>${h}</option>`).join('')}</select></div>
-                    <div class='flex-1'>${likedLabel('Término')}<select onchange="endTime=this.value;renderForm();updateSummary()" class="w-full p-4 bg-slate-50 rounded-2xl font-bold outline-none font-black">${hours.filter(h => parseInt(h.split(':')[0]) > startInt).map(h => `<option value="${h}" ${endTime===h?'selected':''}>${h}</option>`).join('')}<option value="NEXT_DAY" ${endTime==='NEXT_DAY'?'selected':''}>DIA SEG.</option></select></div>
+                container.innerHTML = `${h('Duração')}<div class='flex gap-2 mb-6'>${[1,2,3,4,5].map(d => {
+                    let pct = "";
+                    if(d===2) pct = "15% OFF";
+                    if(d===3) pct = "23% OFF";
+                    if(d===4) pct = "30% OFF";
+                    if(d===5) pct = "36% OFF";
+                    return `<button onclick="extraDays=${d};renderForm();updateSummary()" class='flex-1 py-3 rounded-xl font-bold border-2 ${extraDays===d?"border-blue-600 bg-blue-50 text-blue-800":"border-slate-100 text-slate-800"} flex flex-col items-center'><span class='text-lg'>${d}d</span>${pct ? `<span class="text-[8px] text-green-600 font-bold">${pct}</span>`:""}</button>`;
+                }).join('')}</div>
+                <div class='flex gap-3 mb-2'>
+                    <div class='flex-1'>${likedLabel('Início')}<select onchange="startTime=this.value;renderForm();updateSummary()" class="w-full p-4 bg-slate-50 rounded-2xl font-bold outline-none">${hours.map(h => `<option value="${h}" ${startTime===h?'selected':''}>${h}</option>`).join('')}</select></div>
+                    <div class='flex-1'>${likedLabel('Término')}<select onchange="endTime=this.value;renderForm();updateSummary()" class="w-full p-4 bg-slate-50 rounded-2xl font-bold outline-none">${hours.filter(h => parseInt(h.split(':')[0]) > startInt).map(h => `<option value="${h}" ${endTime===h?'selected':''}>${h}</option>`).join('')}<option value="NEXT_DAY" ${endTime==='NEXT_DAY'?'selected':''}>DIA SEG.</option></select></div>
                 </div>
-                <div class="text-center mb-6 font-black"><p class="text-[10px] uppercase tracking-tight text-blue-500 font-bold">${extraPriceVal > 0 ? `+ R$ ${extraPriceVal.toLocaleString('pt-BR', {minimumFractionDigits: 2})} EXTRA` : '6 Horas inclusas / +5h por hora extra'}</p></div>
-                <div class='p-5 bg-blue-50 rounded-2xl mb-4 flex justify-between font-black cursor-pointer' onclick='deliveryPreviousDay=!deliveryPreviousDay;renderForm()'><div class="flex items-center gap-3"><div class='toggle-switch ${deliveryPreviousDay?"on":""}'><div class='toggle-knob'></div></div><div class="flex flex-col"><p class='text-[10px] font-black text-blue-800 uppercase leading-tight'>ENTREGAR 1 DIA ANTES</p><p class='text-[8px] text-blue-600 font-medium uppercase leading-tight'>Não é certeza mas uma possibilidade</p></div></div></div>${safetyMsg}<div class="h-40"></div>`;
+                <div class="text-center mb-6"><p class="text-[10px] uppercase tracking-tight text-blue-500 font-bold">${extraPriceVal > 0 ? `+ R$ ${extraPriceVal.toLocaleString('pt-BR', {minimumFractionDigits: 2})} EXTRA` : '6 Horas inclusas / +5h por hora extra'}</p></div>
+                <div class='p-5 bg-blue-50 rounded-2xl mb-4 flex justify-between cursor-pointer' onclick='deliveryPreviousDay=!deliveryPreviousDay;renderForm()'><div class="flex items-center gap-3"><div class='toggle-switch ${deliveryPreviousDay?"on":""}'><div class='toggle-knob'></div></div><div class="flex flex-col"><p class='text-[10px] font-bold text-blue-800 uppercase leading-tight'>ENTREGAR 1 DIA ANTES</p><p class='text-[8px] text-blue-600 font-medium uppercase leading-tight'>Não é certeza mas uma possibilidade</p></div></div></div>${safetyMsg}<div class="h-40"></div>`;
             }
             else if (currentStep === 'details') {
-                const hasPiscina = cart.some(i => i.id === 3);
-                container.innerHTML = `${h('Preferências')}<div class='p-6 bg-slate-50 rounded-3xl mb-8 font-black'>
-                ${hasPiscina ? `<p class='text-[11px] font-black text-[#003399] mb-4 uppercase text-center font-black'>A piscina fica coberta?</p><div class='flex gap-2 mb-10 font-black'>${["sim","não"].map(o => `<button onclick="piscinaCovered='${o}';renderForm()" class='flex-1 py-2 rounded-xl border-2 ${piscinaCovered===o?"border-blue-600 bg-blue-600 text-white":"bg-white text-slate-800 font-bold"}'>${o.toUpperCase()}</button>`).join('')}</div>` : ''}
-                <p class='text-[11px] font-black text-[#003399] mb-1 uppercase text-center font-black'>Monitor?</p>
-                <div class='flex gap-2 mb-4 font-black'>${[0,1,2].map(m => `<button onclick="monitorsCount=${m};renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===m?"border-blue-600 bg-blue-600 text-white font-black":"bg-white font-bold"}'>${m===0?'NÃO':m+' MON.'}</button>`).join('')}</div>
-                ${monitorsCount > 0 ? `<div class="mt-4 font-black">${likedLabel('Quantas horas?')}<select onchange="monitorHours=parseInt(this.value);updateSummary()" class="w-full p-4 bg-white rounded-xl font-bold outline-none font-black">${[2,3,4,5,6,7,8].map(h => `<option value="${h}" ${monitorHours===h?'selected':''}>${h} HORAS</option>`).join('')}</select></div>` : ''}
+                const hasPiscina = cart.some(i => i.id === 3 || i.id === 9);
+                container.innerHTML = `${h('Preferências')}<div class='p-6 bg-slate-50 rounded-3xl mb-8'>
+                ${hasPiscina ? `<p class='text-[11px] font-bold text-[#003399] mb-4 uppercase text-center'>A piscina fica coberta?</p><div class='flex gap-2 mb-10'>${["sim","não"].map(o => `<button onclick="piscinaCovered='${o}';renderForm()" class='flex-1 py-2 rounded-xl border-2 ${piscinaCovered===o?"border-blue-600 bg-blue-600 text-white":"bg-white text-slate-800 font-bold"}'>${o.toUpperCase()}</button>`).join('')}</div>` : ''}
+                <p class='text-[11px] font-bold text-[#003399] mb-1 uppercase text-center'>Monitor?</p>
+                <div class='flex gap-2 mb-4'>${[0,1,2].map(m => `<button onclick="monitorsCount=${m};renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===m?"border-blue-600 bg-blue-600 text-white":"bg-white font-bold"}'>${m===0?'NÃO':m+' MON.'}</button>`).join('')}</div>
+                ${monitorsCount > 0 ? `<div class="mt-4">${likedLabel('Quantas horas?')}<select onchange="monitorHours=parseInt(this.value);updateSummary()" class="w-full p-4 bg-white rounded-xl font-bold outline-none">${[2,3,4,5,6,7,8].map(h => `<option value="${h}" ${monitorHours===h?'selected':''}>${h} HORAS</option>`).join('')}</select></div>` : ''}
                 </div>
                 ${cart.filter(t=>t.power || t.category === 'especial' || t.id === 10).length > 0 ? `
-                    <div class='mb-8 font-black'>
-                        <p class='text-[11px] font-black text-[#003399] mb-4 uppercase text-center font-black'>Qual a distancia da tomada mais próxima?</p>
-                        ${cart.filter(t=>t.power || t.category === 'especial' || t.id === 10).map(t => `<div class="mb-4 bg-white p-5 rounded-2xl border border-slate-100 flex items-center justify-between font-black"><p class="text-[10px] font-black text-[#003399] uppercase mr-4">${t.name}</p><div class="flex items-center gap-2"><input type="tel" maxlength="2" placeholder="0" value="${socketDistances[t.id] || ''}" oninput="socketDistances[${t.id}]=this.value" class="w-12 p-3 bg-slate-50 rounded-xl outline-none font-bold text-sm text-center border-2 focus:border-blue-500 font-black"><span class="text-[10px] font-black text-slate-400">metros</span></div></div>`).join('')}
+                    <div class='mb-8'>
+                        <p class='text-[11px] font-bold text-[#003399] mb-4 uppercase text-center'>Qual a distancia da tomada mais próxima?</p>
+                        ${cart.filter(t=>t.power || t.category === 'especial' || t.id === 10).map(t => `<div class="mb-4 bg-white p-5 rounded-2xl border border-slate-100 flex items-center justify-between"><p class="text-[10px] font-bold text-[#003399] uppercase mr-4">${t.name}</p><div class="flex items-center gap-2"><input type="tel" maxlength="2" placeholder="0" value="${socketDistances[t.id] || ''}" oninput="this.value=this.value.replace(/\\D/g,''); socketDistances[${t.id}]=this.value" class="w-12 p-3 bg-slate-50 rounded-xl outline-none font-bold text-sm text-center border-2 focus:border-blue-500"><span class="text-[10px] font-bold text-slate-400">metros</span></div></div>`).join('')}
                     </div>` : ''}${safetyMsg}<div class="h-40"></div>`;
             }
             else if (currentStep === 'summary') {
-                container.innerHTML = `${h('Finalizar')}<div class='p-6 bg-slate-50 rounded-[24px] mb-4 font-black'>
-                ${likedLabel('Cupom?')}<input type="text" placeholder="CÓDIGO PROMOCIONAL" ${couponIsValid ? 'disabled' : ''} value="${couponCode}" oninput="checkCoupon(this.value)" class="w-full p-4 rounded-xl outline-none font-bold uppercase font-black ${couponIsValid?'border-2 border-green-500 bg-green-50':'bg-white shadow-inner'}">
-                ${couponIsValid ? `<p class="text-green-600 text-[10px] font-bold mt-2 font-black"><i class="fas fa-check-circle mr-1"></i> ${COUPONS_DB[couponCode]}</p>` : ''}
-                <div class="mt-8 font-black">${likedLabel('Nota Fiscal?')}<div class="flex gap-2 mb-4 font-black">${[true,false].map(opt => `<button onclick="needsInvoice=${opt};renderForm()" class="flex-1 py-3 rounded-xl border-2 ${needsInvoice===opt?'border-[#003399] bg-[#003399] text-white':'border-white bg-white text-slate-300'} text-xs font-bold font-black font-black">${opt?'SIM':'NÃO'}</button>`).join('')}</div>
-                ${needsInvoice ? `<div class="space-y-4 pt-2 font-black"><div>${likedLabel('CNPJ')} <input type="tel" oninput="maskCNPJ(this)" placeholder="00.000.000/0000-00" class="w-full p-4 bg-white rounded-xl outline-none font-bold shadow-inner font-black"></div><div>${likedLabel('CEP')} <input type="tel" oninput="maskCEP(this)" placeholder="00.000-000" class="w-full p-4 bg-white rounded-xl outline-none font-bold shadow-inner font-black"></div></div>` : ''}</div></div>
-                <div class='p-5 bg-green-50 rounded-3xl mb-4 flex justify-between gap-4 cursor-pointer font-black' onclick='insuranceEnabled=!insuranceEnabled;updateSummary();renderForm()'>
-                    <div class="flex items-center gap-3"><div class='toggle-switch ${insuranceEnabled?"on":""}'><div class='toggle-knob'></div></div><div class="flex flex-col"><p class='text-[10px] font-black text-green-800 uppercase leading-tight'>ADICIONAR SEGURO</p><p class='text-[8px] text-green-700 font-medium uppercase leading-tight'>Fique isento de reparos de até 300 reais caso o brinquedo seja danificado</p></div></div>
+                container.innerHTML = `${h('Finalizar')}<div class='p-6 bg-slate-50 rounded-[24px] mb-4'>
+                ${likedLabel('Cupom?')}<input type="text" placeholder="CÓDIGO PROMOCIONAL" ${couponIsValid ? 'disabled' : ''} value="${couponCode}" oninput="checkCoupon(this.value)" class="w-full p-4 rounded-xl outline-none font-bold uppercase ${couponIsValid?'border-2 border-green-500 bg-green-50':'bg-white shadow-inner'}">
+                ${couponIsValid ? `<p class="text-green-600 text-[10px] font-bold mt-2"><i class="fas fa-check-circle mr-1"></i> ${COUPONS_DB[couponCode]}</p>` : ''}
+                <div class="mt-8">${likedLabel('Nota Fiscal?')}<div class="flex gap-2 mb-4">${[true,false].map(opt => `<button onclick="needsInvoice=${opt};renderForm()" class="flex-1 py-3 rounded-xl border-2 ${needsInvoice===opt?'border-[#003399] bg-[#003399] text-white':'border-white bg-white text-slate-300'} text-xs font-bold">${opt?'SIM':'NÃO'}</button>`).join('')}</div>
+                ${needsInvoice ? `<div class="space-y-4 pt-2"><div>${likedLabel('CNPJ')} <input type="tel" oninput="maskCNPJ(this)" value="${userCNPJ}" placeholder="00.000.000/0000-00" class="w-full p-4 bg-white rounded-xl outline-none font-bold shadow-inner"></div><div>${likedLabel('CEP')} <input type="tel" oninput="maskCEP(this)" value="${userCEP}" placeholder="00.000-000" class="w-full p-4 bg-white rounded-xl outline-none font-bold shadow-inner"></div></div>` : ''}</div></div>
+                <div class='p-5 bg-green-50 rounded-3xl mb-4 flex justify-between gap-4 cursor-pointer' onclick='insuranceEnabled=!insuranceEnabled;updateSummary();renderForm()'>
+                    <div class="flex items-center gap-3"><div class='toggle-switch ${insuranceEnabled?"on":""}'><div class='toggle-knob'></div></div><div class="flex flex-col"><p class='text-[10px] font-bold text-green-800 uppercase leading-tight'>ADICIONAR SEGURO</p><p class='text-[8px] text-green-700 font-medium uppercase leading-tight'>Fique isento de reparos de até 300 reais caso o brinquedo seja danificado</p></div></div>
                 </div>
-                <div class="p-5 bg-slate-100 rounded-3xl border border-slate-200 font-black">
-                    <div class="mb-4 font-black">${likedLabel('Como conheceu a gente?')}
-                        <select onchange="referralSource=this.value;renderForm()" class="w-full p-4 bg-white rounded-xl font-bold text-xs outline-none shadow-inner font-black">
+                <div class="p-5 bg-slate-100 rounded-3xl border border-slate-200">
+                    <div class="mb-4">${likedLabel('Como conheceu a gente?')}
+                        <select onchange="referralSource=this.value;renderForm()" class="w-full p-4 bg-white rounded-xl font-bold text-xs outline-none shadow-inner">
                             <option value="" ${referralSource ? 'disabled' : ''}>${referralSource || 'SELECIONE'}</option>
                             <option value="MARKETPLACE" ${referralSource === 'MARKETPLACE' ? 'selected' : ''}>MARKETPLACE</option>
                             <option value="INSTAGRAM" ${referralSource === 'INSTAGRAM' ? 'selected' : ''}>INSTAGRAM</option>
@@ -990,10 +1626,10 @@
                             <option value="INDICAÇÃO DE EMPRESA" ${referralSource === 'INDICAÇÃO DE EMPRESA' ? 'selected' : ''}>INDICAÇÃO DE EMPRESA</option>
                             <option value="OUTROS" ${referralSource === 'OUTROS' ? 'selected' : ''}>OUTROS</option>
                         </select>
-                        ${referralSource === 'OUTROS' ? `<input type="text" placeholder="Onde?" oninput="referralOther=this.value" class="w-full p-4 mt-2 bg-white rounded-xl font-bold text-xs border border-blue-100 font-black">` : ''}
+                        ${referralSource === 'OUTROS' ? `<input type="text" placeholder="Onde?" oninput="referralOther=this.value" class="w-full p-4 mt-2 bg-white rounded-xl font-bold text-xs border border-blue-100">` : ''}
                     </div>
-                    <div id="orderDetailList" class="space-y-1 font-black"></div>
-                </div>${safetyMsg}<div class="h-40 font-black"></div>`;
+                    <div id="orderDetailList" class="space-y-1"></div>
+                </div>${safetyMsg}<div class="h-40"></div>`;
             }
         }
 
