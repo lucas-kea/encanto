@@ -19,29 +19,19 @@
             margin: 0 auto;
             background: white;
             position: relative;
-            box-shadow: 0 15px 35px rgba(0, 51, 153, 0.1);
+            box-shadow: 0 15px 40px rgba(0, 51, 153, 0.08);
             border-radius: 8px;
             overflow: hidden;
+            border: 1px solid #E2E8F0;
         }
 
-        /* Efeito de recorte serrilhado nas pontas */
-        .serrilhado-topo {
+        /* Efeito de recorte serrilhado */
+        .serrilhado {
             height: 10px;
             background-image: radial-gradient(circle, #F1F5F9 5px, transparent 5px);
-            background-size: 15px 15px;
+            background-size: 16px 16px;
             background-position: center top;
             width: 100%;
-            position: absolute;
-            top: -5px;
-        }
-        .serrilhado-fundo {
-            height: 10px;
-            background-image: radial-gradient(circle, #F1F5F9 5px, transparent 5px);
-            background-size: 15px 15px;
-            background-position: center bottom;
-            width: 100%;
-            position: absolute;
-            bottom: -5px;
         }
 
         .dashed-line {
@@ -53,7 +43,7 @@
             font-size: 10px;
             font-weight: 800;
             color: #94A3B8;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
             margin-bottom: 2px;
         }
@@ -73,26 +63,36 @@
         .status-badge {
             background-color: #DCFCE7;
             color: #15803D;
-            padding: 2px 10px;
-            border-radius: 4px;
+            padding: 3px 10px;
+            border-radius: 6px;
             font-size: 9px;
             font-weight: 900;
             text-transform: uppercase;
             display: inline-flex;
             align-items: center;
-            gap: 3px;
+            gap: 4px;
+            border: 1px solid #BBF7D0;
         }
 
         .btn-print {
             background-color: #003399;
             color: white;
             font-weight: 700;
-            padding: 14px;
+            padding: 16px;
             width: 100%;
-            border-radius: 12px;
+            border-radius: 16px;
             margin-top: 20px;
             text-transform: uppercase;
-            box-shadow: 0 4px 12px rgba(0, 51, 153, 0.2);
+            box-shadow: 0 10px 20px rgba(0, 51, 153, 0.15);
+            transition: all 0.2s;
+        }
+        
+        .btn-print:active {
+            transform: scale(0.97);
+        }
+
+        .yellow-accent {
+            color: #D4AF37;
         }
 
         @media print {
@@ -105,26 +105,28 @@
 <body>
 
     <div class="receipt-container" id="comprovante">
-        <div class="serrilhado-topo"></div>
+        <div class="serrilhado opacity-50"></div>
         
         <div class="p-8">
-            <!-- Cabeçalho Institucional -->
-            <div class="text-center mb-6">
+            <!-- Cabeçalho -->
+            <div class="text-center mb-8">
                 <p class="text-[9px] font-bold text-slate-400 mb-2" id="currentDateTime">XXXX, XX:XX</p>
-                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Reserva - Encanto Festas</p>
-                <h1 class="text-3xl font-black text-[#003399] tracking-tighter leading-none mt-1">ENCANTOFESTAS</h1>
-                <p class="text-[9px] font-bold text-slate-400 mt-2 uppercase">LOCAÇÃO DE BRINQUEDOS</p>
-                <p class="text-[8px] font-bold text-slate-400 uppercase mt-1">Rua Prefeito José Schmidt, 281 - SFS/SC</p>
-                <p class="text-[8px] font-bold text-slate-400 uppercase">CNPJ: 57.545.647/0001-16 | encantofestas.sfs@gmail.com</p>
+                <h1 class="text-xs font-black text-slate-500 uppercase tracking-[0.2em]">COMPROVANTE DE RESERVA</h1>
+                <h2 class="text-4xl font-black text-[#003399] tracking-tighter leading-none mt-2">ENCANTOFESTAS</h2>
+                <p class="text-[10px] font-bold text-slate-400 mt-2 uppercase tracking-widest">LOCAÇÃO DE BRINQUEDOS</p>
+                <div class="mt-4 text-[8px] font-bold text-slate-400 uppercase leading-relaxed">
+                    <p>Rua Prefeito José Schmidt, 281 - SFS/SC</p>
+                    <p>CNPJ: 57.545.647/0001-16 | encantofestas.sfs@gmail.com</p>
+                </div>
             </div>
 
             <div class="dashed-line"></div>
 
-            <!-- Titulo do Documento e Status -->
+            <!-- Identificação da Reserva -->
             <div class="flex justify-between items-center mb-6">
                 <div>
-                    <h2 class="text-base font-black text-slate-800 uppercase">Comprovante de Reserva</h2>
-                    <p class="text-xs font-bold highlight-blue" id="reservaID">#EF-XXXX</p>
+                    <h3 class="text-xs font-black text-slate-400 uppercase tracking-wider">RESERVA N°</h3>
+                    <p class="text-xl font-black highlight-blue" id="reservaID">#EF-0501</p>
                 </div>
                 <div class="status-badge">
                     <i class="fas fa-check"></i> Confirmado
@@ -135,106 +137,115 @@
             <div class="mb-5">
                 <p class="section-label">CONTRATANTE</p>
                 <p class="important-data text-lg" id="reservaNome">XXXX</p>
-                <p class="text-xs font-bold highlight-blue" id="reservaZap">(XX) XXXXX-XXXX</p>
+                <p class="text-xs font-bold yellow-accent" id="reservaZap">(XX) XXXXX-XXXX</p>
             </div>
 
             <!-- Endereço de Montagem -->
             <div class="mb-5">
                 <p class="section-label">ENDEREÇO DE MONTAGEM</p>
                 <p class="important-data" id="reservaRua">RUA XXXX, XXXX</p>
-                <p class="important-data text-xs text-slate-500" id="reservaBairro">BAIRRO XXXX - SÃO FRANCISCO DO SUL</p>
-            </div>
-
-            <!-- Data e Horários Focados -->
-            <div class="grid grid-cols-2 gap-4 mb-5">
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                    <p class="section-label">DATA DA FESTA</p>
-                    <p class="text-lg font-black highlight-blue" id="reservaData">XX/XX/XXXX</p>
-                </div>
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                    <p class="section-label">PREVISÃO ENTREGA</p>
-                    <p class="text-xs font-black text-slate-700" id="reservaPrevisao">08:00 às 09:30</p>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 mb-5">
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                    <p class="section-label">RETIRADA MÍNIMA</p>
-                    <p class="text-xs font-black text-slate-700" id="reservaRetirada">20:00 Horas</p>
-                </div>
+                <p class="text-xs font-bold text-slate-500 uppercase" id="reservaBairro">BAIRRO XXXX - SÃO FRANCISCO DO SUL</p>
             </div>
 
             <div class="dashed-line"></div>
+
+            <!-- Logística de Tempo -->
+            <div class="grid grid-cols-2 gap-4 mb-5">
+                <div class="bg-blue-50/50 p-4 rounded-2xl border border-blue-100/50">
+                    <p class="section-label highlight-blue">DATA DA FESTA</p>
+                    <p class="text-xl font-black highlight-blue" id="reservaData">XX/XX/XXXX</p>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                    <p class="section-label">PREVISÃO ENTREGA</p>
+                    <p class="text-[11px] font-black text-slate-700" id="reservaPrevisao">XXXX</p>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                    <p class="section-label">RETIRADA MÍNIMA</p>
+                    <p class="text-[11px] font-black text-slate-700" id="reservaRetirada">XXXX</p>
+                </div>
+            </div>
 
             <!-- Itens da Reserva -->
             <div class="mb-6">
                 <p class="section-label mb-3">ITENS DA RESERVA</p>
                 <div id="reservaItens" class="space-y-3">
-                    <div class="flex justify-between items-center">
-                        <p class="important-data text-xs">1x Pula-Pula Médio (3 Metros)</p>
+                    <div class="flex justify-between items-center bg-slate-50/50 p-3 rounded-xl border border-slate-100">
+                        <p class="important-data text-xs flex items-center gap-2">
+                            <i class="fas fa-box text-blue-300"></i>
+                            XXXX
+                        </p>
                         <span class="text-[8px] font-black text-green-600 uppercase">CONFIRMADO</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Outros Detalhes -->
-            <div class="grid grid-cols-1 gap-4 mb-6">
-                <div>
+            <!-- Financeiro -->
+            <div class="bg-[#003399] p-6 rounded-2xl text-white mb-6">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <p class="text-[9px] font-black text-blue-200 uppercase tracking-widest">SALDO NA MONTAGEM</p>
+                        <p class="text-[9px] font-bold text-blue-300 uppercase mt-1">PIX, CARTÃO OU DINHEIRO</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-2xl font-black text-white" id="reservaSaldo">R$ 0,00</p>
+                    </div>
+                </div>
+                <div class="pt-3 border-t border-white/10">
+                    <p class="text-[8px] font-bold text-blue-200 uppercase italic">Obs: Valor atualizado considerando o pagamento de R$ 25,00 da reserva.</p>
+                </div>
+            </div>
+
+            <!-- Variáveis Adicionais -->
+            <div class="grid grid-cols-2 gap-3 mb-8">
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
                     <p class="section-label">SEGURO ADICIONAL</p>
-                    <p class="important-data text-xs" id="reservaSeguro">NÃO CONTRATADO</p>
+                    <p class="text-[10px] font-black highlight-blue" id="reservaSeguro">XXXX</p>
                 </div>
-                <div>
-                    <p class="section-label">SALDO NA MONTAGEM (PIX ou Dinheiro)</p>
-                    <p class="text-2xl font-black highlight-blue" id="reservaTotal">R$ 0,00</p>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                    <p class="section-label">MONITORIA</p>
+                    <p class="text-[10px] font-black highlight-blue" id="reservaMonitor">XXXX</p>
                 </div>
             </div>
-
-            <!-- Notas Rápidas -->
-            <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-1 mb-6">
-                <p class="text-[9px] font-bold text-slate-500 flex gap-2">
-                    <span class="text-blue-500">•</span>
-                    <span>CHÃO RETO: <span class="text-slate-700">Terreno plano. Não montamos em rampas.</span></span>
-                </p>
-                <p class="text-[9px] font-bold text-slate-500 flex gap-2">
-                    <span class="text-blue-500">•</span>
-                    <span>IDADE: <span class="text-slate-700">Brinquedos para crianças até 14 anos.</span></span>
-                </p>
-                <p class="text-[9px] font-bold text-slate-500 flex gap-2">
-                    <span class="text-blue-500">•</span>
-                    <span>MONITOR: <span class="text-slate-700" id="reservaMonitor">Não incluso. Supervisão é do contratante.</span></span>
-                </p>
-                <p class="text-[9px] font-bold text-slate-500 flex gap-2">
-                    <span class="text-blue-500">•</span>
-                    <span>CANCELAMENTO: <span class="text-slate-700">Menos de 6 dias perde o sinal.</span></span>
-                </p>
-            </div>
-
-            <div class="dashed-line"></div>
 
             <!-- Normas de Segurança -->
-            <div class="mb-4">
-                <p class="section-label text-center mb-3">Normas de Segurança</p>
+            <div class="space-y-3">
+                <p class="section-label text-center mb-2">Normas e Regras</p>
                 <div class="grid grid-cols-1 gap-2">
-                    <p class="text-[8px] font-bold text-slate-400 uppercase leading-tight">• VIA PÚBLICA: Proibida montagem sem autorização formal.</p>
-                    <p class="text-[8px] font-bold text-slate-400 uppercase leading-tight">• ENERGIA: Cliente deve garantir tomada funcional no local.</p>
-                    <p class="text-[8px] font-bold text-slate-400 uppercase leading-tight">• CLIMA: Ventos fortes ou chuva suspendem o uso.</p>
-                    <p class="text-[8px] font-bold text-slate-400 uppercase leading-tight">• REGRAS: Sem calçados, comidas ou pets no brinquedo.</p>
+                    <div class="flex items-start gap-2 bg-slate-50/50 p-2 rounded-lg">
+                        <i class="fas fa-street-view text-[10px] mt-0.5 highlight-blue"></i>
+                        <p class="text-[8px] font-bold text-slate-500 uppercase leading-tight">VIA PÚBLICA: Obrigatório monitor da Encanto Festas para montagens em rua.</p>
+                    </div>
+                    <div class="flex items-start gap-2 bg-slate-50/50 p-2 rounded-lg">
+                        <i class="fas fa-bolt text-[10px] mt-0.5 highlight-blue"></i>
+                        <p class="text-[8px] font-bold text-slate-500 uppercase leading-tight">ENERGIA: Cliente deve garantir tomada funcional e estável no local.</p>
+                    </div>
+                    <div class="flex items-start gap-2 bg-slate-50/50 p-2 rounded-lg">
+                        <i class="fas fa-cloud-rain text-[10px] mt-0.5 highlight-blue"></i>
+                        <p class="text-[8px] font-bold text-slate-500 uppercase leading-tight">CLIMA: Ventos fortes ou chuva suspendem o uso imediato do brinquedo.</p>
+                    </div>
+                    <div class="flex items-start gap-2 bg-slate-50/50 p-2 rounded-lg">
+                        <i class="fas fa-times-circle text-[10px] mt-0.5 highlight-blue"></i>
+                        <p class="text-[8px] font-bold text-slate-500 uppercase leading-tight">CANCELAMENTO: Aviso com menos de 6 dias resulta na perda do sinal.</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- Rodapé Técnico -->
-            <div class="text-center mt-8 border-t border-slate-50 pt-4">
-                <p class="text-[7px] font-bold text-slate-300 uppercase tracking-widest">ENCANTO FESTAS - SFS-SC - GERADO EM <span id="generationDate">XX/XX/XXXX</span></p>
+            <!-- Footer -->
+            <div class="text-center mt-10 border-t border-slate-100 pt-6">
+                <p class="text-[7px] font-black text-slate-300 uppercase tracking-[0.2em]">ENCANTO FESTAS • SFS-SC • DOCUMENTO OFICIAL</p>
             </div>
         </div>
 
-        <div class="serrilhado-fundo"></div>
+        <div class="serrilhado opacity-50 rotate-180"></div>
     </div>
 
     <!-- Controles -->
     <div class="max-w-[480px] mx-auto p-4 no-print">
         <button onclick="window.print()" class="btn-print">
-            <i class="fas fa-print mr-2"></i> Imprimir Comprovante
+            <i class="fas fa-print mr-2"></i> Salvar Comprovante
         </button>
         <button onclick="window.location.href='index.html'" class="w-full text-slate-400 text-[10px] font-bold uppercase mt-6 text-center block tracking-widest hover:text-[#003399] transition-colors">
             <i class="fas fa-arrow-left mr-1"></i> Nova Reserva
@@ -242,67 +253,82 @@
     </div>
 
     <script>
-        function formatarDataHora() {
-            const agora = new Date();
-            const data = agora.toLocaleDateString('pt-BR');
-            const hora = agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
-            return `${data}, ${hora}`;
-        }
-
         function carregarDadosReserva() {
             const dados = JSON.parse(localStorage.getItem('encanto_reservas') || '[]');
             if (dados.length === 0) return;
 
             const reserva = dados[dados.length - 1];
+            const agora = new Date();
+            
+            // Header Info
+            document.getElementById('currentDateTime').innerText = agora.toLocaleDateString('pt-BR') + ', ' + agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+            
+            // Lógica de Número Sequencial (Iniciando em 501)
+            // Calculamos com base no total de reservas histórico salvo + o número base 500
+            const numSequencial = 500 + dados.length;
+            document.getElementById('reservaID').innerText = `#EF-${numSequencial.toString().padStart(4, '0')}`;
 
-            // Timestamps
-            const now = formatarDataHora();
-            document.getElementById('currentDateTime').innerText = now;
-            document.getElementById('generationDate').innerText = now;
-            
-            // Dados Identificação
+            // Dados Cliente
             document.getElementById('reservaNome').innerText = reserva.nome || 'XXXX';
-            document.getElementById('reservaID').innerText = '#EF-' + (reserva.id || 'XXXX');
             document.getElementById('reservaZap').innerText = reserva.whatsapp || '(XX) XXXXX-XXXX';
-            
-            // Endereço
             document.getElementById('reservaRua').innerText = (reserva.rua || 'XXXX') + ', ' + (reserva.num || 'XXXX');
-            document.getElementById('reservaBairro').innerText = 'BAIRRO ' + (reserva.bairro || 'XXXX') + ' - SÃO FRANCISCO DO SUL';
-            
-            // Logística
+            document.getElementById('reservaBairro').innerText = (reserva.bairro || 'XXXX') + ' - SFS';
             document.getElementById('reservaData').innerText = reserva.evento || 'XX/XX/XXXX';
-            
-            // Cálculo Previsão Entrega (1.5h antes do início)
+
+            // Lógica de Previsão de Entrega
             if (reserva.inicio) {
-                const [h, m] = reserva.inicio.split(':');
-                const dataBase = new Date();
-                dataBase.setHours(parseInt(h), parseInt(m), 0);
-                
-                const inicioEntrega = new Date(dataBase.getTime() - (90 * 60000));
-                const fimEntrega = dataBase;
-                
-                const fH = (d) => d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0');
-                document.getElementById('reservaPrevisao').innerText = `${fH(inicioEntrega)} às ${fH(fimEntrega)}`;
+                const [h, m] = reserva.inicio.split(':').map(Number);
+                const diaAntSelected = reserva.diaAnt === "Sim";
+                let previsaoTexto = "";
+
+                if ((h === 9 || h === 10) && diaAntSelected) {
+                    previsaoTexto = "DIA ANTERIOR (A COMBINAR)";
+                } else if (h === 10 && !diaAntSelected) {
+                    previsaoTexto = "09:00 às 10:00";
+                } else if (h === 9 && !diaAntSelected) {
+                    previsaoTexto = "09:00 (NA MONTAGEM)";
+                } else {
+                    // Regra: 3h antes às 0.5h antes. Mínimo 9h.
+                    let startH = Math.max(9, h - 3);
+                    let endH = h;
+                    let endM = m - 30;
+                    if (endM < 0) {
+                        endH -= 1;
+                        endM = 30;
+                    }
+                    // Garantir que o fim da janela também não seja antes das 9h
+                    if (endH < 9) endH = 9;
+                    
+                    previsaoTexto = `${startH.toString().padStart(2, '0')}:00 às ${endH.toString().padStart(2, '0')}:${endM.toString().padStart(2, '0')}`;
+                }
+                document.getElementById('reservaPrevisao').innerText = previsaoTexto;
             }
 
-            // Itens da Reserva
+            // Itens
             const itensContainer = document.getElementById('reservaItens');
             if (reserva.itens) {
-                itensContainer.innerHTML = reserva.itens.split('\n').map(item => {
-                    return `
-                        <div class="flex justify-between items-center">
-                            <p class="important-data text-xs">${item}</p>
-                            <span class="text-[8px] font-black text-green-600 uppercase">CONFIRMADO</span>
-                        </div>
-                    `;
-                }).join('');
+                itensContainer.innerHTML = reserva.itens.split('\n').filter(i => i.trim() !== "").map(item => `
+                    <div class="flex justify-between items-center bg-slate-50/50 p-3 rounded-xl border border-slate-100">
+                        <p class="important-data text-xs flex items-center gap-2">
+                            <i class="fas fa-box text-blue-300"></i>
+                            ${item}
+                        </p>
+                        <span class="text-[8px] font-black text-green-600 uppercase">CONFIRMADO</span>
+                    </div>
+                `).join('');
+            }
+
+            // Financeiro (Total - 25)
+            if (reserva.total) {
+                let valorLimpo = parseFloat(reserva.total.replace('R$ ', '').replace(/\./g, '').replace(',', '.'));
+                let saldoFinal = Math.max(0, valorLimpo - 25);
+                document.getElementById('reservaSaldo').innerText = "R$ " + saldoFinal.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
             }
 
             // Detalhes Técnicos
-            document.getElementById('reservaSeguro').innerText = reserva.seguro === "Sim" ? "CONTRATADO" : "NÃO CONTRATADO";
-            document.getElementById('reservaMonitor').innerText = reserva.monitores !== "Não" ? `Incluso (${reserva.monitores}).` : "Não incluso. Supervisão é do contratante.";
+            document.getElementById('reservaSeguro').innerText = (reserva.seguro === "Sim" ? "CONTRATADO" : "NÃO CONTRATADO");
+            document.getElementById('reservaMonitor').innerText = (reserva.monitores !== "Não" ? "SIM (EQUIPE ENCANTO)" : "NÃO (POR CONTA DO CLIENTE)");
             document.getElementById('reservaRetirada').innerText = (reserva.termino === "Dia Seg." ? "PRÓXIMO DIA" : reserva.termino) + " HORAS";
-            document.getElementById('reservaTotal').innerText = reserva.total || 'R$ 0,00';
         }
 
         window.onload = carregarDadosReserva;
