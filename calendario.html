@@ -1002,7 +1002,8 @@
             "FIVEHUND": "5% de desconto aplicado!",
             "DEZZOFF": "10% de desconto aplicado!",
             "MEGAPROMO30": "30% de desconto aplicado!",
-            "MEUCLUB": "R$ 15,00 de desconto na entrega aplicado!"
+            "MEUCLUB": "R$ 15,00 de desconto na entrega aplicado!",
+            "MEUANO24": "Valores do ano de 2024 aplicado!"
         };
 
         const TOYS_DB = [
@@ -1352,33 +1353,74 @@
         function updateSummary() {
             let totalBrinquedos = 0;
             let fullPriceItemsSum = 0; 
+            let seasonalOriginalSum = 0; // Valor que seria pago sem cupom, mas com sazonalidade
             const pl = getPriceLevel(selectedDate);
             let plMult = pl==='$' ? 0.8 : (pl==='$$$' ? 1.2 : (pl==='$$$$' ? 1.6 : 1.0));
             let countCombo = 0;
+
+            const isMEUANO24 = couponCode === "MEUANO24" && couponIsValid;
+
             cart.forEach(i => {
-                let priceItem = (i.category === 'mesa_comer') ? i.price : i.price * plMult;
+                let currentNormalPrice = (i.category === 'mesa_comer') ? i.price : i.price * plMult;
+                seasonalOriginalSum += currentNormalPrice * i.qty;
+                
+                let priceItem = currentNormalPrice;
                 if (couponCode === "MIXCASTLE" && i.id === 7) priceItem = 180;
+                
+                // --- LÓGICA CUPOM MEUANO24 (Preços de 2024) ---
+                if (isMEUANO24) {
+                    const prices2024 = {
+                        1: 120, // Pula Pula Pequeno
+                        2: 150, // Pula Pula Médio
+                        3: 150, // Piscina de Bolinhas
+                        4: 300, // Tobogã Médio
+                        5: 100, // Área Baby
+                        6: 150, // Mini Baby
+                        7: 150, // Castelinho
+                        8: 400, // Futebol de Sabão
+                        9: 300, // Escorrega com Bolinhas
+                        10: 150, // Airhockey
+                        11: 150, // Pebolim
+                        12: 150, // Pingpong
+                        13: 15   // Mesas
+                    };
+                    if (prices2024[i.id]) priceItem = prices2024[i.id];
+                }
+
                 totalBrinquedos += priceItem * i.qty;
                 fullPriceItemsSum += i.price * i.qty;
                 if (i.category !== 'mesa_comer') countCombo += i.qty;
             });
-            let comboDiscountFactor = countCombo >= 2 ? (pl === '$' ? 0.95 : 0.90) : 1.0;
+
+            // Lógica Combo normal (sem cupom MEUANO24)
+            let comboFactorNormal = countCombo >= 2 ? (pl === '$' ? 0.95 : 0.90) : 1.0;
+            let totalNormalSemCupom = seasonalOriginalSum * comboFactorNormal;
+
+            // Lógica Final com Cupom
+            let comboDiscountFactor = (countCombo >= 2 && !isMEUANO24) ? (pl === '$' ? 0.95 : 0.90) : 1.0;
             const badge = document.getElementById('discountBadge');
-            if (countCombo >= 2) {
+            
+            if (countCombo >= 2 && !isMEUANO24) {
                 badge.innerText = `COMBO ${pl === '$' ? 5 : 10}%!`;
                 badge.classList.remove('hidden');
             } else badge.classList.add('hidden');
+
             totalBrinquedos *= comboDiscountFactor;
             let multDaysFactor = [1, 1, 1.7, 2.3, 2.8, 3.2][extraDays] || 1;
             let totalFinal = totalBrinquedos * multDaysFactor;
+
+            // Extras comuns
             let startInt = parseInt(startTime.split(':')[0]) || 0;
             let isNextDay = endTime === "NEXT_DAY";
             let endInt = isNextDay ? 22 : (parseInt(endTime.split(':')[0]) || 0);
             let duration = endInt - startInt;
             let durationExtra = (duration > 6) ? (duration - 6) * 5 : 0;
             let nextDayExtra = isNextDay ? 10 : 0;
-            totalFinal += durationExtra + nextDayExtra;
-            totalFinal += monitorsCount * monitorHours * 30;
+            let baseExtras = durationExtra + nextDayExtra + (monitorsCount * monitorHours * 30);
+
+            totalFinal += baseExtras;
+
+            // Frete e Seguro
             let deliveryFee = 0;
             const onlyMesas = cart.length === 1 && cart[0].id === 13;
             if (selectedBairro) {
@@ -1389,30 +1431,52 @@
                 }
             }
             if (couponCode === "MEUCLUB" && deliveryFee > 0) deliveryFee = Math.max(0, deliveryFee - 15);
+            
             totalFinal += (insuranceEnabled ? 14.90 : 0) + deliveryFee;
-            if (couponIsValid) {
+            
+            if (couponIsValid && !isMEUANO24) {
                 if (couponCode === "FIVEHUND") totalFinal *= 0.95;
                 else if (couponCode === "DEZZOFF") totalFinal *= 0.90;
                 else if (["UIOU321", "3U2O1IU", "U3O1I2U", "21O3OI3", "12O3123", "OU1IO33", "13O2I3U", "0132139", "MEGAPROMO30"].includes(couponCode)) totalFinal *= 0.70;
             }
+
+            // --- CÁLCULO ECONOMIA ---
+            // Se for MEUANO24, comparamos com o preço sazonal total normal (sem desconto de combo para ser honesto com a regra do cupom)
+            let referencePrice = (totalNormalSemCupom * multDaysFactor) + baseExtras + (selectedBairro ? BAIRROS[selectedBairro] : 0) + (insuranceEnabled ? 14.90 : 0);
+            const savings = Math.max(0, referencePrice - totalFinal);
+
             document.getElementById('totalValueText').innerText = "R$ " + totalFinal.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
             document.getElementById('pixFinalTotalDisplay').innerText = "R$ " + totalFinal.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-            const savings = Math.max(0, ((fullPriceItemsSum * extraDays) + (selectedBairro ? BAIRROS[selectedBairro] : 0) + (insuranceEnabled ? 14.90 : 0)) - totalFinal);
+            
             const savingsEl = document.getElementById('savingsText');
             if (savings > 0.5) {
                 savingsEl.innerText = `Você economizou R$ ${savings.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
                 savingsEl.classList.remove('hidden');
             } else savingsEl.classList.add('hidden');
+
             const delEl = document.getElementById('deliveryText');
             if (selectedBairro) delEl.innerHTML = deliveryFee === 0 ? '<span class="text-green-500 font-bold">FRETE GRÁTIS</span>' : `TAXA DE ENTREGA R$ ${deliveryFee.toFixed(2).replace('.',',')} REAIS`;
             else delEl.innerText = "";
+
             document.getElementById('mainBtn').disabled = cart.length === 0;
+
             if (currentStep === 'summary') {
                 const list = document.getElementById('orderDetailList');
                 if (list) {
-                    let itemsHtml = cart.map(i => `<div class='flex justify-between text-slate-800 font-bold py-0.5 text-[10px] uppercase'><span>${i.qty}x ${i.name}</span><span>R$ ${(i.price * i.qty * extraDays).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></div>`).join('');
-                    itemsHtml += `<div class='border-t border-slate-200 mt-2 pt-2 flex justify-between text-[9px] font-bold text-slate-400 uppercase tracking-tighter'><span>VALOR SEM DESCONTO</span><span>R$ ${((fullPriceItemsSum * extraDays) + (selectedBairro ? BAIRROS[selectedBairro] : 0) + (insuranceEnabled ? 14.90 : 0)).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></div>`;
-                    itemsHtml += `<div class='flex justify-between text-[9px] font-bold text-green-500 uppercase tracking-tighter'><span>DESCONTOS</span><span>- R$ ${savings.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></div>`;
+                    let itemsHtml = cart.map(i => {
+                        let p = i.price;
+                        if (isMEUANO24) {
+                             const prices2024 = {1:120,2:150,3:150,4:300,5:100,6:150,7:150,8:400,9:300,10:150,11:150,12:150,13:15};
+                             p = prices2024[i.id] || p;
+                        } else {
+                             const pl = getPriceLevel(selectedDate);
+                             let m = pl==='$' ? 0.8 : (pl==='$$$' ? 1.2 : (pl==='$$$$' ? 1.6 : 1.0));
+                             if (i.category !== 'mesa_comer') p *= m;
+                        }
+                        return `<div class='flex justify-between text-slate-800 font-bold py-0.5 text-[10px] uppercase'><span>${i.qty}x ${i.name}</span><span>R$ ${(p * i.qty * extraDays).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></div>`;
+                    }).join('');
+                    itemsHtml += `<div class='border-t border-slate-200 mt-2 pt-2 flex justify-between text-[9px] font-bold text-slate-400 uppercase tracking-tighter'><span>VALOR ORIGINAL SEM CUPOM</span><span>R$ ${referencePrice.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></div>`;
+                    itemsHtml += `<div class='flex justify-between text-[9px] font-bold text-green-500 uppercase tracking-tighter'><span>ECONOMIA TOTAL</span><span>- R$ ${savings.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></div>`;
                     list.innerHTML = itemsHtml;
                 }
             }
@@ -1471,11 +1535,9 @@
                     referral: referralSource === "OUTROS" ? referralOther : referralSource
                 };
 
-                // --- NOVA LOGÍSTICA: SALVAR EM LOCALSTORAGE PARA reserva.html ---
                 const localData = JSON.parse(localStorage.getItem('encanto_reservas') || '[]');
                 localData.push({ ...payload, timestamp: new Date().getTime() });
                 localStorage.setItem('encanto_reservas', JSON.stringify(localData));
-                // -------------------------------------------------------------
 
                 try { await fetch(API_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); } catch (e) { console.error("Erro Sheets:", e); }
             }
@@ -1513,7 +1575,28 @@
         function maskCNPJ(i) { let v = i.value.replace(/\D/g, "").slice(0, 14); let m = ""; if (v.length > 0) m = v.substring(0, 2); if (v.length > 2) m += "." + v.substring(2, 5); if (v.length > 5) m += "." + v.substring(5, 8); if (v.length > 8) m += "/" + v.substring(8, 12); if (v.length > 12) m += "-" + v.substring(12, 14); i.value = m; userCNPJ = m; }
         function maskCEP(i) { let v = i.value.replace(/\D/g, "").slice(0, 8); let m = ""; if (v.length > 0) m = v.substring(0, 2); if (v.length > 2) m += "." + v.substring(2, 5); if (v.length > 5) m += "-" + v.substring(5, 8); i.value = m; userCEP = m; }
         function maskZap(i) { let v = i.value.replace(/\D/g, "").slice(0, 11); let m = v.length > 0 ? "(" + v.substring(0, 2) : ""; if (v.length > 2) m += ") " + v.substring(2, 7); if (v.length > 7) m += "-" + v.substring(7, 11); i.value = m; userZap = m; }
-        function checkCoupon(val) { if (couponIsValid) return; let code = val.toUpperCase().trim(); if (COUPONS_DB[code]) { couponCode = code; couponIsValid = true; updateSummary(); renderForm(); } }
+        
+        function checkCoupon(val) { 
+            if (couponIsValid) return; 
+            let code = val.toUpperCase().trim(); 
+
+            // --- VALIDAÇÃO DATA EXPIRAÇÃO MEUANO24 (10 de Janeiro de 2026) ---
+            if (code === "MEUANO24") {
+                const now = new Date();
+                const expiry = new Date(2026, 0, 10, 23, 59, 59); // Mês 0 = Janeiro
+                if (now > expiry) {
+                    showToast("Este cupom expirou!");
+                    return;
+                }
+            }
+
+            if (COUPONS_DB[code]) { 
+                couponCode = code; 
+                couponIsValid = true; 
+                updateSummary(); 
+                renderForm(); 
+            } 
+        }
 
         function nextStep() {
             if (currentStep === 'id') {
@@ -1655,12 +1738,10 @@
             btn.style.backgroundColor = "#22C55E";
             btn.style.boxShadow = "0 4px 0 #166534";
             
-            // --- REDIRECIONAMENTO AUTOMÁTICO ---
             setTimeout(() => {
                 window.location.href = 'reserva.html';
-            }, 1000); // 1 segundo de delay para o usuário ver o feedback visual
+            }, 1000); 
         }
     </script>
-    
 </body>
 </html>
