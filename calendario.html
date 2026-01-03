@@ -949,6 +949,10 @@
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbwdUg2e6m0Nf96QW7w2pcTB_fTPcaHpSyY4vlFVMnZ5yImFFxnlhOcPyRH7f7pmPvd_/exec"; 
         
+        // --- CONFIGURAÇÃO TELEGRAM CORRIGIDA ---
+        const TELEGRAM_TOKEN = "7731612058:AAEPNWozAfXa5J1mKwfFNCjBwBijrIvOlr8"; 
+        const TELEGRAM_CHAT_ID = "6791831671"; 
+        
         let currentDate = new Date();
         let selectedDate = null;
         let sheetData = [];
@@ -1430,7 +1434,37 @@
             const valorPorDia = totalTotal / extraDays;
             const valorPorDiaFormatado = "R$ " + valorPorDia.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
 
-            // Loop para criar uma linha para cada dia de aluguel
+            // 1. Notificação para o Telegram (Enviada apenas UMA vez por reserva para não spammar)
+            if (TELEGRAM_TOKEN && TELEGRAM_CHAT_ID) {
+                const itemsList = cart.map(item => `• ${item.qty}x ${item.name}`).join("\n");
+                const telegramMsg = `🚀 *NOVA RESERVA RECEBIDA*\n\n` +
+                                    `👤 *Cliente:* ${userName}\n` +
+                                    `📱 *WhatsApp:* ${userZap}\n\n` +
+                                    `📅 *Data Inicial:* ${normalizeDate(selectedDate)}\n` +
+                                    `🔢 *Duração:* ${extraDays} dia(s)\n` +
+                                    `⏰ *Horário:* ${startTime} às ${endTime === 'NEXT_DAY' ? 'Dia Seg.' : endTime}\n\n` +
+                                    `📍 *Bairro:* ${selectedBairro}\n` +
+                                    `🏠 *Rua:* ${userRua}, ${userNum}\n\n` +
+                                    `📦 *Brinquedos:*\n${itemsList}\n\n` +
+                                    `💰 *Valor Total:* R$ ${totalTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\n\n` +
+                                    `⚙️ _Detalhes enviados para a Planilha_`;
+
+                try {
+                    fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            chat_id: TELEGRAM_CHAT_ID,
+                            text: telegramMsg,
+                            parse_mode: 'Markdown'
+                        })
+                    });
+                } catch (e) {
+                    console.error("Erro ao enviar para Telegram:", e);
+                }
+            }
+
+            // 2. Loop para criar as linhas no Google Sheets (Continua igual, enviando uma linha por dia)
             for (let i = 0; i < extraDays; i++) {
                 let dataLinha = new Date(selectedDate);
                 dataLinha.setDate(selectedDate.getDate() + i);
@@ -1438,7 +1472,7 @@
                 const randomLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
                 const payload = {
                     id: randomLetter,
-                    evento: normalizeDate(dataLinha) || "N/A", // Data incrementada para cada linha
+                    evento: normalizeDate(dataLinha) || "N/A",
                     diaAnt: deliveryPreviousDay ? "Sim" : "Não",
                     inicio: startTime || "N/A",
                     termino: (endTime === "NEXT_DAY" ? "Dia Seg." : endTime) || "N/A",
@@ -1459,7 +1493,7 @@
                     nota: needsInvoice ? "Sim" : "Não",
                     diaria: extraDays || "N/A",
                     pago: "0,00",
-                    total: valorPorDiaFormatado, // Valor dividido entre as linhas
+                    total: valorPorDiaFormatado,
                     obs: i > 0 ? `Dia ${i+1} de aluguel` : "N/A",
                     cnpj: userCNPJ || "N/A",
                     cep: userCEP || "N/A",
@@ -1474,7 +1508,7 @@
                         body: JSON.stringify(payload) 
                     }); 
                 } catch (e) {
-                    console.error("Erro ao enviar linha:", e);
+                    console.error("Erro ao enviar linha para o Sheets:", e);
                 }
             }
         }
@@ -1578,7 +1612,7 @@
                 ${safetyMsg}<div class="h-40"></div>`;
             }
             else if (currentStep === 'address') {
-                container.innerHTML = `${h('Endereço')}<select onchange='selectedBairro=this.value;updateSummary()' class='w-full p-5 bg-slate-50 rounded-2xl mb-4 font-bold outline-none font-black'><option value=''>Selecione o Bairro</option>${Object.keys(BAIRROS).map(b => `<option value="${b}" ${selectedBairro===b?'selected':''}>${b}</option>`)}</select><div class="relative mb-4"><input type="text" id="userRuaGhost" class="w-full p-5 bg-slate-50 rounded-2xl absolute inset-0 text-slate-300 pointer-events-none font-bold outline-none" disabled><input type='text' id='userRua' value='${userRua}' placeholder='Nome da Rua' oninput='handleStreetInput(this)' onkeydown="handleStreetKeydown(event)" class='w-full p-5 bg-transparent rounded-2xl relative font-bold outline-none'></div><div id='streetSuggestionsContainer'></div><div class='flex gap-2 mb-4 font-black'><input type='text' value='${userSN ? "S/N" : userNum}' maxlength='4' placeholder='N°' oninput='userNum=this.value' class='w-28 p-5 bg-slate-50 rounded-2xl font-bold outline-none font-black ${userSN ? "opacity-50" : ""}'> <div class='flex items-center gap-2 p-3 bg-slate-50 rounded-2xl flex-1 cursor-pointer font-black' onclick='userSN=!userSN;renderForm()'><div class='toggle-switch ${userSN?"on":""}'><div class='toggle-knob'></div></div><span class='text-[10px] font-bold text-slate-600 uppercase font-black'>SEM NÚMERO</span></div></div><input type='text' value='${userDetails}' placeholder='Cor da casa, muro, etc' oninput='userDetails=this.value' class='w-full p-5 bg-slate-50 rounded-2xl font-bold outline-none font-black'>${safetyMsg}<div class="h-40"></div>`;
+                container.innerHTML = `${h('Endereço')}<select onchange='selectedBairro=this.value;updateSummary()' class='w-full p-5 bg-slate-50 rounded-2xl mb-4 font-bold outline-none font-black'><option value=''>Selecione o Bairro</option>${Object.keys(BAIRROS).map(b => `<option value="${b}" ${selectedBairro===b?'selected':''}>${b}</option>`)}</select><div class="relative mb-4"><input type="text" id="userRuaGhost" class="w-full p-5 bg-slate-50 rounded-2xl absolute inset-0 text-slate-300 pointer-events-none font-bold outline-none" disabled><input type='text' id='userRua' value='${userRua}' placeholder='Nome da Rua' oninput='handleStreetInput(this)' onkeydown="handleStreetKeydown(event)" class='w-full p-5 bg-transparent rounded-2xl relative font-bold outline-none'></div><div id='streetSuggestionsContainer'></div><div class='flex gap-2 mb-4 font-black'><input type='text' value='${userSN ? "S/N" : userNum}' maxlength='4' placeholder='N°' oninput='this.value=this.value.replace(/\\D/g,""); userNum=this.value' class='w-28 p-5 bg-slate-50 rounded-2xl font-bold outline-none font-black ${userSN ? "opacity-50" : ""}'> <div class='flex items-center gap-2 p-3 bg-slate-50 rounded-2xl flex-1 cursor-pointer font-black' onclick='userSN=!userSN;renderForm()'><div class='toggle-switch ${userSN?"on":""}'><div class='toggle-knob'></div></div><span class='text-[10px] font-bold text-slate-600 uppercase font-black'>SEM NÚMERO</span></div></div><input type='text' value='${userDetails}' placeholder='Cor da casa, muro, etc' oninput='userDetails=this.value' class='w-full p-5 bg-slate-50 rounded-2xl font-bold outline-none font-black'>${safetyMsg}<div class="h-40"></div>`;
             }
             else if (currentStep === 'party') {
                 const hours = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"];
@@ -1607,7 +1641,7 @@
             else if (currentStep === 'details') {
                 const hasPiscina = cart.some(i => i.id === 3);
                 container.innerHTML = `${h('Preferências')}<div class='p-6 bg-slate-50 rounded-3xl mb-8 font-black'>
-                ${hasPiscina ? `<p class='text-[11px] font-black text-[#003399] mb-4 uppercase text-center font-black'>A piscina fica coberta?</p><div class='flex gap-2 mb-10 font-black'>${["sim","não"].map(o => `<button onclick="piscinaCovered='${o}';renderForm()" class='flex-1 py-2 rounded-xl border-2 ${piscinaCovered===o?"border-blue-600 bg-blue-600 text-white":"bg-white text-slate-800 font-bold"}'>${o.toUpperCase()}</button>`).join('')}</div>` : ''}
+                ${hasPiscina ? `<p class='text-[11px] font-black text-[#003399] mb-4 uppercase text-center font-black'>A piscina fica coberta?</p><div class='flex gap-2 mb-10 font-black'>${["sim","não"].map(o => `<button onclick="piscinaCover='${o}';renderForm()" class='flex-1 py-2 rounded-xl border-2 ${piscinaCovered===o?"border-blue-600 bg-blue-600 text-white":"bg-white text-slate-800 font-bold"}'>${o.toUpperCase()}</button>`).join('')}</div>` : ''}
                 <p class='text-[11px] font-black text-[#003399] mb-1 uppercase text-center font-black'>Monitor?</p>
                 <div class='flex gap-2 mb-4 font-black'>${[0,1,2].map(m => `<button onclick="monitorsCount=${m};renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===m?"border-blue-600 bg-blue-600 text-white font-black":"bg-white font-bold"}'>${m===0?'NÃO':m+' MON.'}</button>`).join('')}</div>
                 ${monitorsCount > 0 ? `<div class="mt-4 font-black">${likedLabel('Quantas horas?')}<select onchange="monitorHours=parseInt(this.value);updateSummary()" class="w-full p-4 bg-white rounded-xl font-bold outline-none font-black">${[2,3,4,5,6,7,8].map(h => `<option value="${h}" ${monitorHours===h?'selected':''}>${h} HORAS</option>`).join('')}</select></div>` : ''}
@@ -1669,6 +1703,5 @@
             }, 2000);
         }
     </script>
-    
 </body>
 </html>
