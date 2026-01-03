@@ -264,7 +264,6 @@
             document.getElementById('currentDateTime').innerText = agora.toLocaleDateString('pt-BR') + ', ' + agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
             
             // Lógica de Número Sequencial (Iniciando em 501)
-            // Calculamos com base no total de reservas histórico salvo + o número base 500
             const numSequencial = 500 + dados.length;
             document.getElementById('reservaID').innerText = `#EF-${numSequencial.toString().padStart(4, '0')}`;
 
@@ -288,7 +287,6 @@
                 } else if (h === 9 && !diaAntSelected) {
                     previsaoTexto = "09:00 (NA MONTAGEM)";
                 } else {
-                    // Regra: 3h antes às 0.5h antes. Mínimo 9h.
                     let startH = Math.max(9, h - 3);
                     let endH = h;
                     let endM = m - 30;
@@ -296,7 +294,6 @@
                         endH -= 1;
                         endM = 30;
                     }
-                    // Garantir que o fim da janela também não seja antes das 9h
                     if (endH < 9) endH = 9;
                     
                     previsaoTexto = `${startH.toString().padStart(2, '0')}:00 às ${endH.toString().padStart(2, '0')}:${endM.toString().padStart(2, '0')}`;
@@ -322,7 +319,12 @@
             if (reserva.total) {
                 let valorLimpo = parseFloat(reserva.total.replace('R$ ', '').replace(/\./g, '').replace(',', '.'));
                 let saldoFinal = Math.max(0, valorLimpo - 25);
-                document.getElementById('reservaSaldo').innerText = "R$ " + saldoFinal.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+                
+                // Garantindo sempre 2 casas decimais para os centavos
+                document.getElementById('reservaSaldo').innerText = "R$ " + saldoFinal.toLocaleString('pt-BR', { 
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2 
+                });
             }
 
             // Detalhes Técnicos
