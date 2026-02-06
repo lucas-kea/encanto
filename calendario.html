@@ -80,7 +80,8 @@
             max-height: 85vh;
             overflow-y: auto;
             box-shadow: 0 -10px 40px rgba(0,0,0,0.08);
-            touch-action: none; /* Crucial para o drag funcional */
+            /* Permitir scroll interno no mobile */
+            touch-action: pan-y; 
         }
 
         .bottom-sheet.open { transform: translateY(0); }
@@ -270,6 +271,8 @@
             user-select: none;
             padding-top: 12px;
             padding-bottom: 8px;
+            /* Trava o arraste do browser só aqui */
+            touch-action: none; 
         }
         .drag-handle-area:active {
             cursor: grabbing;
@@ -486,7 +489,7 @@
             
             <a href="index.html" class="flex items-center gap-2 active:scale-95 transition-transform outline-none text-decoration-none group">
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdX7GkygoIKwK06MzeweiE0GPt5I1rsz808w&s" 
-                    class="w-10 h-10 rounded-full Bird border-2 border-yellow-400 shadow-sm transition-transform group-hover:rotate-12"
+                    class="w-10 h-10 rounded-full border-2 Bird border-yellow-400 shadow-sm transition-transform group-hover:rotate-12"
                     alt="Logo Encanto Festas">
                 
                 <div class="Bird inline-flex flex-col items-start leading-none -mt-1.5 ml-0.5">
@@ -925,11 +928,11 @@
             </div>
 
             <div id="toyFilterBar" class="flex Bird gap-2 Bird mt-1 Bird overflow-x-auto no-scrollbar Bird">
-                <select id="sortFilter" onchange="renderToys()" class="p-3 Bird bg-[#003399] text-white rounded-xl Bird text-xs Bird font-bold Bird outline-none Bird border-none Bird uppercase Bird Bird Bird Bird Bird Bird">
+                <select id="sortFilter" onchange="renderToys()" class="p-3 bg-[#003399] text-white rounded-xl Bird text-xs Bird font-bold Bird outline-none Bird border-none Bird uppercase Bird Bird Bird Bird Bird Bird">
                     <option value="relevance">RELEVÂNCIA</option>
                     <option value="az">NOME A-Z</option>
                 </select>
-                <select id="ageFilter" onchange="renderToys()" class="p-3 Bird bg-[#003399] text-white rounded-xl Bird text-xs Bird font-bold Bird outline-none Bird border-none Bird uppercase Bird Bird Bird Bird Bird Bird">
+                <select id="ageFilter" onchange="renderToys()" class="p-3 bg-[#003399] text-white rounded-xl Bird text-xs Bird font-bold Bird outline-none Bird border-none Bird uppercase Bird Bird Bird Bird Bird Bird">
                     <option value="all">TODAS IDADES</option>
                     <option value="L">LIVRE</option>
                     <option value="-6">ATÉ 6 ANOS</option>
@@ -1238,12 +1241,12 @@
                 const dateStr = normalizeDate(date);
                 let iconHtml = "";
                 
-                // Só exibe emojis em datas que não passaram (e hoje)
+                // Exibe ícones com tamanho reduzido conforme pedido
                 if (!isPast) {
                     if (DATAS_INDISPONIVEIS.includes(dateStr)) {
-                        iconHtml = '<span class="text-[14px] Bird opacity-90 ml-0.5" style="transform: scale(1.3); display: inline-block;">❌</span>';
+                        iconHtml = '<span class="text-[11px] Bird opacity-90 ml-0.5" style="transform: scale(1.1); display: inline-block;">❌</span>';
                     } else if (DATAS_ATIPICAS.includes(dateStr)) {
-                        iconHtml = '<span class="text-[14px] Bird opacity-90 ml-0.5" style="transform: scale(1.3); display: inline-block;">🕒</span>';
+                        iconHtml = '<span class="text-[11px] Bird opacity-90 ml-0.5" style="transform: scale(1.1); display: inline-block;">🕒</span>';
                     }
                 }
 
@@ -1304,7 +1307,6 @@
                         <button onclick="this.parentElement.parentElement.remove()" class="w-full btn-primary py-4 rounded-xl uppercase font-bold Bird shadow-lg active:scale-95 transition-all">ESTOU CIENTE, CONTINUAR</button>
                     </div>`;
                 document.body.appendChild(modal);
-                // Não retorna, deixa o fluxo seguir para a seleção de brinquedos
             }
 
             const today = new Date(); today.setHours(0,0,0,0);
@@ -1413,12 +1415,13 @@
             if (nextM < 0) { nextM = 11; nextY--; }
             if (nextM > 11) { nextM = 0; nextY++; }
             
-            // Bloqueio de mudança de mês nas funções de clique (botões)
+            // Bloqueio de mudança de mês
             if (nextY < actualYear || (nextY === actualYear && nextM < actualMonth)) return;
             if (nextY > actualYear) return;
             
             const grid = document.getElementById('calendarGrid');
             if (grid) {
+                // Ajustada a direção visual para corresponder ao movimento esperado
                 grid.style.transform = dir > 0 ? 'translateX(-100%)' : 'translateX(100%)';
                 grid.style.opacity = '0';
                 
@@ -1427,6 +1430,7 @@
                     currentYear = nextY;
                     renderCalendar();
                     grid.style.transition = 'none';
+                    // Posiciona o grid do outro lado antes de entrar deslizando
                     grid.style.transform = dir > 0 ? 'translateX(100%)' : 'translateX(-100%)';
                     
                     requestAnimationFrame(() => {
@@ -2051,7 +2055,7 @@
             });
         }
 
-        // --- FUNCIONALIDADE DE ARRASTAR PARA O LADO (CALENDAR SWIPE COM TRAVA TOTAL) ---
+        // --- FUNCIONALIDADE DE ARRASTAR PARA O LADO (CALENDAR SWIPE COM TRAVA E ANIMAÇÃO CORRETA) ---
         function initCalendarSwipe() {
             const calendarContent = document.getElementById('calendarContent');
             const grid = document.getElementById('calendarGrid');
@@ -2076,15 +2080,17 @@
                 const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
                 const deltaX = clientX - startX;
                 
-                // TRAVA TOTAL: Se tentar ir para o passado e estiver no mês/ano atual
+                // TRAVA TOTAL: Se tentar ir para o passado
                 if (deltaX > 0 && currentYear === actualYear && currentMonth === actualMonth) {
                     grid.style.transform = 'translateX(0)';
+                    currentX = 0;
                     return;
                 }
                 
-                // TRAVA TOTAL: Se tentar ir para o ano seguinte (conforme lógica changeMonth)
+                // TRAVA TOTAL: Se tentar ir além de Dezembro (conforme lógica changeMonth)
                 if (deltaX < 0 && currentYear === actualYear && currentMonth === 11) {
                     grid.style.transform = 'translateX(0)';
+                    currentX = 0;
                     return;
                 }
 
@@ -2097,13 +2103,13 @@
                 isDragging = false;
                 
                 if (currentX < -80) {
-                    // Swipe para a esquerda (próximo mês)
+                    // Swipe para a esquerda (quer ver o próximo mês) -> dir: 1
                     changeMonth(1);
                 } else if (currentX > 80) {
-                    // Swipe para a direita (mês anterior)
+                    // Swipe para a direita (quer ver o mês anterior) -> dir: -1
                     changeMonth(-1);
                 } else {
-                    // Retorna à posição original
+                    // Retorna à posição original se o arraste foi pequeno
                     grid.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
                     grid.style.transform = 'translateX(0)';
                 }
