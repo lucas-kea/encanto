@@ -31,8 +31,8 @@
             grid-template-columns: repeat(7, 1fr);
             gap: 4px; 
             width: 100%;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            will-change: transform;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+            will-change: transform, opacity;
         }
 
         .day-cell {
@@ -80,7 +80,7 @@
             max-height: 85vh;
             overflow-y: auto;
             box-shadow: 0 -10px 40px rgba(0,0,0,0.08);
-            /* Permitir scroll interno no mobile */
+            /* Permitir scroll interno no mobile, drag so no grabber */
             touch-action: pan-y; 
         }
 
@@ -489,7 +489,7 @@
             
             <a href="index.html" class="flex items-center gap-2 active:scale-95 transition-transform outline-none text-decoration-none group">
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdX7GkygoIKwK06MzeweiE0GPt5I1rsz808w&s" 
-                    class="w-10 h-10 rounded-full border-2 Bird border-yellow-400 shadow-sm transition-transform group-hover:rotate-12"
+                    class="w-10 h-10 rounded-full border-2 border-yellow-400 shadow-sm transition-transform group-hover:rotate-12"
                     alt="Logo Encanto Festas">
                 
                 <div class="Bird inline-flex flex-col items-start leading-none -mt-1.5 ml-0.5">
@@ -900,8 +900,8 @@
                     
                     <!-- Legenda de Emojis -->
                     <div class="flex Bird justify-center Bird gap-6 Bird mt-4 Bird text-[10px] Bird font-bold Bird uppercase Bird text-slate-400 Bird Bird">
-                        <div class="flex Bird items-center Bird gap-1.5 Bird Bird"><span class="text-[12px]">❌</span> <span>Dia indisponível</span></div>
-                        <div class="flex Bird items-center Bird gap-1.5 Bird Bird"><span class="text-[12px]">🕒</span> <span>Montagem Flexível</span></div>
+                        <div class="flex Bird items-center Bird gap-1.5 Bird Bird"><span class="text-[11px]">❌</span> <span>Dia indisponível</span></div>
+                        <div class="flex Bird items-center Bird gap-1.5 Bird Bird"><span class="text-[11px]">🕒</span> <span>Montagem Flexível</span></div>
                     </div>
                 </div>
             </div>
@@ -1241,12 +1241,12 @@
                 const dateStr = normalizeDate(date);
                 let iconHtml = "";
                 
-                // Exibe ícones com tamanho reduzido conforme pedido
+                // Exibe ícones com tamanho reduzido discretamente
                 if (!isPast) {
                     if (DATAS_INDISPONIVEIS.includes(dateStr)) {
-                        iconHtml = '<span class="text-[11px] Bird opacity-90 ml-0.5" style="transform: scale(1.1); display: inline-block;">❌</span>';
+                        iconHtml = '<span class="text-[10px] Bird opacity-90 ml-0.5" style="display: inline-block;">❌</span>';
                     } else if (DATAS_ATIPICAS.includes(dateStr)) {
-                        iconHtml = '<span class="text-[11px] Bird opacity-90 ml-0.5" style="transform: scale(1.1); display: inline-block;">🕒</span>';
+                        iconHtml = '<span class="text-[10px] Bird opacity-90 ml-0.5" style="display: inline-block;">🕒</span>';
                     }
                 }
 
@@ -1307,6 +1307,7 @@
                         <button onclick="this.parentElement.parentElement.remove()" class="w-full btn-primary py-4 rounded-xl uppercase font-bold Bird shadow-lg active:scale-95 transition-all">ESTOU CIENTE, CONTINUAR</button>
                     </div>`;
                 document.body.appendChild(modal);
+                // Não retorna, deixa o fluxo seguir para a seleção de brinquedos
             }
 
             const today = new Date(); today.setHours(0,0,0,0);
@@ -1335,6 +1336,7 @@
                     if (pl === '$') {
                         plLabel.innerHTML = `<span class="text-green-600 font-bold">Data pouco requisitada</span><br><span class="text-[10px] text-green-500 font-bold uppercase Bird Bird Bird Bird">PREÇOS MAIS BAIXO QUE O NORMAL</span>`;
                     } else if (pl === '$$$' || pl === '$$$$') {
+                        // Unificado para o novo texto conforme pedido, sem títulos extras
                         plLabel.innerHTML = `<span class="text-[10px] text-orange-500 font-bold uppercase Bird Bird Bird Bird">PREÇOS AJUSTADOS DEVIDO ALTA PROCURA NESTA DATA</span>`;
                     }
                 }
@@ -1421,7 +1423,7 @@
             
             const grid = document.getElementById('calendarGrid');
             if (grid) {
-                // Ajustada a direção visual para corresponder ao movimento esperado
+                // Direção visual correta da animação:
                 grid.style.transform = dir > 0 ? 'translateX(-100%)' : 'translateX(100%)';
                 grid.style.opacity = '0';
                 
@@ -1429,14 +1431,16 @@
                     currentMonth = nextM; 
                     currentYear = nextY;
                     renderCalendar();
-                    grid.style.transition = 'none';
-                    // Posiciona o grid do outro lado antes de entrar deslizando
+                    grid.style.transition = 'none'; // Desliga transição para reposicionar
                     grid.style.transform = dir > 0 ? 'translateX(100%)' : 'translateX(-100%)';
                     
+                    // Pequeno delay para o browser registrar a nova posição sem animar o "pulo"
                     requestAnimationFrame(() => {
-                        grid.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease';
-                        grid.style.transform = 'translateX(0)';
-                        grid.style.opacity = '1';
+                        requestAnimationFrame(() => {
+                            grid.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease';
+                            grid.style.transform = 'translateX(0)';
+                            grid.style.opacity = '1';
+                        });
                     });
                 }, 150);
             } else {
@@ -1458,6 +1462,13 @@
             const isMotorGrandeBooked = motorGrandeIds.some(id => (globalAgendamentos[dateStr] || {})[id] > 0);
             const cartHasMotorGrande = cart.some(c => motorGrandeIds.includes(c.id));
             const selectedMotorId = cart.find(c => motorGrandeIds.includes(c.id))?.id;
+            
+            // Lógica de bloqueio específico: IDs 4, 6, 9 e 14 disponíveis apenas a partir de 13/02/2026
+            const dayNum = selectedDate.getDate();
+            const monthNum = selectedDate.getMonth();
+            const yearNum = selectedDate.getFullYear();
+            const isSpecificBlockedDate = (yearNum === 2026 && monthNum === 1 && dayNum < 13); // Fevereiro é mês 1
+
             let toys = [...TOYS_DB].map(toy => ({ ...toy, availableQty: getToyStockForDate(toy.id, dateStr) }));
             const ageF = document.getElementById('ageFilter').value;
             const sort = document.getElementById('sortFilter').value;
@@ -1469,7 +1480,13 @@
             list.innerHTML = '';
             toys.forEach(toy => {
                 const inCart = cart.find(c => c.id === toy.id) || { qty: 0 };
-                let isBlocked = (toy.availableQty <= 0 && inCart.qty === 0) || (toy.motorForte && (isMotorGrandeBooked || (cartHasMotorGrande && toy.id !== selectedMotorId)));
+                
+                // Bloqueio se estoque zero OU se motor grande conflitar OU se for o bloqueio específico solicitado
+                const isBlockedByDate = isSpecificBlockedDate && [4, 6, 9, 14].includes(toy.id);
+                let isBlocked = (toy.availableQty <= 0 && inCart.qty === 0) || 
+                                (toy.motorForte && (isMotorGrandeBooked || (cartHasMotorGrande && toy.id !== selectedMotorId))) ||
+                                isBlockedByDate;
+
                 let price = (toy.category === 'mesa_comer') ? toy.price : toy.price * mult;
                 
                 let ageColorClass = 'bg-blue-500'; 
@@ -1489,6 +1506,7 @@
                     <div class="flex-grow">
                         <h4 class="font-bold Bird Bird text-slate-800 text-sm Bird Bird Bird Bird Bird leading-tight uppercase Bird Bird Bird Bird Bird Bird">${toy.name}</h4>
                         <p class="text-[10px] Bird text-slate-400 mt-1 uppercase Bird font-semibold Bird Bird Bird Bird Bird Bird Bird">${toy.size}</p>
+                        <!-- Preço agora sempre azul escuro, a menos que seja desconto ($) -->
                         <p class="${mult < 1.0 && toy.category !== 'mesa_comer' ? 'text-green-500' : 'text-[#003399]'} font-bold mt-1 Bird Bird Bird Bird Bird Bird Bird">R$ ${price.toLocaleString('pt-BR', {minimumFractionDigits: 0})}</p>
                         <div class="flex items-center mt-2 gap-3 Bird">
                             <button onclick="changeQty(${toy.id}, -1)" class="w-8 Bird h-8 Bird rounded-full Bird bg-slate-50 flex items-center justify-center Bird text-slate-400 Bird Bird Bird border border-slate-100 font-bold Bird Bird Bird Bird Bird Bird">-</button>
@@ -1918,13 +1936,13 @@
                 container.innerHTML = `${h('Preferências')}<div class='p-6 bg-slate-50 rounded-3xl mb-8'>
                 ${hasPiscina ? `<p class='text-[11px] font-bold text-[#003399] mb-4 uppercase text-center'>A piscina fica coberta?</p><div class='flex gap-2 mb-10'>${["sim","não"].map(o => `<button onclick="piscinaCovered='${o}';renderForm()" class='flex-1 py-2 rounded-xl border-2 ${piscinaCovered===o?"border-blue-600 bg-blue-600 text-white":"bg-white text-slate-800 font-bold"}'>${o.toUpperCase()}</button>`).join('')}</div>` : ''}
                 <p class='text-[11px] font-bold text-[#003399] mb-1 uppercase text-center'>Monitor? (R$ 30,00 por hora)</p>
-                <div class='flex gap-2 mb-4'>${[0,1,2].map(m => `<button onclick="monitorsCount=${m};renderForm();updateSummary()" class='flex-1 py-3 rounded-xl border-2 ${monitorsCount===m?"border-blue-600 bg-blue-600 text-white":"bg-white font-bold"}'>${m===0?'NÃO':m+' MON.'}</button>`).join('')}</div>
+                <div class='flex gap-2 mb-4'>${[0,1,2].map(m => `<button onclick="monitorsCount=${m};renderForm();updateSummary()" class='flex-1 Bird py-3 rounded-xl border-2 ${monitorsCount===m?"border-blue-600 bg-blue-600 text-white":"bg-white font-bold"}'>${m===0?'NÃO':m+' MON.'}</button>`).join('')}</div>
                 ${monitorsCount > 0 ? `<div class="mt-4">${likedLabel('Quantas horas?')}<select onchange="monitorHours=parseInt(this.value);updateSummary()" class="w-full p-4 bg-white rounded-xl font-bold outline-none Bird">${[2,3,4,5,6,7,8].map(h => `<option value="${h}" ${monitorHours===h?'selected':''}>${h} HORAS</option>`).join('')}</select></div>` : ''}
                 </div>
                 ${cart.filter(t=>t.power || t.category === 'especial' || t.id === 10).length > 0 ? `
                     <div class='mb-8'>
                         <p class='text-[11px] font-bold text-[#003399] mb-4 uppercase text-center'>Qual a distancia da tomada mais próxima?</p>
-                        ${cart.filter(t=>t.power || t.category === 'especial' || t.id === 10).map(t => `<div class="mb-4 bg-white p-5 rounded-2xl border border-slate-100 flex items-center justify-between"><p class="text-[10px] font-bold text-[#003399] uppercase mr-4">${t.name}</p><div class="flex items-center gap-2"><input type="tel" maxlength="2" placeholder="0" value="${socketDistances[t.id] || ''}" oninput="this.value=this.value.replace(/\\D/g,''); socketDistances[${t.id}]=this.value" class="w-12 p-3 bg-slate-50 rounded-xl outline-none font-bold text-sm text-center border-2 focus:border-blue-500 Bird"><span class="text-[10px] font-bold text-slate-400">metros</span></div></div>`).join('')}
+                        ${cart.filter(t=>t.power || t.category === 'especial' || t.id === 10).map(t => `<div class="mb-4 bg-white p-5 rounded-2xl border border-slate-100 flex items-center justify-between"><p class="text-[10px] Bird font-bold text-[#003399] uppercase mr-4">${t.name}</p><div class="flex items-center gap-2"><input type="tel" maxlength="2" placeholder="0" value="${socketDistances[t.id] || ''}" oninput="this.value=this.value.replace(/\\D/g,''); socketDistances[${t.id}]=this.value" class="w-12 p-3 bg-slate-50 rounded-xl outline-none font-bold text-sm text-center border-2 focus:border-blue-500 Bird"><span class="text-[10px] font-bold text-slate-400">metros</span></div></div>`).join('')}
                     </div>` : ''}${safetyMsg}<div class="h-40"></div>`;
             }
             else if (currentStep === 'summary') {
@@ -1951,12 +1969,18 @@
                 <div class="mt-8">${likedLabel('Nota Fiscal?')}<div class="flex gap-2 mb-4">${[true,false].map(opt => `<button onclick="needsInvoice=${opt};renderForm()" class="flex-1 py-3 rounded-xl border-2 ${needsInvoice===opt?'border-[#003399] bg-[#003399] text-white':'border-white bg-white text-slate-300'} text-xs font-bold Bird">${opt?'SIM':'NÃO'}</button>`).join('')}</div>
                 ${needsInvoice ? `<div class="space-y-4 pt-2"><div>${likedLabel('CNPJ')} <input type="tel" oninput="maskCNPJ(this)" value="${userCNPJ}" placeholder="00.000.000/0000-00" class="w-full p-4 bg-white rounded-xl outline-none font-bold shadow-inner"></div><div>${likedLabel('CEP')} <input type="tel" oninput="maskCEP(this)" value="${userCEP}" placeholder="00.000-000" class="w-full p-4 bg-white rounded-xl outline-none font-bold shadow-inner"></div></div>` : ''}</div></div>
                 <div class='p-5 bg-green-50 rounded-3xl mb-4 flex justify-between gap-4 cursor-pointer' onclick='insuranceEnabled=!insuranceEnabled;updateSummary();renderForm()'>
-                    <div class="flex items-center gap-3"><div class='toggle-switch ${insuranceEnabled?"on":""}'><div class='toggle-knob'></div></div><div class="flex flex-col"><p class='text-[10px] font-bold text-green-800 uppercase leading-tight'>ADICIONAR SEGURO (R$ 9,90 APENAS)</p><p class='text-[8px] text-green-700 font-medium uppercase leading-tight'>Fique isento de reparos de até 300 reais caso o brinquedo seja danificado</p></div></div>
+                    <div class="flex items-center gap-3">
+                        <div class='toggle-switch ${insuranceEnabled?"on":""}'>
+                            <div class='toggle-knob'></div>
+                        </div>
+                        <div class="flex flex-col"><p class='text-[10px] font-bold text-green-800 uppercase leading-tight'>ADICIONAR SEGURO (R$ 9,90 APENAS)</p><p class='text-[8px] text-green-700 font-medium uppercase leading-tight'>Fique isento de reparos de até 300 reais caso o brinquedo seja danificado</p></div>
+                    </div>
                 </div>
                 <div class="p-5 bg-slate-100 rounded-3xl border border-slate-200">
                     <div class="mb-4">${likedLabel('Como conheceu a gente?')}
                         <select onchange="referralSource=this.value;renderForm()" class="w-full p-4 bg-white rounded-xl font-bold text-xs outline-none shadow-inner">
-                            <option value="" ${referralSource ? 'disabled' : ''}>${referralSource || 'SELECIONE'}</option>
+                            <option value="" ${referralSource === '' ? 'selected' : ''}>SELECIONE</option>
+                            <option value="JA SOU CLIENTE" ${referralSource === 'JA SOU CLIENTE' ? 'selected' : ''}>JA SOU CLIENTE</option>
                             <option value="MARKETPLACE" ${referralSource === 'MARKETPLACE' ? 'selected' : ''}>MARKETPLACE</option>
                             <option value="INSTAGRAM" ${referralSource === 'INSTAGRAM' ? 'selected' : ''}>INSTAGRAM</option>
                             <option value="ANUNCIO FACE / INSTA" ${referralSource === 'ANUNCIO FACE / INSTA' ? 'selected' : ''}>ANUNCIO FACE / INSTA</option>
@@ -2080,15 +2104,16 @@
                 const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
                 const deltaX = clientX - startX;
                 
-                // TRAVA TOTAL: Se tentar ir para o passado
-                if (deltaX > 0 && currentYear === actualYear && currentMonth === actualMonth) {
+                // TRAVA TOTAL: Verifica se pode arrastar naquela direção
+                let canSwipeRight = !(currentYear === actualYear && currentMonth === actualMonth); // Proibe passado
+                let canSwipeLeft = !(currentYear === actualYear && currentMonth === 11); // Proibe proximo ano
+
+                if (deltaX > 0 && !canSwipeRight) { // Tentando ir para o passado
                     grid.style.transform = 'translateX(0)';
                     currentX = 0;
                     return;
                 }
-                
-                // TRAVA TOTAL: Se tentar ir além de Dezembro (conforme lógica changeMonth)
-                if (deltaX < 0 && currentYear === actualYear && currentMonth === 11) {
+                if (deltaX < 0 && !canSwipeLeft) { // Tentando ir para o futuro bloqueado
                     grid.style.transform = 'translateX(0)';
                     currentX = 0;
                     return;
@@ -2103,10 +2128,10 @@
                 isDragging = false;
                 
                 if (currentX < -80) {
-                    // Swipe para a esquerda (quer ver o próximo mês) -> dir: 1
+                    // Swipe para a esquerda (quer ver o próximo mês)
                     changeMonth(1);
                 } else if (currentX > 80) {
-                    // Swipe para a direita (quer ver o mês anterior) -> dir: -1
+                    // Swipe para a direita (quer ver o mês anterior)
                     changeMonth(-1);
                 } else {
                     // Retorna à posição original se o arraste foi pequeno
