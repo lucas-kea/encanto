@@ -529,7 +529,7 @@
                                 <h4 class="text-xl font-black text-white Bird leading-tight">
                                     Painel de Agendamento
                                 </h4>
-                                <p class="text-[14px] text-blue-100 leading-relaxed font-medium Bird">
+                                <p class="text-[14px] text-blue-100 Bird leading-relaxed font-medium Bird">
                                     Quer confirmar se a sua festa está agendada corretamente? Valide todos os itens e horários agora mesmo!
                                 </p>
                             </div>
@@ -1014,9 +1014,9 @@
         // --- CONFIGURAÇÃO DATAS INDISPONÍVEIS (MANUTENÇÃO) ---
         const DATAS_INDISPONIVEIS = ["02/02/2026", "03/02/2026", "04/02/2026"]; 
 
-        // --- CONFIGURAÇÃO DATAS ATÍPICAS (ENTREGA ANTECIPADA) ---
+        // --- CONFIGURAÇÃO DATAS ATÍPICAS (ENTREGA ANTECIPADA / FLEXÍVEL) ---
         const DATAS_ATIPICAS = [
-            "11/02/2026", "12/02/2026",
+            "11/02/2026", "12/02/2026", "19/02/2026", "20/02/2026",
             "27/02/2026", "28/02/2026",
             "20/03/2026", "21/03/2026",
             "24/04/2026", "25/04/2026",
@@ -1078,19 +1078,18 @@
         };
 
         const TOYS_DB = [
-            { id: 1, name: "Pula Pula Pequeno", qty: 1, price: 170, category: "pula", age: "14", size: "2.44m", power: false, motorForte: false, relevance: 1, photo: "https://www.dropbox.com/scl/fi/el5jqaoyod5ukwwzaxihx/camap.webp?rlkey=y1zvmsi9cdtsbh3gtb3091a4x&st=bpwuda61&raw=1" },
+            { id: 1, name: "Pula Pula Pequeno", qty: 2, price: 170, category: "pula", age: "14", size: "2.44m", power: false, motorForte: false, relevance: 1, photo: "https://www.dropbox.com/scl/fi/el5jqaoyod5ukwwzaxihx/camap.webp?rlkey=y1zvmsi9cdtsbh3gtb3091a4x&st=bpwuda61&raw=1" },
             { id: 2, name: "Pula Pula Médio", qty: 3, price: 190, category: "pula", age: "14", size: "3.05m", power: false, motorForte: false, relevance: 2, photo: "https://www.dropbox.com/scl/fi/2xwplyqsnbhndgwde2scg/camam.webp?rlkey=41hiqdgiwnxzvmllf0owgckx8&st=g35vk0oj&raw=1" },
-            { id: 3, name: "Piscina de Bolinhas", qty: 2, price: 160, category: "piscina", age: "14", size: "1.5m ou 2m", power: false, motorForte: false, relevance: 3, photo: "https://www.dropbox.com/scl/fi/pr90on1ea81nq30lzpxr8/piscina.webp?rlkey=mp5a9b4yfk5v0tyqt75g0ij2j&st=gp4p2onk&raw=1" },
-            { id: 4, name: "Tobogã Médio", qty: 1, price: 400, category: "toboga", age: "14", size: "3x5m", power: true, motorForte: true, relevance: 4, photo: "https://www.dropbox.com/scl/fi/a673dgh39ak497b6h9e2t/tobogam.webp?rlkey=byhi3k1tklmum2sfq9fyor2rb&st=rz9ming4&raw=1" },
-            { id: 5, name: "Área Baby", qty: 1, price: 120, category: "baby", age: "6", size: "Padrão", power: false, motorForte: false, relevance: 5, photo: "https://www.dropbox.com/scl/fi/fttgp8j0mjdhw22rwgr3i/areababy.webp?rlkey=028cvlshetwv4w7dm3aydbzwj&st=7kmq57d2&raw=1" },
-            { id: 6, name: "Mini Baby", qty: 1, price: 220, category: "baby", age: "6", size: "Padrão", power: true, motorForte: false, relevance: 6, photo: "https://www.dropbox.com/scl/fi/fxeu36d83jxv2jpwi2c1n/mini-babyyy.webp?rlkey=kecnwpquq7415hlrwf3j1man4&st=jsdhlky6&raw=1" },
-            { id: 7, name: "Castelinho", qty: 1, price: 220, category: "baby", age: "14", size: "3m", power: true, motorForte: false, relevance: 7, photo: "https://www.dropbox.com/scl/fi/zn1npqidyhre44o7v1nwr/castelinho.webp?rlkey=8765usqe385cii48inuz99e5j&st=5q2xu57k&raw=1" },
-            { id: 8, name: "Futebol de Sabão (MANUTENÇÃO)", qty: 0, price: 600, category: "especial", age: "14", size: "4x8", power: true, motorForte: true, relevance: 8, photo: "https://www.dropbox.com/scl/fi/iceod32yym2tttljajh8e/futebol.webp?rlkey=qttzkj74om9j8uyov770cvkdn&st=10wsk8x8&raw=1" },
-            { id: 14, name: "Castelo com Bolinhas", qty: 1, price: 400, category: "especial", age: "14", size: "PADRÃO", power: true, motorForte: true, relevance: 9, photo: "https://www.dropbox.com/scl/fi/zmarb00ru1nyhjqch5di9/castelobol.webp?rlkey=e61r8oz1vig47qbye891hpl5l&st=aoe55hbi&raw=1" },
+            { id: 15, name: "Pula Pula Grande", qty: 1, price: 260, category: "pula", age: "14", size: "4.27M", power: false, motorForte: false, relevance: 3, photo: "https://www.dropbox.com/scl/fi/p8cefa8upn9pnqkqdud6b/camag.webp?rlkey=wqcxwv9mcefoenq4frvnxc2jv&st=o1bmmpv5&raw=1" },
+            { id: 3, name: "Piscina de Bolinhas", qty: 2, price: 190, category: "piscina", age: "14", size: "1.5m ou 2m", power: false, motorForte: false, relevance: 4, photo: "https://www.dropbox.com/scl/fi/pr90on1ea81nq30lzpxr8/piscina.webp?rlkey=mp5a9b4yfk5v0tyqt75g0ij2j&st=gp4p2onk&raw=1" },
+            { id: 4, name: "Escorrega Premium", qty: 1, price: 400, category: "toboga", age: "14", size: "3x5m", power: true, motorForte: true, relevance: 5, photo: "https://www.dropbox.com/scl/fi/a673dgh39ak497b6h9e2t/tobogam.webp?rlkey=byhi3k1tklmum2sfq9fyor2rb&st=rz9ming4&raw=1" },
+            { id: 5, name: "Área Baby", qty: 1, price: 120, category: "baby", age: "6", size: "Padrão", power: false, motorForte: false, relevance: 6, photo: "https://www.dropbox.com/scl/fi/fttgp8j0mjdhw22rwgr3i/areababy.webp?rlkey=028cvlshetwv4w7dm3aydbzwj&st=7kmq57d2&raw=1" },
+            { id: 6, name: "Mini Piscina de Bolinhas", qty: 1, price: 190, category: "baby", age: "6", size: "Padrão", power: true, motorForte: false, relevance: 7, photo: "https://www.dropbox.com/scl/fi/fxeu36d83jxv2jpwi2c1n/mini-babyyy.webp?rlkey=kecnwpquq7415hlrwf3j1man4&st=jsdhlky6&raw=1" },
+            { id: 7, name: "Castelinho Pula Pula", qty: 1, price: 220, category: "baby", age: "14", size: "3m", power: true, motorForte: false, relevance: 8, photo: "https://www.dropbox.com/scl/fi/zn1npqidyhre44o7v1nwr/castelinho.webp?rlkey=8765usqe385cii48inuz99e5j&st=5q2xu57k&raw=1" },
             { id: 9, name: "Escorrega com Bolinhas", qty: 1, price: 400, category: "especial", age: "14", size: "Padrão", power: true, motorForte: true, relevance: 10, photo: "https://www.dropbox.com/scl/fi/vqjds36sx0wvhjuxurc4l/escorregobol.webp?rlkey=qxk7tzac8xod1fdzrwr8u508m&st=59u3k5x9&raw=1" },
-            { id: 10, name: "Airhockey", qty: 1, price: 200, category: "mesa_jogo", age: "L", size: "Padrão", power: true, motorForte: false, relevance: 11, photo: "https://www.dropbox.com/scl/fi/ajfbj633cif6lpuqblzrw/aero.webp?rlkey=hw3hlemgizrnj4ta2fkrcs1ep&st=6it80vyn&raw=1" },
-            { id: 11, name: "Pebolim", qty: 1, price: 200, category: "mesa_jogo", age: "L", size: "Padrão", power: false, motorForte: false, relevance: 12, photo: "https://www.dropbox.com/scl/fi/bx7605s0ls33k02y74t4j/pebolim.webp?rlkey=409zdmagm2yj6ao6g4mfhfquj&st=j6elwlyz&raw=1" },
-            { id: 12, name: "Pingpong", qty: 1, price: 200, category: "mesa_jogo", age: "L", size: "Padrão", power: false, motorForte: false, relevance: 13, photo: "https://www.dropbox.com/scl/fi/3ulqvdy513l94frbqa99p/pingpong.webp?rlkey=zwzys2yjemczin4ebi3c22jq8&st=w8pcvikq&raw=1" },
+            { id: 10, name: "Airhockey", qty: 1, price: 220, category: "mesa_jogo", age: "L", size: "Padrão", power: true, motorForte: false, relevance: 11, photo: "https://www.dropbox.com/scl/fi/ajfbj633cif6lpuqblzrw/aero.webp?rlkey=hw3hlemgizrnj4ta2fkrcs1ep&st=6it80vyn&raw=1" },
+            { id: 11, name: "Pebolim", qty: 1, price: 220, category: "mesa_jogo", age: "L", size: "Padrão", power: false, motorForte: false, relevance: 12, photo: "https://www.dropbox.com/scl/fi/bx7605s0ls33k02y74t4j/pebolim.webp?rlkey=409zdmagm2yj6ao6g4mfhfquj&st=j6elwlyz&raw=1" },
+            { id: 12, name: "Pingpong", qty: 1, price: 220, category: "mesa_jogo", age: "L", size: "Padrão", power: false, motorForte: false, relevance: 13, photo: "https://www.dropbox.com/scl/fi/3ulqvdy513l94frbqa99p/pingpong.webp?rlkey=zwzys2yjemczin4ebi3c22jq8&st=w8pcvikq&raw=1" },
             { id: 13, name: "Mesas", qty: 4, price: 15, category: "mesa_comer", age: "L", size: "mesa c/ 4 cadeiras", power: false, motorForte: false, relevance: 14, photo: "https://www.dropbox.com/scl/fi/zpcyj8a466fhms7vqwcr6/mesas.webp?rlkey=8ca2hbxbnvxbftagrprq7scj7&st=bb24hbti&raw=1" }
         ];
 
@@ -1363,7 +1362,7 @@
                     "O GPS da Encanto Festas já conhece tantos atalhos que ele deveria ganhar um prêmio de Guia Turístico da cidade!",
                     "A gente já decorou o nome de metade dos cachorros da cidade de tanto visitar quintais para montar diversão! 🐶",
                     "A gente sabe que o trabalho foi bem feito quando a criança chora... porque não quer que a gente leve o brinquedo embora!",
-                    "A gente já encontrou de tudo dentro de uma piscina de bolinhas: de um sapato perdido até um controle remoto que a família procurava há meses!",
+                    "A gente já encontrou de tudo dentro de uma piscina de bolinhas: de um sabato perdido até um controle remoto que a família procurava há meses!",
                     "Nossa equipe descobriu uma nova lei da física: o tamanho de um inflável triplica na hora de guardar e o espaço do carro diminui pela metade!",
                     "A Encanto Festas já percorreu quilômetros suficientes para ir até a Lua... mas a gente preferiu ficar aqui montando brinquedos."
                 ];
@@ -1463,11 +1462,17 @@
             const cartHasMotorGrande = cart.some(c => motorGrandeIds.includes(c.id));
             const selectedMotorId = cart.find(c => motorGrandeIds.includes(c.id))?.id;
             
-            // Lógica de bloqueio específico: IDs 4, 6, 9 e 14 disponíveis apenas a partir de 13/02/2026
+            // Lógica de bloqueio específico e novas regras
             const dayNum = selectedDate.getDate();
             const monthNum = selectedDate.getMonth();
             const yearNum = selectedDate.getFullYear();
-            const isSpecificBlockedDate = (yearNum === 2026 && monthNum === 1 && dayNum < 13); // Fevereiro é mês 1
+            
+            // Regra original de bloqueio Fevereiro
+            const isSpecificBlockedDate = (yearNum === 2026 && monthNum === 1 && dayNum < 13); // Antes de 13/02
+            // Regra Escorrega (Agosto)
+            const isAugustBlocked = (yearNum < 2026 || (yearNum === 2026 && monthNum < 7)); 
+            // Regra Pula Grande (Disponível apenas APÓS 20/02)
+            const isPulaGrandeBlocked = (yearNum === 2026 && monthNum === 1 && dayNum <= 20);
 
             let toys = [...TOYS_DB].map(toy => ({ ...toy, availableQty: getToyStockForDate(toy.id, dateStr) }));
             const ageF = document.getElementById('ageFilter').value;
@@ -1481,11 +1486,14 @@
             toys.forEach(toy => {
                 const inCart = cart.find(c => c.id === toy.id) || { qty: 0 };
                 
-                // Bloqueio se estoque zero OU se motor grande conflitar OU se for o bloqueio específico solicitado
-                const isBlockedByDate = isSpecificBlockedDate && [4, 6, 9, 14].includes(toy.id);
+                // Bloqueios Consolidados
+                const isBlockedByDate = isSpecificBlockedDate && [4, 6].includes(toy.id);
+                const isEscorregaBlocked = toy.id === 9 && isAugustBlocked;
+                const isPulaGrandeDateBlocked = toy.id === 15 && isPulaGrandeBlocked;
+
                 let isBlocked = (toy.availableQty <= 0 && inCart.qty === 0) || 
                                 (toy.motorForte && (isMotorGrandeBooked || (cartHasMotorGrande && toy.id !== selectedMotorId))) ||
-                                isBlockedByDate;
+                                isBlockedByDate || isEscorregaBlocked || isPulaGrandeDateBlocked;
 
                 let price = (toy.category === 'mesa_comer') ? toy.price : toy.price * mult;
                 
@@ -1556,13 +1564,45 @@
 
         function updateSummary() {
             let totalBrinquedos = 0;
-            let fullPriceItemsSum = 0; 
             let seasonalOriginalSum = 0; 
             const pl = getPriceLevel(selectedDate);
             let plMult = pl==='$' ? 0.8 : (pl==='$$$' ? 1.2 : (pl==='$$$$' ? 1.6 : 1.0));
             let countCombo = 0;
+            let comboText = "";
+            let specificComboSavings = 0;
 
             const isMEUANO24 = couponCode === "MEUANO24" && couponIsValid;
+
+            // Função auxiliar para verificar presença de combo no carrinho (apenas quantidade 1)
+            const hasCombo = (ids) => ids.every(id => cart.some(c => c.id === id && c.qty >= 1));
+
+            // Lógica de Match Único para Combos
+            let comboApplied = false;
+
+            // 1. Escorrega Premium (4) + Pula Pula Médio (2) -> 490 (Economia 100)
+            if(!comboApplied && hasCombo([4, 2])) { 
+                specificComboSavings = 100; 
+                comboText = "COMBO AVENTURA ATIVADO!"; 
+                comboApplied = true;
+            }
+            // 2. Mini Piscina de Bolinhas (6) + Area Baby (5) -> 250 (Economia 60)
+            if(!comboApplied && hasCombo([5, 6])) { 
+                specificComboSavings = 60; 
+                comboText = "COMBO BABY ATIVADO!"; 
+                comboApplied = true;
+            }
+            // 3. Piscina de Bolinhas (3) + Castelinho Pula Pula (7) -> 360 (Economia 50)
+            if(!comboApplied && hasCombo([3, 7])) { 
+                specificComboSavings = 50; 
+                comboText = "COMBO DIVERSÃO ATIVADO!"; 
+                comboApplied = true;
+            }
+            // 4. Pebolim (11) + Aerohockey (10) -> 360 (Economia 80)
+            if(!comboApplied && hasCombo([11, 10])) { 
+                specificComboSavings = 80; 
+                comboText = "COMBO JOGOS ATIVADO!"; 
+                comboApplied = true;
+            }
 
             cart.forEach(i => {
                 let currentNormalPrice = (i.category === 'mesa_comer') ? i.price : i.price * plMult;
@@ -1573,24 +1613,26 @@
                 
                 if (isMEUANO24) {
                     const prices2024 = {
-                        1: 120, 2: 150, 3: 150, 4: 300, 5: 100, 6: 150, 7: 150, 
-                        8: 400, 9: 300, 10: 150, 11: 150, 12: 150, 13: 15, 14: 350
+                        1: 120, 2: 150, 15: 200, 3: 150, 4: 300, 5: 100, 6: 150, 7: 150, 
+                        9: 300, 10: 150, 11: 150, 12: 150, 13: 15
                     };
                     if (prices2024[i.id]) priceItem = prices2024[i.id];
                 }
 
                 totalBrinquedos += priceItem * i.qty;
-                fullPriceItemsSum += i.price * i.qty;
                 if (i.category !== 'mesa_comer') countCombo += i.qty;
             });
 
-            let comboFactorNormal = countCombo >= 2 ? (pl === '$' ? 0.95 : 0.90) : 1.0;
-            let totalNormalSemCupom = seasonalOriginalSum * comboFactorNormal;
+            // Aplica os combos específicos no total final antes de outros multiplicadores
+            totalBrinquedos -= specificComboSavings;
 
-            let comboDiscountFactor = (countCombo >= 2 && !isMEUANO24) ? (pl === '$' ? 0.95 : 0.90) : 1.0;
+            let comboDiscountFactor = (countCombo >= 2 && !isMEUANO24 && !comboApplied) ? (pl === '$' ? 0.95 : 0.90) : 1.0;
             const badge = document.getElementById('discountBadge');
             
-            if (countCombo >= 2 && !isMEUANO24) {
+            if (specificComboSavings > 0) {
+                badge.innerText = `${comboText} - R$ ${specificComboSavings} OFF`;
+                badge.classList.remove('hidden');
+            } else if (countCombo >= 2 && !isMEUANO24) {
                 const perc = pl === '$' ? 5 : 10;
                 badge.innerText = `DESCONTO DE ${perc}% APLICADO!`;
                 badge.classList.remove('hidden');
@@ -1629,7 +1671,7 @@
                 else if (["UIOU321", "3U2O1IU", "U3O1I2U", "21O3OI3", "12O3123", "OU1IO33", "13O2I3U", "0132139", "MEGAPROMO30"].includes(couponCode)) totalFinal *= 0.70;
             }
 
-            let referencePrice = (totalNormalSemCupom * multDaysFactor) + baseExtras + (selectedBairro ? BAIRROS[selectedBairro] : 0) + (insuranceEnabled ? 9.90 : 0);
+            let referencePrice = (seasonalOriginalSum * multDaysFactor) + baseExtras + (selectedBairro ? BAIRROS[selectedBairro] : 0) + (insuranceEnabled ? 9.90 : 0);
             const savings = Math.max(0, referencePrice - totalFinal);
 
             document.getElementById('totalValueText').innerText = "R$ " + totalFinal.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
@@ -1653,7 +1695,7 @@
                     let itemsHtml = cart.map(i => {
                         let p = i.price;
                         if (isMEUANO24) {
-                             const prices2024 = {1:120,2:150,3:150,4:300,5:100,6:150,7:150,8:400,9:300,10:150,11:150,12:150,13:15,14:350};
+                             const prices2024 = {1:120,2:150,15:200,3:150,4:300,5:100,6:150,7:150,9:300,10:150,11:150,12:150,13:15};
                              p = prices2024[i.id] || p;
                         } else {
                              const pl = getPriceLevel(selectedDate);
@@ -1874,7 +1916,7 @@
                 }
             }
             if (currentStep === 'details') {
-                const needsPower = cart.filter(t=>t.power || t.category === 'especial' || t.id === 10);
+                const needsPower = cart.filter(t=>t.power || t.id === 10);
                 if (needsPower.length > 0) {
                     const filled = Object.values(socketDistances).some(d => d && d.trim() !== "");
                     if (!filled) { showToast("Informe a distância da tomada para pelo menos um brinquedo"); return; }
@@ -1922,7 +1964,7 @@
                     if(d===3) pct = "23% OFF";
                     if(d===4) pct = "30% OFF";
                     if(d===5) pct = "36% OFF";
-                    return `<button onclick="extraDays=${d};renderForm();updateSummary()" class='flex-1 py-3 rounded-xl font-bold border-2 ${extraDays===d?"border-blue-600 bg-blue-50 text-blue-800":"border-slate-100 text-slate-800"} flex flex-col items-center'><span class='text-lg'>${d}d</span>${pct ? `<span class="text-[8px] text-green-600 font-bold">${pct}</span>`:""}</button>`;
+                    return `<button onclick="extraDays=${d};renderForm();updateSummary()" class='flex-1 Bird py-3 rounded-xl font-bold border-2 ${extraDays===d?"border-blue-600 bg-blue-50 text-blue-800":"border-slate-100 text-slate-800"} flex flex-col items-center'><span class='text-lg'>${d}d</span>${pct ? `<span class="text-[8px] text-green-600 font-bold">${pct}</span>`:""}</button>`;
                 }).join('')}</div>
                 <div class='flex gap-3 mb-2'>
                     <div class='flex-1'>${likedLabel('Início')}<select onchange="startTime=this.value;renderForm();updateSummary()" class="w-full p-4 bg-slate-50 rounded-2xl font-bold outline-none">${hours.map(h => `<option value="${h}" ${startTime===h?'selected':''}>${h}</option>`).join('')}</select></div>
@@ -1932,17 +1974,17 @@
                 <div class='p-5 bg-blue-50 rounded-2xl mb-4 flex justify-between cursor-pointer' onclick='deliveryPreviousDay=!deliveryPreviousDay;renderForm()'><div class="flex items-center gap-3"><div class='toggle-switch ${deliveryPreviousDay?"on":""}'><div class='toggle-knob'></div></div><div class="flex flex-col"><p class='text-[10px] font-bold text-blue-800 uppercase leading-tight'>ENTREGAR 1 DIA ANTES</p><p class='text-[8px] text-blue-600 font-medium uppercase leading-tight'>Não é certeza mas uma possibilidade</p></div></div></div>${safetyMsg}<div class="h-40"></div>`;
             }
             else if (currentStep === 'details') {
-                const hasPiscina = cart.some(i => i.id === 3 || i.id === 9 || i.id === 14);
+                const hasPiscina = cart.some(i => i.id === 3 || i.id === 9);
                 container.innerHTML = `${h('Preferências')}<div class='p-6 bg-slate-50 rounded-3xl mb-8'>
                 ${hasPiscina ? `<p class='text-[11px] font-bold text-[#003399] mb-4 uppercase text-center'>A piscina fica coberta?</p><div class='flex gap-2 mb-10'>${["sim","não"].map(o => `<button onclick="piscinaCovered='${o}';renderForm()" class='flex-1 py-2 rounded-xl border-2 ${piscinaCovered===o?"border-blue-600 bg-blue-600 text-white":"bg-white text-slate-800 font-bold"}'>${o.toUpperCase()}</button>`).join('')}</div>` : ''}
                 <p class='text-[11px] font-bold text-[#003399] mb-1 uppercase text-center'>Monitor? (R$ 30,00 por hora)</p>
                 <div class='flex gap-2 mb-4'>${[0,1,2].map(m => `<button onclick="monitorsCount=${m};renderForm();updateSummary()" class='flex-1 Bird py-3 rounded-xl border-2 ${monitorsCount===m?"border-blue-600 bg-blue-600 text-white":"bg-white font-bold"}'>${m===0?'NÃO':m+' MON.'}</button>`).join('')}</div>
                 ${monitorsCount > 0 ? `<div class="mt-4">${likedLabel('Quantas horas?')}<select onchange="monitorHours=parseInt(this.value);updateSummary()" class="w-full p-4 bg-white rounded-xl font-bold outline-none Bird">${[2,3,4,5,6,7,8].map(h => `<option value="${h}" ${monitorHours===h?'selected':''}>${h} HORAS</option>`).join('')}</select></div>` : ''}
                 </div>
-                ${cart.filter(t=>t.power || t.category === 'especial' || t.id === 10).length > 0 ? `
+                ${cart.filter(t=>t.power || t.id === 10).length > 0 ? `
                     <div class='mb-8'>
                         <p class='text-[11px] font-bold text-[#003399] mb-4 uppercase text-center'>Qual a distancia da tomada mais próxima?</p>
-                        ${cart.filter(t=>t.power || t.category === 'especial' || t.id === 10).map(t => `<div class="mb-4 bg-white p-5 rounded-2xl border border-slate-100 flex items-center justify-between"><p class="text-[10px] Bird font-bold text-[#003399] uppercase mr-4">${t.name}</p><div class="flex items-center gap-2"><input type="tel" maxlength="2" placeholder="0" value="${socketDistances[t.id] || ''}" oninput="this.value=this.value.replace(/\\D/g,''); socketDistances[${t.id}]=this.value" class="w-12 p-3 bg-slate-50 rounded-xl outline-none font-bold text-sm text-center border-2 focus:border-blue-500 Bird"><span class="text-[10px] font-bold text-slate-400">metros</span></div></div>`).join('')}
+                        ${cart.filter(t=>t.power || t.id === 10).map(t => `<div class="mb-4 bg-white p-5 rounded-2xl border border-slate-100 flex items-center justify-between"><p class="text-[10px] Bird font-bold text-[#003399] uppercase mr-4">${t.name}</p><div class="flex items-center gap-2"><input type="tel" maxlength="2" placeholder="0" value="${socketDistances[t.id] || ''}" oninput="this.value=this.value.replace(/\\D/g,''); socketDistances[${t.id}]=this.value" class="w-12 p-3 bg-slate-50 rounded-xl outline-none font-bold text-sm text-center border-2 focus:border-blue-500 Bird"><span class="text-[10px] font-bold text-slate-400">metros</span></div></div>`).join('')}
                     </div>` : ''}${safetyMsg}<div class="h-40"></div>`;
             }
             else if (currentStep === 'summary') {
