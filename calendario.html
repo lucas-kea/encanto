@@ -743,7 +743,7 @@
                 } else if (checkDate.getTime() === tomorrow.getTime()) {
                     dateBadgeHtml = `<span class="text-[10px] Bird font-black text-[#1e3a8a] Bird leading-none uppercase text-center">AMA<br>NHÃ</span>`;
                 } else {
-                    dateBadgeHtml = `<span class="text-[10px] Bird uppercase font-bold opacity-70 Bird leading-none text-[#1e3a8a]/80">${date.toLocaleDateString('pt-PT', { month: 'short' }).replace('.','')}</span><span class="Bird text-xl font-bold brand-font leading-none text-[#1e3a8a]">${date.getDate()}</span>`;
+                    dateBadgeHtml = `<span class="text-[10px] Bird uppercase font-bold opacity-70 Bird leading-none text-[#1e3a8a]/80">${date.toLocaleDateString('pt-PT', { month: 'short' }).replace('.','')}</span><span class="Bird text-xl font-bold brand-font Bird leading-none text-[#1e3a8a] Bird">${date.getDate()}</span>`;
                 }
                 const itensRaw = item["ITENS LOCADOS"] || 'Equipamentos Diversos';
                 const itensList = itensRaw.split(',').map(i => i.trim()).join('<br>');
@@ -1012,7 +1012,7 @@
         const TELEGRAM_CHAT_ID = "6791831671"; 
         
         // --- CONFIGURAÇÃO DATAS INDISPONÍVEIS (MANUTENÇÃO) ---
-        const DATAS_INDISPONIVEIS = ["02/02/2026", "03/02/2026", "04/02/2026"]; 
+        const DATAS_INDISPONIVEIS = ["02/02/2026", "03/02/2026", "04/02/2026", "14/03/2026"]; 
 
         // --- CONFIGURAÇÃO DATAS ATÍPICAS (ENTREGA ANTECIPADA / FLEXÍVEL) ---
         const DATAS_ATIPICAS = [
@@ -1080,17 +1080,15 @@
         const TOYS_DB = [
             { id: 1, name: "Pula Pula Pequeno", qty: 2, price: 170, category: "pula", age: "14", size: "2.44m", power: false, motorForte: false, relevance: 1, photo: "https://www.dropbox.com/scl/fi/el5jqaoyod5ukwwzaxihx/camap.webp?rlkey=y1zvmsi9cdtsbh3gtb3091a4x&st=bpwuda61&raw=1" },
             { id: 2, name: "Pula Pula Médio", qty: 3, price: 190, category: "pula", age: "14", size: "3.05m", power: false, motorForte: false, relevance: 2, photo: "https://www.dropbox.com/scl/fi/2xwplyqsnbhndgwde2scg/camam.webp?rlkey=41hiqdgiwnxzvmllf0owgckx8&st=g35vk0oj&raw=1" },
-            { id: 15, name: "Pula Pula Grande", qty: 1, price: 260, category: "pula", age: "14", size: "4.27M", power: false, motorForte: false, relevance: 3, photo: "https://www.dropbox.com/scl/fi/p8cefa8upn9pnqkqdud6b/camag.webp?rlkey=wqcxwv9mcefoenq4frvnxc2jv&st=o1bmmpv5&raw=1" },
             { id: 3, name: "Piscina de Bolinhas", qty: 2, price: 190, category: "piscina", age: "14", size: "1.5m ou 2m", power: false, motorForte: false, relevance: 4, photo: "https://www.dropbox.com/scl/fi/pr90on1ea81nq30lzpxr8/piscina.webp?rlkey=mp5a9b4yfk5v0tyqt75g0ij2j&st=gp4p2onk&raw=1" },
             { id: 4, name: "Escorrega Premium", qty: 1, price: 400, category: "toboga", age: "14", size: "3x5m", power: true, motorForte: true, relevance: 5, photo: "https://www.dropbox.com/scl/fi/a673dgh39ak497b6h9e2t/tobogam.webp?rlkey=byhi3k1tklmum2sfq9fyor2rb&st=rz9ming4&raw=1" },
             { id: 5, name: "Área Baby", qty: 1, price: 120, category: "baby", age: "6", size: "Padrão", power: false, motorForte: false, relevance: 6, photo: "https://www.dropbox.com/scl/fi/fttgp8j0mjdhw22rwgr3i/areababy.webp?rlkey=028cvlshetwv4w7dm3aydbzwj&st=7kmq57d2&raw=1" },
             { id: 6, name: "Mini Piscina de Bolinhas", qty: 1, price: 190, category: "baby", age: "6", size: "Padrão", power: true, motorForte: false, relevance: 7, photo: "https://www.dropbox.com/scl/fi/fxeu36d83jxv2jpwi2c1n/mini-babyyy.webp?rlkey=kecnwpquq7415hlrwf3j1man4&st=jsdhlky6&raw=1" },
             { id: 7, name: "Castelinho Pula Pula", qty: 1, price: 220, category: "baby", age: "14", size: "3m", power: true, motorForte: false, relevance: 8, photo: "https://www.dropbox.com/scl/fi/zn1npqidyhre44o7v1nwr/castelinho.webp?rlkey=8765usqe385cii48inuz99e5j&st=5q2xu57k&raw=1" },
-            { id: 9, name: "Escorrega com Bolinhas", qty: 1, price: 400, category: "especial", age: "14", size: "Padrão", power: true, motorForte: true, relevance: 10, photo: "https://www.dropbox.com/scl/fi/vqjds36sx0wvhjuxurc4l/escorregobol.webp?rlkey=qxk7tzac8xod1fdzrwr8u508m&st=59u3k5x9&raw=1" },
-            { id: 10, name: "Airhockey", qty: 1, price: 220, category: "mesa_jogo", age: "L", size: "Padrão", power: true, motorForte: false, relevance: 11, photo: "https://www.dropbox.com/scl/fi/ajfbj633cif6lpuqblzrw/aero.webp?rlkey=hw3hlemgizrnj4ta2fkrcs1ep&st=6it80vyn&raw=1" },
-            { id: 11, name: "Pebolim", qty: 1, price: 220, category: "mesa_jogo", age: "L", size: "Padrão", power: false, motorForte: false, relevance: 12, photo: "https://www.dropbox.com/scl/fi/bx7605s0ls33k02y74t4j/pebolim.webp?rlkey=409zdmagm2yj6ao6g4mfhfquj&st=j6elwlyz&raw=1" },
-            { id: 12, name: "Pingpong", qty: 1, price: 220, category: "mesa_jogo", age: "L", size: "Padrão", power: false, motorForte: false, relevance: 13, photo: "https://www.dropbox.com/scl/fi/3ulqvdy513l94frbqa99p/pingpong.webp?rlkey=zwzys2yjemczin4ebi3c22jq8&st=w8pcvikq&raw=1" },
-            { id: 13, name: "Mesas", qty: 4, price: 15, category: "mesa_comer", age: "L", size: "mesa c/ 4 cadeiras", power: false, motorForte: false, relevance: 14, photo: "https://www.dropbox.com/scl/fi/zpcyj8a466fhms7vqwcr6/mesas.webp?rlkey=8ca2hbxbnvxbftagrprq7scj7&st=bb24hbti&raw=1" }
+            { id: 9, name: "Escorrega com Bolinhas", qty: 1, price: 400, category: "especial", age: "14", size: "Padrão", power: true, motorForte: true, relevance: 8, photo: "https://www.dropbox.com/scl/fi/vqjds36sx0wvhjuxurc4l/escorregobol.webp?rlkey=qxk7tzac8xod1fdzrwr8u508m&st=59u3k5x9&raw=1" },
+            { id: 10, name: "Airhockey", qty: 1, price: 220, category: "mesa_jogo", age: "L", size: "Padrão", power: true, motorForte: false, relevance: 9, photo: "https://www.dropbox.com/scl/fi/ajfbj633cif6lpuqblzrw/aero.webp?rlkey=hw3hlemgizrnj4ta2fkrcs1ep&st=6it80vyn&raw=1" },
+            { id: 11, name: "Pebolim", qty: 1, price: 220, category: "mesa_jogo", age: "L", size: "Padrão", power: false, motorForte: false, relevance: 10, photo: "https://www.dropbox.com/scl/fi/bx7605s0ls33k02y74t4j/pebolim.webp?rlkey=409zdmagm2yj6ao6g4mfhfquj&st=j6elwlyz&raw=1" },
+            { id: 13, name: "Mesas", qty: 4, price: 15, category: "mesa_comer", age: "L", size: "mesa c/ 4 cadeiras", power: false, motorForte: false, relevance: 11, photo: "https://www.dropbox.com/scl/fi/zpcyj8a466fhms7vqwcr6/mesas.webp?rlkey=8ca2hbxbnvxbftagrprq7scj7&st=bb24hbti&raw=1" }
         ];
 
         const totalEstoqueGlobal = TOYS_DB.reduce((acc, toy) => acc + toy.qty, 0);
@@ -1111,6 +1109,7 @@
             document.getElementById('summaryFooter').style.display = 'none';
             initDragToClose(); // Inicializa o drag handle
             initCalendarSwipe(); // Inicializa o swipe lateral com trava
+            initKeyboardNavigation(); // Inicializa navegação profissional com Enter
         };
 
         async function loadStreets() {
@@ -1170,7 +1169,6 @@
 
         function getDayColorStyle(date) {
             const dateStr = normalizeDate(date);
-            // Mantém a cor igual aos outros dias mesmo se for data indisponível
             const agendados = globalAgendamentos[dateStr] || {};
             let locados = 0;
             Object.values(agendados).forEach(v => locados += v);
@@ -1192,7 +1190,6 @@
             label.innerText = `${["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"][currentMonth]} ${currentYear}`;
             grid.innerHTML = '';
 
-            // Cabeçalho dos dias da semana
             const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'];
             weekDays.forEach(day => {
                 const dayHeader = document.createElement('div');
@@ -1206,7 +1203,6 @@
             const actualMonth = today.getMonth();
             const actualYear = today.getFullYear();
 
-            // Lógica de desativar botões
             if (currentYear === actualYear && currentMonth === actualMonth) {
                 prevBtn.style.backgroundColor = '#E2E8F0';
                 prevBtn.style.color = '#94A3B8';
@@ -1240,7 +1236,6 @@
                 const dateStr = normalizeDate(date);
                 let iconHtml = "";
                 
-                // Exibe ícones com tamanho reduzido discretamente
                 if (!isPast) {
                     if (DATAS_INDISPONIVEIS.includes(dateStr)) {
                         iconHtml = '<span class="text-[10px] Bird opacity-90 ml-0.5" style="display: inline-block;">❌</span>';
@@ -1268,8 +1263,6 @@
 
         function selectDate(date) {
             const dateStr = normalizeDate(date);
-            
-            // 1. Verificação de Manutenção (Bloqueio Total)
             if (DATAS_INDISPONIVEIS.includes(dateStr)) {
                 const modal = document.createElement('div');
                 modal.className = "fixed inset-0 bg-black/60 z-[500] flex items-center justify-center p-6";
@@ -1288,7 +1281,6 @@
                 return;
             }
 
-            // 2. Verificação de Data Atípica (Aviso de Entrega Antecipada)
             if (DATAS_ATIPICAS.includes(dateStr)) {
                 const modal = document.createElement('div');
                 modal.className = "fixed inset-0 bg-black/60 z-[500] flex items-center justify-center p-6";
@@ -1306,7 +1298,6 @@
                         <button onclick="this.parentElement.parentElement.remove()" class="w-full btn-primary py-4 rounded-xl uppercase font-bold Bird shadow-lg active:scale-95 transition-all">ESTOU CIENTE, CONTINUAR</button>
                     </div>`;
                 document.body.appendChild(modal);
-                // Não retorna, deixa o fluxo seguir para a seleção de brinquedos
             }
 
             const today = new Date(); today.setHours(0,0,0,0);
@@ -1325,7 +1316,6 @@
             const plLabel = document.getElementById('priceLevelLabel');
             const filterBar = document.getElementById('toyFilterBar');
             
-            // Gerencia espaçamento da barra de filtros baseado no texto de preço
             if (filterBar) {
                 if (pl === '$$') {
                     plLabel.innerHTML = '';
@@ -1335,7 +1325,6 @@
                     if (pl === '$') {
                         plLabel.innerHTML = `<span class="text-green-600 font-bold">Data pouco requisitada</span><br><span class="text-[10px] text-green-500 font-bold uppercase Bird Bird Bird Bird">PREÇOS MAIS BAIXO QUE O NORMAL</span>`;
                     } else if (pl === '$$$' || pl === '$$$$') {
-                        // Unificado para o novo texto conforme pedido, sem títulos extras
                         plLabel.innerHTML = `<span class="text-[10px] text-orange-500 font-bold uppercase Bird Bird Bird Bird">PREÇOS AJUSTADOS DEVIDO ALTA PROCURA NESTA DATA</span>`;
                     }
                 }
@@ -1416,13 +1405,11 @@
             if (nextM < 0) { nextM = 11; nextY--; }
             if (nextM > 11) { nextM = 0; nextY++; }
             
-            // Bloqueio de mudança de mês
             if (nextY < actualYear || (nextY === actualYear && nextM < actualMonth)) return;
             if (nextY > actualYear) return;
             
             const grid = document.getElementById('calendarGrid');
             if (grid) {
-                // Direção visual correta da animação:
                 grid.style.transform = dir > 0 ? 'translateX(-100%)' : 'translateX(100%)';
                 grid.style.opacity = '0';
                 
@@ -1430,10 +1417,9 @@
                     currentMonth = nextM; 
                     currentYear = nextY;
                     renderCalendar();
-                    grid.style.transition = 'none'; // Desliga transição para reposicionar
+                    grid.style.transition = 'none'; 
                     grid.style.transform = dir > 0 ? 'translateX(100%)' : 'translateX(-100%)';
                     
-                    // Pequeno delay para o browser registrar a nova posição sem animar o "pulo"
                     requestAnimationFrame(() => {
                         requestAnimationFrame(() => {
                             grid.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease';
@@ -1462,17 +1448,14 @@
             const cartHasMotorGrande = cart.some(c => motorGrandeIds.includes(c.id));
             const selectedMotorId = cart.find(c => motorGrandeIds.includes(c.id))?.id;
             
-            // Lógica de bloqueio específico e novas regras
             const dayNum = selectedDate.getDate();
             const monthNum = selectedDate.getMonth();
             const yearNum = selectedDate.getFullYear();
-            
-            // Regra original de bloqueio Fevereiro
-            const isSpecificBlockedDate = (yearNum === 2026 && monthNum === 1 && dayNum < 13); // Antes de 13/02
-            // Regra Escorrega (Agosto)
+            const isSpecificBlockedDate = (yearNum === 2026 && monthNum === 1 && dayNum < 13);
             const isAugustBlocked = (yearNum < 2026 || (yearNum === 2026 && monthNum < 7)); 
-            // Regra Pula Grande (Disponível apenas APÓS 20/02)
-            const isPulaGrandeBlocked = (yearNum === 2026 && monthNum === 1 && dayNum <= 20);
+
+            // Bloqueio específico: Mini Piscina (6) e Castelinho (7) em 15/03/2026
+            const isMarch15Blocked = (yearNum === 2026 && monthNum === 2 && dayNum === 15);
 
             let toys = [...TOYS_DB].map(toy => ({ ...toy, availableQty: getToyStockForDate(toy.id, dateStr) }));
             const ageF = document.getElementById('ageFilter').value;
@@ -1485,24 +1468,19 @@
             list.innerHTML = '';
             toys.forEach(toy => {
                 const inCart = cart.find(c => c.id === toy.id) || { qty: 0 };
-                
-                // Bloqueios Consolidados
                 const isBlockedByDate = isSpecificBlockedDate && [4, 6].includes(toy.id);
                 const isEscorregaBlocked = toy.id === 9 && isAugustBlocked;
-                const isPulaGrandeDateBlocked = toy.id === 15 && isPulaGrandeBlocked;
+                const isItemMarch15Blocked = isMarch15Blocked && (toy.id === 6 || toy.id === 7);
 
                 let isBlocked = (toy.availableQty <= 0 && inCart.qty === 0) || 
                                 (toy.motorForte && (isMotorGrandeBooked || (cartHasMotorGrande && toy.id !== selectedMotorId))) ||
-                                isBlockedByDate || isEscorregaBlocked || isPulaGrandeDateBlocked;
+                                isBlockedByDate || isEscorregaBlocked || isItemMarch15Blocked;
 
                 let price = (toy.category === 'mesa_comer') ? toy.price : toy.price * mult;
                 
                 let ageColorClass = 'bg-blue-500'; 
-                if (toy.age === 'L') {
-                    ageColorClass = 'bg-green-500'; 
-                } else if (toy.age === '14') {
-                    ageColorClass = 'bg-orange-500'; 
-                }
+                if (toy.age === 'L') ageColorClass = 'bg-green-500'; 
+                else if (toy.age === '14') ageColorClass = 'bg-orange-500'; 
 
                 const card = document.createElement('div');
                 card.className = `toy-card flex p-4 relative ${isBlocked ? 'disabled' : ''}`;
@@ -1512,14 +1490,13 @@
                         <img src="${processedPhoto}" class="w-full h-full object-cover opacity-0 transition-opacity duration-300" onload="this.classList.remove('opacity-0'); this.parentElement.classList.remove('img-skeleton')" onerror="this.src='https://via.placeholder.com/150?text=Indispon%C3%ADvel'; this.classList.remove('opacity-0'); this.parentElement.classList.remove('img-skeleton')"><div class="age-badge ${ageColorClass} font-bold Bird Bird Bird Bird Bird">${toy.age}</div>
                     </div>
                     <div class="flex-grow">
-                        <h4 class="font-bold Bird Bird text-slate-800 text-sm Bird Bird Bird Bird Bird leading-tight uppercase Bird Bird Bird Bird Bird Bird">${toy.name}</h4>
-                        <p class="text-[10px] Bird text-slate-400 mt-1 uppercase Bird font-semibold Bird Bird Bird Bird Bird Bird Bird">${toy.size}</p>
-                        <!-- Preço agora sempre azul escuro, a menos que seja desconto ($) -->
-                        <p class="${mult < 1.0 && toy.category !== 'mesa_comer' ? 'text-green-500' : 'text-[#003399]'} font-bold mt-1 Bird Bird Bird Bird Bird Bird Bird">R$ ${price.toLocaleString('pt-BR', {minimumFractionDigits: 0})}</p>
+                        <h4 class="font-bold text-slate-800 text-sm leading-tight uppercase">${toy.name}</h4>
+                        <p class="text-[10px] text-slate-400 mt-1 uppercase font-semibold">${toy.size}</p>
+                        <p class="${mult < 1.0 && toy.category !== 'mesa_comer' ? 'text-green-500' : 'text-[#003399]'} font-bold mt-1">R$ ${price.toLocaleString('pt-BR', {minimumFractionDigits: 0})}</p>
                         <div class="flex items-center mt-2 gap-3 Bird">
-                            <button onclick="changeQty(${toy.id}, -1)" class="w-8 Bird h-8 Bird rounded-full Bird bg-slate-50 flex items-center justify-center Bird text-slate-400 Bird Bird Bird border border-slate-100 font-bold Bird Bird Bird Bird Bird Bird">-</button>
-                            <span class="font-bold Bird text-sm w-4 Bird text-center Bird Bird Bird Bird Bird Bird Bird">${inCart.qty}</span>
-                            <button onclick="changeQty(${toy.id}, 1)" class="w-8 Bird h-8 Bird rounded-full Bird bg-[#003399] text-white Bird flex items-center justify-center font-bold Bird Bird Bird Bird Bird Bird Bird">+</button>
+                            <button onclick="changeQty(${toy.id}, -1)" class="w-8 Bird h-8 Bird rounded-full Bird bg-slate-50 flex items-center justify-center Bird text-slate-400 Bird Bird Bird border border-slate-100 font-bold">-</button>
+                            <span class="font-bold Bird text-sm w-4 Bird text-center">${inCart.qty}</span>
+                            <button onclick="changeQty(${toy.id}, 1)" class="w-8 Bird h-8 Bird rounded-full Bird bg-[#003399] text-white Bird flex items-center justify-center font-bold">+</button>
                         </div>
                     </div>`;
                 list.appendChild(card);
@@ -1570,65 +1547,49 @@
             let countCombo = 0;
             let comboText = "";
             let specificComboSavings = 0;
-
             const isMEUANO24 = couponCode === "MEUANO24" && couponIsValid;
 
-            // Função auxiliar para verificar presença de combo no carrinho (apenas quantidade 1)
             const hasCombo = (ids) => ids.every(id => cart.some(c => c.id === id && c.qty >= 1));
 
             // Lógica de Match Único para Combos
             let comboApplied = false;
 
-            // 1. Escorrega Premium (4) + Pula Pula Médio (2) -> 490 (Economia 100)
+            // 1. COMBO ECONOMIA: Escorrega Premium (4) + Pula Pula Médio (2) -> 490 (Economia 100)
             if(!comboApplied && hasCombo([4, 2])) { 
                 specificComboSavings = 100; 
-                comboText = "COMBO AVENTURA ATIVADO!"; 
+                comboText = "COMBO ECONOMIA ATIVADO!"; 
                 comboApplied = true;
             }
-            // 2. Mini Piscina de Bolinhas (6) + Area Baby (5) -> 250 (Economia 60)
+            // 2. COMBO BABY: Mini Piscina de Bolinhas (6) + Area Baby (5) -> 250 (Economia 60)
             if(!comboApplied && hasCombo([5, 6])) { 
                 specificComboSavings = 60; 
                 comboText = "COMBO BABY ATIVADO!"; 
                 comboApplied = true;
             }
-            // 3. Piscina de Bolinhas (3) + Castelinho Pula Pula (7) -> 360 (Economia 50)
+            // 3. COMBO +DIVERSÃO: Piscina de Bolinhas (3) + Castelinho Pula Pula (7) -> 360 (Economia 50)
             if(!comboApplied && hasCombo([3, 7])) { 
                 specificComboSavings = 50; 
-                comboText = "COMBO DIVERSÃO ATIVADO!"; 
-                comboApplied = true;
-            }
-            // 4. Pebolim (11) + Aerohockey (10) -> 360 (Economia 80)
-            if(!comboApplied && hasCombo([11, 10])) { 
-                specificComboSavings = 80; 
-                comboText = "COMBO JOGOS ATIVADO!"; 
+                comboText = "COMBO +DIVERSÃO ATIVADO!"; 
                 comboApplied = true;
             }
 
             cart.forEach(i => {
                 let currentNormalPrice = (i.category === 'mesa_comer') ? i.price : i.price * plMult;
                 seasonalOriginalSum += currentNormalPrice * i.qty;
-                
                 let priceItem = currentNormalPrice;
                 if (couponCode === "MIXCASTLE" && i.id === 7) priceItem = 180;
                 
                 if (isMEUANO24) {
-                    const prices2024 = {
-                        1: 120, 2: 150, 15: 200, 3: 150, 4: 300, 5: 100, 6: 150, 7: 150, 
-                        9: 300, 10: 150, 11: 150, 12: 150, 13: 15
-                    };
+                    const prices2024 = {1:120,2:150,3:150,4:300,5:100,6:150,7:150,9:300,10:150,11:150,13:15};
                     if (prices2024[i.id]) priceItem = prices2024[i.id];
                 }
-
                 totalBrinquedos += priceItem * i.qty;
                 if (i.category !== 'mesa_comer') countCombo += i.qty;
             });
 
-            // Aplica os combos específicos no total final antes de outros multiplicadores
             totalBrinquedos -= specificComboSavings;
 
-            let comboDiscountFactor = (countCombo >= 2 && !isMEUANO24 && !comboApplied) ? (pl === '$' ? 0.95 : 0.90) : 1.0;
             const badge = document.getElementById('discountBadge');
-            
             if (specificComboSavings > 0) {
                 badge.innerText = `${comboText} - R$ ${specificComboSavings} OFF`;
                 badge.classList.remove('hidden');
@@ -1638,7 +1599,6 @@
                 badge.classList.remove('hidden');
             } else badge.classList.add('hidden');
 
-            totalBrinquedos *= comboDiscountFactor;
             let multDaysFactor = [1, 1, 1.7, 2.3, 2.8, 3.2][extraDays] || 1;
             let totalFinal = totalBrinquedos * multDaysFactor;
 
@@ -1662,7 +1622,6 @@
                 }
             }
             if (couponCode === "MEUCLUB" && deliveryFee > 0) deliveryFee = Math.max(0, deliveryFee - 15);
-            
             totalFinal += (insuranceEnabled ? 9.90 : 0) + deliveryFee;
             
             if (couponIsValid && !isMEUANO24) {
@@ -1684,37 +1643,34 @@
             } else savingsEl.classList.add('hidden');
 
             const delEl = document.getElementById('deliveryText');
-            if (selectedBairro) delEl.innerHTML = deliveryFee === 0 ? '<span class="text-green-500 font-bold Bird Bird Bird Bird Bird Bird">FRETE GRÁTIS</span>' : `TAXA DE ENTREGA R$ ${deliveryFee.toFixed(2).replace('.',',')} REAIS`;
+            if (selectedBairro) delEl.innerHTML = deliveryFee === 0 ? '<span class="text-green-500 font-bold">FRETE GRÁTIS</span>' : `TAXA DE ENTREGA R$ ${deliveryFee.toFixed(2).replace('.',',')} REAIS`;
             else delEl.innerText = "";
 
             document.getElementById('mainBtn').disabled = cart.length === 0;
 
             if (currentStep === 'summary') {
-                const list = document.getElementById('orderDetailList');
-                if (list) {
+                const detailList = document.getElementById('orderDetailList');
+                if (detailList) {
                     let itemsHtml = cart.map(i => {
                         let p = i.price;
                         if (isMEUANO24) {
-                             const prices2024 = {1:120,2:150,15:200,3:150,4:300,5:100,6:150,7:150,9:300,10:150,11:150,12:150,13:15};
+                             const prices2024 = {1:120,2:150,3:150,4:300,5:100,6:150,7:150,9:300,10:150,11:150,13:15};
                              p = prices2024[i.id] || p;
                         } else {
-                             const pl = getPriceLevel(selectedDate);
-                             let m = pl==='$' ? 0.8 : (pl==='$$$' ? 1.2 : (pl==='$$$$' ? 1.6 : 1.0));
+                             const plvl = getPriceLevel(selectedDate);
+                             let m = plvl==='$' ? 0.8 : (plvl==='$$$' ? 1.2 : (plvl==='$$$$' ? 1.6 : 1.0));
                              if (i.category !== 'mesa_comer') p *= m;
                         }
-                        return `<div class='flex Bird justify-between text-slate-800 font-bold py-0.5 text-[10px] uppercase Bird Bird Bird Bird Bird Bird Bird'><span>${i.qty}x ${i.name}</span><span>R$ ${(p * i.qty * extraDays).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></div>`;
+                        return `<div class='flex justify-between text-slate-800 font-bold py-0.5 text-[10px] uppercase'><span>${i.qty}x ${i.name}</span><span>R$ ${(p * i.qty * extraDays).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></div>`;
                     }).join('');
-                    itemsHtml += `<div class='Bird Bird border-t Bird border-slate-200 Bird mt-2 Bird pt-2 Bird flex Bird justify-between Bird text-[9px] Bird font-bold text-slate-400 Bird uppercase tracking-tighter Bird Bird Bird Bird Bird Bird Bird'><span>VALOR ORIGINAL SEM CUPOM</span><span>R$ ${referencePrice.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></div>`;
-                    itemsHtml += `<div class='flex Bird justify-between text-[9px] Bird font-bold text-green-500 Bird uppercase tracking-tighter Bird Bird Bird Bird Bird Bird Bird'><span>ECONOMIA TOTAL</span><span>- R$ ${savings.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></div>`;
-                    list.innerHTML = itemsHtml;
+                    itemsHtml += `<div class='border-t border-slate-200 mt-2 pt-2 flex justify-between text-[9px] font-bold text-slate-400 uppercase tracking-tighter'><span>VALOR ORIGINAL SEM CUPOM</span><span>R$ ${referencePrice.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></div>`;
+                    itemsHtml += `<div class='flex justify-between text-[9px] font-bold text-green-500 uppercase tracking-tighter'><span>ECONOMIA TOTAL</span><span>- R$ ${savings.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></div>`;
+                    detailList.innerHTML = itemsHtml;
                 }
             }
 
-            // Controle de visibilidade do botão Voltar
             const backBtn = document.getElementById('backBtn');
-            if (backBtn) {
-                backBtn.classList.toggle('hidden', currentStep === 'toys');
-            }
+            if (backBtn) backBtn.classList.toggle('hidden', currentStep === 'toys');
         }
 
         async function sendToSheet() {
@@ -1724,15 +1680,12 @@
             const valorPorDia = totalTotal / extraDays;
             const valorPorDiaFormatado = "R$ " + valorPorDia.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
 
-            // Cálculo da Porcentagem de Desconto
             let discountPercent = 0;
             const pl = getPriceLevel(selectedDate);
-            // Desconto de Combo
             let countCombo = cart.filter(i => i.category !== 'mesa_comer').reduce((acc, i) => acc + i.qty, 0);
             if (countCombo >= 2 && couponCode !== "MEUANO24") {
                 discountPercent += (pl === '$' ? 5 : 10);
             }
-            // Desconto de Cupom
             if (couponIsValid && couponCode !== "MEUANO24") {
                 if (couponCode === "FIVEHUND") discountPercent += 5;
                 else if (couponCode === "DEZZOFF") discountPercent += 10;
@@ -1746,7 +1699,7 @@
                     fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: telegramMsg, Bird: 'Markdown' })
+                        body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: telegramMsg, parse_mode: 'Markdown' })
                     });
                 } catch (e) { console.error("Erro Telegram:", e); }
             }
@@ -1779,7 +1732,6 @@
                     diaria: extraDays || "N/A",
                     pago: "0,00",
                     total: valorPorDiaFormatado,
-                    // Aqui é onde o pagamento e desconto são unidos para a planilha
                     obs: i > 0 ? `Dia ${i+1} de aluguel` : `Pagamento: ${paymentMethod} | Desconto: ${discountPercent}% | Cupom: ${couponCode || 'N/A'}`,
                     cnpj: userCNPJ || "N/A",
                     cep: userCEP || "N/A",
@@ -1806,20 +1758,18 @@
             if(sheet) { 
                 sheet.classList.add('open'); 
                 sheet.scrollTop = 0; 
-                sheet.style.transform = ''; // Limpa qualquer drag anterior
+                sheet.style.transform = ''; 
             } 
             document.body.style.overflow = 'hidden'; 
             const mainBtn = document.getElementById('mainBtn');
-            if (mainBtn) {
-                mainBtn.innerText = currentStep === 'summary' ? 'FINALIZAR' : 'Continuar';
-            }
-            updateSummary(); // Garante que o botão Voltar atualize ao abrir
+            if (mainBtn) mainBtn.innerText = currentStep === 'summary' ? 'FINALIZAR' : 'Continuar';
+            updateSummary(); 
         }
 
         function closeSheet() { 
             document.querySelectorAll('.bottom-sheet').forEach(s => {
                 s.classList.remove('open');
-                s.style.transform = ''; // Reseta transform para o padrão CSS
+                s.style.transform = ''; 
             }); 
             document.getElementById('overlay').style.display = 'none'; 
             document.body.style.overflow = 'auto'; 
@@ -1838,7 +1788,7 @@
                 if (normalizeString(match).startsWith(searchVal)) { if(ghost) ghost.value = val + match.substring(searchVal.length + (val.length - searchVal.length)); } 
                 else { if(ghost) ghost.value = ""; }
                 const matches = streetList.filter(s => normalizeString(s).includes(searchVal)).slice(0, 3);
-                container.innerHTML = matches.map(s => `<div class="suggestion-item Bird Bird Bird Bird Bird" onclick="selectStreet('${s}')">${s}</div>`).join('');
+                container.innerHTML = matches.map(s => `<div class="suggestion-item" onclick="selectStreet('${s}')">${s}</div>`).join('');
                 container.style.display = 'block';
             } else { if(ghost) ghost.value = ""; container.style.display = 'none'; }
         }
@@ -1853,16 +1803,11 @@
         function checkCoupon(val) { 
             if (couponIsValid) return; 
             let code = val.toUpperCase().trim(); 
-
             if (code === "MEUANO24") {
                 const now = new Date();
                 const expiry = new Date(2026, 0, 10, 23, 59, 59); 
-                if (now > expiry) {
-                    showToast("Este cupom expirou!");
-                    return;
-                }
+                if (now > expiry) { showToast("Este cupom expirou!"); return; }
             }
-
             if (COUPONS_DB[code]) { 
                 couponCode = code; 
                 couponIsValid = true; 
@@ -1880,10 +1825,7 @@
                 currentStep = prev;
                 if (prev === 'toys') {
                     closeSheet();
-                    setTimeout(() => {
-                        openSheet('toySheet');
-                        updateSummary();
-                    }, 200);
+                    setTimeout(() => { openSheet('toySheet'); updateSummary(); }, 200);
                 } else {
                     renderForm();
                     updateSummary();
@@ -1908,8 +1850,8 @@
                     if (conflicts.length > 0) {
                         const conflict = conflicts[0];
                         const modal = document.createElement('div');
-                        modal.className = "fixed inset-0 bg-black/60 z-[400] flex items-center justify-center p-6 Bird Bird";
-                        modal.innerHTML = `<div class="bg-white p-8 rounded-3xl Bird text-center shadow-2xl max-w-xs font-bold Bird"><i class="fas fa-calendar-times text-red-500 text-4xl mb-4"></i><p class="font-bold text-slate-800 uppercase text-sm">Não é possível reservar ${extraDays} dias!</p><p class="text-slate-500 text-xs mt-3 leading-relaxed uppercase">O brinquedo <span class="text-red-500">${conflict.name}</span> já está totalmente reservado no dia <span class="text-[#003399]">${conflict.date}</span>.</p><button onclick="this.parentElement.parentElement.remove()" class="mt-6 w-full btn-primary py-3 rounded-xl uppercase font-bold">Entendido</button></div>`;
+                        modal.className = "fixed inset-0 bg-black/60 z-[400] flex items-center justify-center p-6";
+                        modal.innerHTML = `<div class="bg-white p-8 rounded-3xl text-center shadow-2xl max-w-xs font-bold"><i class="fas fa-calendar-times text-red-500 text-4xl mb-4"></i><p class="font-bold text-slate-800 uppercase text-sm">Não é possível reservar ${extraDays} dias!</p><p class="text-slate-500 text-xs mt-3 leading-relaxed uppercase">O brinquedo <span class="text-red-500">${conflict.name}</span> já está totalmente reservado no dia <span class="text-[#003399]">${conflict.date}</span>.</p><button onclick="this.parentElement.parentElement.remove()" class="mt-6 w-full btn-primary py-3 rounded-xl uppercase font-bold">Entendido</button></div>`;
                         document.body.appendChild(modal);
                         return;
                     }
@@ -1940,13 +1882,9 @@
             if (currentStep === 'id') {
                 container.innerHTML = `${h('CONTATO')}<div class="mb-4">${likedLabel('Nome')}<input type='text' value='${userName}' placeholder='Primeiro nome' oninput='formatName(this)' maxlength='18' class='w-full p-5 bg-slate-50 rounded-2xl outline-none border-2 border-transparent focus:border-blue-500 font-bold'></div>
                 <div class="mb-4">
-                    <div class="flex items-center gap-1 mb-1 ml-1">
-                        <i class="fab fa-whatsapp text-green-500 text-xs"></i>
-                        <label class="text-[10px] font-bold text-[#003399] uppercase">WhatsApp</label>
-                    </div>
+                    <div class="flex items-center gap-1 mb-1 ml-1"><i class="fab fa-whatsapp text-green-500 text-xs"></i><label class="text-[10px] font-bold text-[#003399] uppercase">WhatsApp</label></div>
                     <input type='tel' value='${userZap}' placeholder='(xx) xxxxx-xxxx' oninput='maskZap(this)' class='w-full p-5 bg-slate-50 rounded-2xl outline-none border-2 border-transparent focus:border-blue-500 font-bold'>
-                </div>
-                ${safetyMsg}<div class="h-40"></div>`;
+                </div>${safetyMsg}<div class="h-40"></div>`;
             }
             else if (currentStep === 'address') {
                 container.innerHTML = `${h('Endereço')}<select onchange='selectedBairro=this.value;updateSummary()' class='w-full p-5 bg-slate-50 rounded-2xl mb-4 font-bold outline-none'><option value=''>Selecione o Bairro</option>${Object.keys(BAIRROS).map(b => `<option value="${b}" ${selectedBairro===b?'selected':''} ${b === 'Vila da Glória' ? 'disabled' : ''}>${b}${b === 'Vila da Glória' ? ' (INDISPONÍVEL)' : ''}</option>`)}</select><div class="relative mb-4"><input type="text" id="userRuaGhost" class="w-full p-5 bg-slate-50 rounded-2xl absolute inset-0 text-slate-300 pointer-events-none font-bold outline-none" disabled><input type='text' id='userRua' value='${userRua}' placeholder='Nome da Rua' oninput='handleStreetInput(this)' onkeydown="handleStreetKeydown(event)" class='w-full p-5 bg-transparent rounded-2xl relative font-bold outline-none'></div><div id='streetSuggestionsContainer'></div><div class='flex gap-2 mb-4'><input type='text' value='${userSN ? "S/N" : userNum}' maxlength='4' placeholder='N°' oninput='this.value=this.value.replace(/\\D/g,""); userNum=this.value' class='w-28 p-5 bg-slate-50 rounded-2xl font-bold outline-none ${userSN ? "opacity-50" : ""}'> <div class='flex items-center gap-2 p-3 bg-slate-50 rounded-2xl flex-1 cursor-pointer' onclick='userSN=!userSN;renderForm()'><div class='toggle-switch ${userSN?"on":""}'><div class='toggle-knob'></div></div><span class='text-[10px] font-bold text-slate-600 uppercase'>SEM NÚMERO</span></div></div><input type='text' value='${userDetails}' placeholder='Cor da casa, muro, etc' oninput='userDetails=this.value' class='w-full p-5 bg-slate-50 rounded-2xl font-bold outline-none'>${safetyMsg}<div class="h-40"></div>`;
@@ -1960,10 +1898,7 @@
                 const extraPriceVal = (duration > 6 ? (duration - 6) * 5 : 0) + (isNextDay ? 10 : 0);
                 container.innerHTML = `${h('Duração')}<div class='flex gap-2 mb-6'>${[1,2,3,4,5].map(d => {
                     let pct = "";
-                    if(d===2) pct = "15% OFF";
-                    if(d===3) pct = "23% OFF";
-                    if(d===4) pct = "30% OFF";
-                    if(d===5) pct = "36% OFF";
+                    if(d===2) pct = "15% OFF"; if(d===3) pct = "23% OFF"; if(d===4) pct = "30% OFF"; if(d===5) pct = "36% OFF";
                     return `<button onclick="extraDays=${d};renderForm();updateSummary()" class='flex-1 Bird py-3 rounded-xl font-bold border-2 ${extraDays===d?"border-blue-600 bg-blue-50 text-blue-800":"border-slate-100 text-slate-800"} flex flex-col items-center'><span class='text-lg'>${d}d</span>${pct ? `<span class="text-[8px] text-green-600 font-bold">${pct}</span>`:""}</button>`;
                 }).join('')}</div>
                 <div class='flex gap-3 mb-2'>
@@ -1971,7 +1906,7 @@
                     <div class='flex-1'>${likedLabel('Término')}<select onchange="endTime=this.value;renderForm();updateSummary()" class="w-full p-4 bg-slate-50 rounded-2xl font-bold outline-none">${hours.filter(h => parseInt(h.split(':')[0]) > startInt).map(h => `<option value="${h}" ${endTime===h?'selected':''}>${h}</option>`).join('')}<option value="NEXT_DAY" ${endTime==='NEXT_DAY'?'selected':''}>DIA SEG.</option></select></div>
                 </div>
                 <div class="text-center mb-6"><p class="text-[10px] uppercase tracking-tight text-blue-500 font-bold">${extraPriceVal > 0 ? `+ R$ ${extraPriceVal.toLocaleString('pt-BR', {minimumFractionDigits: 2})} EXTRA` : '6 Horas inclusas / +5h por hora extra'}</p></div>
-                <div class='p-5 bg-blue-50 rounded-2xl mb-4 flex justify-between cursor-pointer' onclick='deliveryPreviousDay=!deliveryPreviousDay;renderForm()'><div class="flex items-center gap-3"><div class='toggle-switch ${deliveryPreviousDay?"on":""}'><div class='toggle-knob'></div></div><div class="flex flex-col"><p class='text-[10px] font-bold text-blue-800 uppercase leading-tight'>ENTREGAR 1 DIA ANTES</p><p class='text-[8px] text-blue-600 font-medium uppercase leading-tight'>Não é certeza mas uma possibilidade</p></div></div></div>${safetyMsg}<div class="h-40"></div>`;
+                <div class='p-5 bg-blue-50 rounded-2xl mb-4 flex justify-between cursor-pointer' onclick='deliveryPreviousDay=!deliveryPreviousDay;renderForm()'><div class="flex items-center gap-3"><div class='toggle-switch ${deliveryPreviousDay?"on":""}'><div class='toggle-knob'></div></div><div class="flex flex-col"><p class='text-[10px] font-bold text-blue-800 uppercase leading-tight'>ENTREGAR DIA ANTERIOR (GRATIS)</p><p class='text-[8px] text-blue-600 font-medium uppercase leading-tight'>NÃO É CERTEZA MAS UMA POSSIBILIDADE</p></div></div></div>${safetyMsg}<div class="h-40"></div>`;
             }
             else if (currentStep === 'details') {
                 const hasPiscina = cart.some(i => i.id === 3 || i.id === 9);
@@ -1981,67 +1916,13 @@
                 <div class='flex gap-2 mb-4'>${[0,1,2].map(m => `<button onclick="monitorsCount=${m};renderForm();updateSummary()" class='flex-1 Bird py-3 rounded-xl border-2 ${monitorsCount===m?"border-blue-600 bg-blue-600 text-white":"bg-white font-bold"}'>${m===0?'NÃO':m+' MON.'}</button>`).join('')}</div>
                 ${monitorsCount > 0 ? `<div class="mt-4">${likedLabel('Quantas horas?')}<select onchange="monitorHours=parseInt(this.value);updateSummary()" class="w-full p-4 bg-white rounded-xl font-bold outline-none Bird">${[2,3,4,5,6,7,8].map(h => `<option value="${h}" ${monitorHours===h?'selected':''}>${h} HORAS</option>`).join('')}</select></div>` : ''}
                 </div>
-                ${cart.filter(t=>t.power || t.id === 10).length > 0 ? `
-                    <div class='mb-8'>
-                        <p class='text-[11px] font-bold text-[#003399] mb-4 uppercase text-center'>Qual a distancia da tomada mais próxima?</p>
-                        ${cart.filter(t=>t.power || t.id === 10).map(t => `<div class="mb-4 bg-white p-5 rounded-2xl border border-slate-100 flex items-center justify-between"><p class="text-[10px] Bird font-bold text-[#003399] uppercase mr-4">${t.name}</p><div class="flex items-center gap-2"><input type="tel" maxlength="2" placeholder="0" value="${socketDistances[t.id] || ''}" oninput="this.value=this.value.replace(/\\D/g,''); socketDistances[${t.id}]=this.value" class="w-12 p-3 bg-slate-50 rounded-xl outline-none font-bold text-sm text-center border-2 focus:border-blue-500 Bird"><span class="text-[10px] font-bold text-slate-400">metros</span></div></div>`).join('')}
-                    </div>` : ''}${safetyMsg}<div class="h-40"></div>`;
+                ${cart.filter(t=>t.power || t.id === 10).length > 0 ? `<div class='mb-8'><p class='text-[11px] font-bold text-[#003399] mb-4 uppercase text-center'>Qual a distancia da tomada mais próxima?</p>${cart.filter(t=>t.power || t.id === 10).map(t => `<div class="mb-4 bg-white p-5 rounded-2xl border border-slate-100 flex items-center justify-between"><p class="text-[10px] font-bold text-[#003399] uppercase mr-4">${t.name}</p><div class="flex items-center gap-2"><input type="tel" maxlength="2" placeholder="0" value="${socketDistances[t.id] || ''}" oninput="this.value=this.value.replace(/\\D/g,''); socketDistances[${t.id}]=this.value" class="w-12 p-3 bg-slate-50 rounded-xl outline-none font-bold text-sm text-center border-2 focus:border-blue-500 Bird"><span class="text-[10px] font-bold text-slate-400">metros</span></div></div>`).join('')}</div>` : ''}${safetyMsg}<div class="h-40"></div>`;
             }
             else if (currentStep === 'summary') {
-                container.innerHTML = `${h('Finalizar')}<div class='p-6 bg-slate-50 rounded-[24px] mb-4'>
-                ${likedLabel('Tipo de pagamento')}
-                <select onchange="paymentMethod=this.value;renderForm()" class="w-full p-4 mb-2 bg-white rounded-xl font-bold outline-none shadow-inner">
-                    <option value="Pix" ${paymentMethod === 'Pix' ? 'selected' : ''}>Pix</option>
-                    <option value="Dinheiro Físico" ${paymentMethod === 'Dinheiro Físico' ? 'selected' : ''}>Dinheiro Físico</option>
-                    <option value="Cartão de crédito" ${paymentMethod === 'Cartão de crédito' ? 'selected' : ''}>Cartão de crédito</option>
-                    <option value="Cartão de débito" ${paymentMethod === 'Cartão de débito' ? 'selected' : ''}>Cartão de débito</option>
-                </select>
-                
-                <div class="flex items-start gap-2 mb-4 bg-blue-50/50 p-3 rounded-xl">
-                    <i class="fas fa-smile-beam text-blue-500 mt-0.5 text-xs"></i>
-                    <p class="text-[10px] font-bold text-blue-900 leading-tight">
-                        Fique tranquilo(a)! O acerto final do valor é realizado apenas quando os brinquedos estiverem montadinhos e prontos para a diversão no local!
-                    </p>
-                </div>
-
-                ${paymentMethod === 'Cartão de crédito' ? `<p class="text-orange-600 text-[10px] font-bold mb-4"><i class="fas fa-info-circle mr-1"></i> tem uma pequena taxa padrão do cartão para 1x, 2x ou mais.</p>` : ''}
-                
-                ${likedLabel('Cupom?')}<input type="text" placeholder="CÓDIGO PROMOCIONAL" ${couponIsValid ? 'disabled' : ''} value="${couponCode}" oninput="checkCoupon(this.value)" class="w-full p-4 rounded-xl outline-none font-bold uppercase ${couponIsValid?'border-2 border-green-500 bg-green-50':'bg-white shadow-inner'}">
-                ${couponIsValid ? `<p class="text-green-600 text-[10px] font-bold mt-2 Bird"><i class="fas fa-check-circle mr-1"></i> ${COUPONS_DB[couponCode]}</p>` : ''}
-                <div class="mt-8">${likedLabel('Nota Fiscal?')}<div class="flex gap-2 mb-4">${[true,false].map(opt => `<button onclick="needsInvoice=${opt};renderForm()" class="flex-1 py-3 rounded-xl border-2 ${needsInvoice===opt?'border-[#003399] bg-[#003399] text-white':'border-white bg-white text-slate-300'} text-xs font-bold Bird">${opt?'SIM':'NÃO'}</button>`).join('')}</div>
-                ${needsInvoice ? `<div class="space-y-4 pt-2"><div>${likedLabel('CNPJ')} <input type="tel" oninput="maskCNPJ(this)" value="${userCNPJ}" placeholder="00.000.000/0000-00" class="w-full p-4 bg-white rounded-xl outline-none font-bold shadow-inner"></div><div>${likedLabel('CEP')} <input type="tel" oninput="maskCEP(this)" value="${userCEP}" placeholder="00.000-000" class="w-full p-4 bg-white rounded-xl outline-none font-bold shadow-inner"></div></div>` : ''}</div></div>
-                <div class='p-5 bg-green-50 rounded-3xl mb-4 flex justify-between gap-4 cursor-pointer' onclick='insuranceEnabled=!insuranceEnabled;updateSummary();renderForm()'>
-                    <div class="flex items-center gap-3">
-                        <div class='toggle-switch ${insuranceEnabled?"on":""}'>
-                            <div class='toggle-knob'></div>
-                        </div>
-                        <div class="flex flex-col"><p class='text-[10px] font-bold text-green-800 uppercase leading-tight'>ADICIONAR SEGURO (R$ 9,90 APENAS)</p><p class='text-[8px] text-green-700 font-medium uppercase leading-tight'>Fique isento de reparos de até 300 reais caso o brinquedo seja danificado</p></div>
-                    </div>
-                </div>
-                <div class="p-5 bg-slate-100 rounded-3xl border border-slate-200">
-                    <div class="mb-4">${likedLabel('Como conheceu a gente?')}
-                        <select onchange="referralSource=this.value;renderForm()" class="w-full p-4 bg-white rounded-xl font-bold text-xs outline-none shadow-inner">
-                            <option value="" ${referralSource === '' ? 'selected' : ''}>SELECIONE</option>
-                            <option value="JA SOU CLIENTE" ${referralSource === 'JA SOU CLIENTE' ? 'selected' : ''}>JA SOU CLIENTE</option>
-                            <option value="MARKETPLACE" ${referralSource === 'MARKETPLACE' ? 'selected' : ''}>MARKETPLACE</option>
-                            <option value="INSTAGRAM" ${referralSource === 'INSTAGRAM' ? 'selected' : ''}>INSTAGRAM</option>
-                            <option value="ANUNCIO FACE / INSTA" ${referralSource === 'ANUNCIO FACE / INSTA' ? 'selected' : ''}>ANUNCIO FACE / INSTA</option>
-                            <option value="GOOGLE / MAPS" ${referralSource === 'GOOGLE / MAPS' ? 'selected' : ''}>GOOGLE / MAPS</option>
-                            <option value="BANNER / OUTDOOR" ${referralSource === 'BANNER / OUTDOOR' ? 'selected' : ''}>BANNER / OUTDOOR</option>
-                            <option value="INDICAÇÃO DE AMIGO" ${referralSource === 'INDICAÇÃO DE AMIGO' ? 'selected' : ''}>INDICAÇÃO DE AMIGO</option>
-                            <option value="INDICAÇÃO DE EMPRESA" ${referralSource === 'INDICAÇÃO DE EMPRESA' ? 'selected' : ''}>INDICAÇÃO DE EMPRESA</option>
-                            <option value="OUTROS" ${referralSource === 'OUTROS' ? 'selected' : ''}>OUTROS</option>
-                        </select>
-                        ${referralSource === 'OUTROS' ? `<input type="text" placeholder="Onde?" oninput="referralOther=this.value" class="w-full p-4 mt-2 bg-white rounded-xl font-bold text-xs border border-blue-100">` : ''}
-                    </div>
-                    <div id="orderDetailList" class="space-y-1"></div>
-                </div>${safetyMsg}<div class="h-40"></div>`;
+                container.innerHTML = `${h('Finalizar')}<div class='p-6 bg-slate-50 rounded-[24px] mb-4'>${likedLabel('Tipo de pagamento')}<select onchange="paymentMethod=this.value;renderForm()" class="w-full p-4 mb-2 bg-white rounded-xl font-bold outline-none shadow-inner"><option value="Pix" ${paymentMethod === 'Pix' ? 'selected' : ''}>Pix</option><option value="Dinheiro Físico" ${paymentMethod === 'Dinheiro Físico' ? 'selected' : ''}>Dinheiro Físico</option><option value="Cartão de crédito" ${paymentMethod === 'Cartão de crédito' ? 'selected' : ''}>Cartão de crédito</option><option value="Cartão de débito" ${paymentMethod === 'Cartão de débito' ? 'selected' : ''}>Cartão de débito</option></select><div class="flex items-start gap-2 mb-4 bg-blue-50/50 p-3 rounded-xl"><i class="fas fa-smile-beam text-blue-500 mt-0.5 text-xs"></i><p class="text-[10px] font-bold text-blue-900 leading-tight">Fique tranquilo(a)! O acerto final do valor é realizado apenas quando os brinquedos estiverem montadinhos e prontos para a diversão no local!</p></div>${paymentMethod === 'Cartão de crédito' ? `<p class="text-orange-600 text-[10px] font-bold mb-4"><i class="fas fa-info-circle mr-1"></i> tem uma pequena taxa padrão do cartão para 1x, 2x ou mais.</p>` : ''}${likedLabel('Cupom?')}<input type="text" placeholder="CÓDIGO PROMOCIONAL" ${couponIsValid ? 'disabled' : ''} value="${couponCode}" oninput="checkCoupon(this.value)" class="w-full p-4 rounded-xl outline-none font-bold uppercase ${couponIsValid?'border-2 border-green-500 bg-green-50':'bg-white shadow-inner'}">${couponIsValid ? `<p class="text-green-600 text-[10px] font-bold mt-2 Bird"><i class="fas fa-check-circle mr-1"></i> ${COUPONS_DB[couponCode]}</p>` : ''}<div class="mt-8">${likedLabel('Nota Fiscal?')}<div class="flex gap-2 mb-4">${[true,false].map(opt => `<button onclick="needsInvoice=${opt};renderForm()" class="flex-1 py-3 rounded-xl border-2 ${needsInvoice===opt?'border-[#003399] bg-[#003399] text-white':'border-white bg-white text-slate-300'} text-xs font-bold Bird">${opt?'SIM':'NÃO'}</button>`).join('')}</div>${needsInvoice ? `<div class="space-y-4 pt-2"><div>${likedLabel('CNPJ')} <input type="tel" oninput="maskCNPJ(this)" value="${userCNPJ}" placeholder="00.000.000/0000-00" class="w-full p-4 bg-white rounded-xl outline-none font-bold shadow-inner"></div><div>${likedLabel('CEP')} <input type="tel" oninput="maskCEP(this)" value="${userCEP}" placeholder="00.000-000" class="w-full p-4 bg-white rounded-xl outline-none font-bold shadow-inner"></div></div>` : ''}</div></div><div class='p-5 bg-green-50 rounded-3xl mb-4 flex justify-between gap-4 cursor-pointer' onclick='insuranceEnabled=!insuranceEnabled;updateSummary();renderForm()'><div class="flex items-center gap-3"><div class='toggle-switch ${insuranceEnabled?"on":""}'><div class='toggle-knob'></div></div><div class="flex flex-col"><p class='text-[10px] font-bold text-green-800 uppercase leading-tight'>ADICIONAR SEGURO (R$ 9,90 APENAS)</p><p class='text-[8px] text-green-700 font-medium uppercase leading-tight'>Fique isento de reparos de até 300 reais caso o brinquedo seja danificado</p></div></div></div><div class="p-5 bg-slate-100 rounded-3xl border border-slate-200"><div class="mb-4">${likedLabel('Como conheceu a gente?')}<select onchange="referralSource=this.value;renderForm()" class="w-full p-4 bg-white rounded-xl font-bold text-xs outline-none shadow-inner"><option value="" ${referralSource === '' ? 'selected' : ''}>SELECIONE</option><option value="JA SOU CLIENTE" ${referralSource === 'JA SOU CLIENTE' ? 'selected' : ''}>JA SOU CLIENTE</option><option value="MARKETPLACE" ${referralSource === 'MARKETPLACE' ? 'selected' : ''}>MARKETPLACE</option><option value="INSTAGRAM" ${referralSource === 'INSTAGRAM' ? 'selected' : ''}>INSTAGRAM</option><option value="ANUNCIO FACE / INSTA" ${referralSource === 'ANUNCIO FACE / INSTA' ? 'selected' : ''}>ANUNCIO FACE / INSTA</option><option value="GOOGLE / MAPS" ${referralSource === 'GOOGLE / MAPS' ? 'selected' : ''}>GOOGLE / MAPS</option><option value="BANNER / OUTDOOR" ${referralSource === 'BANNER / OUTDOOR' ? 'selected' : ''}>BANNER / OUTDOOR</option><option value="INDICAÇÃO DE AMIGO" ${referralSource === 'INDICAÇÃO DE AMIGO' ? 'selected' : ''}>INDICAÇÃO DE AMIGO</option><option value="INDICAÇÃO DE EMPRESA" ${referralSource === 'INDICAÇÃO DE EMPRESA' ? 'selected' : ''}>INDICAÇÃO DE EMPRESA</option><option value="OUTROS" ${referralSource === 'OUTROS' ? 'selected' : ''}>OUTROS</option></select>${referralSource === 'OUTROS' ? `<input type="text" placeholder="Onde?" oninput="referralOther=this.value" class="w-full p-4 mt-2 bg-white rounded-xl font-bold text-xs border border-blue-100">` : ''}</div><div id="orderDetailList" class="space-y-1"></div></div>${safetyMsg}<div class="h-40"></div>`;
             }
-            
             const mainBtn = document.getElementById('mainBtn');
-            if (mainBtn) {
-                mainBtn.innerText = currentStep === 'summary' ? 'FINALIZAR' : 'Continuar';
-            }
+            if (mainBtn) mainBtn.innerText = currentStep === 'summary' ? 'FINALIZAR' : 'Continuar';
         }
 
         function copyPixOnly() {
@@ -2052,141 +1933,85 @@
             tempInput.select();
             document.execCommand("copy");
             document.body.removeChild(tempInput);
-            
             const btn = document.getElementById('pixBtn');
-            const originalText = btn.innerText;
             btn.innerText = "COPIADO!";
             btn.style.backgroundColor = "#22C55E";
             btn.style.boxShadow = "0 4px 0 #166534";
-            
-            setTimeout(() => {
-                window.location.href = 'reserva.html';
-            }, 1000); 
+            setTimeout(() => { window.location.href = 'reserva.html'; }, 1000); 
         }
 
-        // --- FUNCIONALIDADE DE ARRASTAR PARA FECHAR (DRAG-TO-CLOSE) ---
+        function initKeyboardNavigation() {
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const active = document.activeElement;
+                    if (active.tagName === 'INPUT' || active.tagName === 'SELECT') {
+                        const ghost = document.getElementById('userRuaGhost');
+                        if (active.id === 'userRua' && ghost && ghost.value !== "") return;
+                        e.preventDefault();
+                        const focusables = Array.from(document.querySelectorAll('#formContent input:not([disabled]), #formContent select:not([disabled])'));
+                        const index = focusables.indexOf(active);
+                        if (index > -1 && index < focusables.length - 1) focusables[index + 1].focus();
+                        else nextStep();
+                    }
+                }
+            });
+        }
+
         function initDragToClose() {
             const sheets = document.querySelectorAll('.bottom-sheet');
-            
             sheets.forEach(sheet => {
                 const handleArea = sheet.querySelector('.drag-handle-area');
                 if (!handleArea) return;
-
-                let startY = 0;
-                let currentY = 0;
-                let isDragging = false;
-
-                const onStart = (e) => {
-                    isDragging = true;
-                    startY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
-                    sheet.style.transition = 'none'; // Desabilita transição durante o drag
-                };
-
+                let startY = 0; let currentY = 0; let isDragging = false;
+                const onStart = (e) => { isDragging = true; startY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY; sheet.style.transition = 'none'; };
                 const onMove = (e) => {
                     if (!isDragging) return;
                     const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
                     const deltaY = clientY - startY;
-                    
-                    if (deltaY > 0) { // Só permite arrastar para baixo
-                        currentY = deltaY;
-                        sheet.style.transform = `translateY(${deltaY}px)`;
-                    } else {
-                        currentY = 0;
-                        sheet.style.transform = `translateY(0)`;
-                    }
+                    if (deltaY > 0) { currentY = deltaY; sheet.style.transform = `translateY(${deltaY}px)`; }
                 };
-
                 const onEnd = () => {
-                    if (!isDragging) return;
-                    isDragging = false;
+                    if (!isDragging) return; isDragging = false;
                     sheet.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
-                    
-                    if (currentY > 120) { // Limiar de fechamento
-                        closeSheet();
-                    } else {
-                        sheet.style.transform = 'translateY(0)';
-                    }
+                    if (currentY > 120) closeSheet();
+                    else sheet.style.transform = 'translateY(0)';
                     currentY = 0;
                 };
-
-                // Listeners de Mouse
                 handleArea.addEventListener('mousedown', onStart);
                 window.addEventListener('mousemove', onMove);
                 window.addEventListener('mouseup', onEnd);
-
-                // Listeners de Touch (Mobile)
                 handleArea.addEventListener('touchstart', onStart, { passive: true });
                 window.addEventListener('touchmove', onMove, { passive: false });
                 window.addEventListener('touchend', onEnd);
             });
         }
 
-        // --- FUNCIONALIDADE DE ARRASTAR PARA O LADO (CALENDAR SWIPE COM TRAVA E ANIMAÇÃO CORRETA) ---
         function initCalendarSwipe() {
             const calendarContent = document.getElementById('calendarContent');
             const grid = document.getElementById('calendarGrid');
             if (!calendarContent || !grid) return;
-
-            let startX = 0;
-            let currentX = 0;
-            let isDragging = false;
-
-            const actualDate = new Date();
-            const actualMonth = actualDate.getMonth();
-            const actualYear = actualDate.getFullYear();
-
-            const onStart = (e) => {
-                isDragging = true;
-                startX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-                grid.style.transition = 'none';
-            };
-
+            let startX = 0; let currentX = 0; let isDragging = false;
+            const actualDate = new Date(); const actualMonth = actualDate.getMonth(); const actualYear = actualDate.getFullYear();
+            const onStart = (e) => { isDragging = true; startX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX; grid.style.transition = 'none'; };
             const onMove = (e) => {
                 if (!isDragging) return;
                 const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
                 const deltaX = clientX - startX;
-                
-                // TRAVA TOTAL: Verifica se pode arrastar naquela direção
-                let canSwipeRight = !(currentYear === actualYear && currentMonth === actualMonth); // Proibe passado
-                let canSwipeLeft = !(currentYear === actualYear && currentMonth === 11); // Proibe proximo ano
-
-                if (deltaX > 0 && !canSwipeRight) { // Tentando ir para o passado
-                    grid.style.transform = 'translateX(0)';
-                    currentX = 0;
-                    return;
-                }
-                if (deltaX < 0 && !canSwipeLeft) { // Tentando ir para o futuro bloqueado
-                    grid.style.transform = 'translateX(0)';
-                    currentX = 0;
-                    return;
-                }
-
-                currentX = deltaX;
-                grid.style.transform = `translateX(${deltaX}px)`;
+                let canSwipeRight = !(currentYear === actualYear && currentMonth === actualMonth);
+                let canSwipeLeft = !(currentYear === actualYear && currentMonth === 11);
+                if ((deltaX > 0 && !canSwipeRight) || (deltaX < 0 && !canSwipeLeft)) { grid.style.transform = 'translateX(0)'; currentX = 0; return; }
+                currentX = deltaX; grid.style.transform = `translateX(${deltaX}px)`;
             };
-
             const onEnd = () => {
-                if (!isDragging) return;
-                isDragging = false;
-                
-                if (currentX < -80) {
-                    // Swipe para a esquerda (quer ver o próximo mês)
-                    changeMonth(1);
-                } else if (currentX > 80) {
-                    // Swipe para a direita (quer ver o mês anterior)
-                    changeMonth(-1);
-                } else {
-                    // Retorna à posição original se o arraste foi pequeno
-                    grid.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
-                    grid.style.transform = 'translateX(0)';
-                }
+                if (!isDragging) return; isDragging = false;
+                if (currentX < -80) changeMonth(1);
+                else if (currentX > 80) changeMonth(-1);
+                else { grid.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)'; grid.style.transform = 'translateX(0)'; }
                 currentX = 0;
             };
-
             calendarContent.addEventListener('mousedown', onStart);
             window.addEventListener('mousemove', onMove);
             window.addEventListener('mouseup', onEnd);
-
             calendarContent.addEventListener('touchstart', onStart, { passive: true });
             window.addEventListener('touchmove', onMove, { passive: true });
             window.addEventListener('touchend', onEnd);
