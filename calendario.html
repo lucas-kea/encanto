@@ -578,7 +578,7 @@
         </div>
         <div class="search-area Bird">
             <div class="relative max-w-xl mx-auto Bird">
-                <input type="text" id="agendaSearch" placeholder="Procurar por nome" class="w-full bg-white/10 Bird border Bird border-white/10 rounded-xl Bird Bird Bird py-2.5 pl-9 pr-4 text-white placeholder-white/30 text-sm focus:outline-none focus:bg-white/20 focus:border-yellow-400/50 transition-all">
+                <input type="text" id="agendaSearch" placeholder="Procurar por nome" class="w-full bg-white/10 Bird Bird border Bird border-white/10 rounded-xl Bird Bird Bird py-2.5 pl-9 pr-4 text-white placeholder-white/30 text-sm focus:outline-none focus:bg-white/20 focus:border-yellow-400/50 transition-all">
                 <div class="absolute left-3 top-1/2 -translate-y-1/2 text-white/30 Bird">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
                 </div>
@@ -1012,7 +1012,7 @@
         const TELEGRAM_CHAT_ID = "6791831671"; 
         
         // --- CONFIGURAÇÃO DATAS INDISPONÍVEIS (MANUTENÇÃO) ---
-        const DATAS_INDISPONIVEIS = ["02/02/2026", "03/02/2026", "04/02/2026", "14/03/2026"]; 
+        const DATAS_INDISPONIVEIS = ["02/02/2026", "03/02/2026", "04/02/2026", "14/03/2026", "12/06/2026", "13/06/2026", "14/06/2026"]; 
 
         // --- CONFIGURAÇÃO DATAS ATÍPICAS (ENTREGA ANTECIPADA / FLEXÍVEL) ---
         const DATAS_ATIPICAS = [
@@ -1078,14 +1078,15 @@
         };
 
         const TOYS_DB = [
-            { id: 1, name: "Pula Pula Pequeno", qty: 2, price: 170, category: "pula", age: "14", size: "2.44m", power: false, motorForte: false, relevance: 1, photo: "https://www.dropbox.com/scl/fi/el5jqaoyod5ukwwzaxihx/camap.webp?rlkey=y1zvmsi9cdtsbh3gtb3091a4x&st=bpwuda61&raw=1" },
+            { id: 1, name: "Pula Pula Pequeno", qty: 1, price: 170, category: "pula", age: "14", size: "2.44m", power: false, motorForte: false, relevance: 1, photo: "https://www.dropbox.com/scl/fi/el5jqaoyod5ukwwzaxihx/camap.webp?rlkey=y1zvmsi9cdtsbh3gtb3091a4x&st=bpwuda61&raw=1" },
             { id: 2, name: "Pula Pula Médio", qty: 3, price: 190, category: "pula", age: "14", size: "3.05m", power: false, motorForte: false, relevance: 2, photo: "https://www.dropbox.com/scl/fi/2xwplyqsnbhndgwde2scg/camam.webp?rlkey=41hiqdgiwnxzvmllf0owgckx8&st=g35vk0oj&raw=1" },
+            { id: 14, name: "Pula Pula Grande", qty: 1, price: 250, category: "pula", age: "14", size: "4.27m", power: false, motorForte: false, relevance: 3, photo: "https://www.dropbox.com/scl/fi/p8cefa8upn9pnqkqdud6b/camag.webp?rlkey=wqcxwv9mcefoenq4frvnxc2jv&st=ojwwh4bq&raw=1" },
             { id: 3, name: "Piscina de Bolinhas", qty: 2, price: 190, category: "piscina", age: "14", size: "1.5m ou 2m", power: false, motorForte: false, relevance: 4, photo: "https://www.dropbox.com/scl/fi/pr90on1ea81nq30lzpxr8/piscina.webp?rlkey=mp5a9b4yfk5v0tyqt75g0ij2j&st=gp4p2onk&raw=1" },
             { id: 4, name: "Escorrega Premium", qty: 1, price: 400, category: "toboga", age: "14", size: "3x5m", power: true, motorForte: true, relevance: 5, photo: "https://www.dropbox.com/scl/fi/a673dgh39ak497b6h9e2t/tobogam.webp?rlkey=byhi3k1tklmum2sfq9fyor2rb&st=rz9ming4&raw=1" },
             { id: 5, name: "Área Baby", qty: 1, price: 120, category: "baby", age: "6", size: "Padrão", power: false, motorForte: false, relevance: 6, photo: "https://www.dropbox.com/scl/fi/fttgp8j0mjdhw22rwgr3i/areababy.webp?rlkey=028cvlshetwv4w7dm3aydbzwj&st=7kmq57d2&raw=1" },
             { id: 6, name: "Mini Piscina de Bolinhas", qty: 1, price: 190, category: "baby", age: "6", size: "Padrão", power: true, motorForte: false, relevance: 7, photo: "https://www.dropbox.com/scl/fi/fxeu36d83jxv2jpwi2c1n/mini-babyyy.webp?rlkey=kecnwpquq7415hlrwf3j1man4&st=jsdhlky6&raw=1" },
-            { id: 7, name: "Castelinho Pula Pula", qty: 1, price: 220, category: "baby", age: "14", size: "3m", power: true, motorForte: false, relevance: 8, photo: "https://www.dropbox.com/scl/fi/zn1npqidyhre44o7v1nwr/castelinho.webp?rlkey=8765usqe385cii48inuz99e5j&st=5q2xu57k&raw=1" },
-            { id: 9, name: "Escorrega com Bolinhas", qty: 1, price: 400, category: "especial", age: "14", size: "Padrão", power: true, motorForte: true, relevance: 8, photo: "https://www.dropbox.com/scl/fi/vqjds36sx0wvhjuxurc4l/escorregobol.webp?rlkey=qxk7tzac8xod1fdzrwr8u508m&st=59u3k5x9&raw=1" },
+            // { id: 7, name: "Castelinho Pula Pula", qty: 1, price: 220, category: "baby", age: "14", size: "3m", power: true, motorForte: false, relevance: 8, photo: "https://www.dropbox.com/scl/fi/zn1npqidyhre44o7v1nwr/castelinho.webp?rlkey=8765usqe385cii48inuz99e5j&st=5q2xu57k&raw=1" },
+            // { id: 9, name: "Escorrega com Bolinhas", qty: 1, price: 400, category: "especial", age: "14", size: "Padrão", power: true, motorForte: true, relevance: 8, photo: "https://www.dropbox.com/scl/fi/vqjds36sx0wvhjuxurc4l/escorregobol.webp?rlkey=qxk7tzac8xod1fdzrwr8u508m&st=59u3k5x9&raw=1" },
             { id: 10, name: "Airhockey", qty: 1, price: 220, category: "mesa_jogo", age: "L", size: "Padrão", power: true, motorForte: false, relevance: 9, photo: "https://www.dropbox.com/scl/fi/ajfbj633cif6lpuqblzrw/aero.webp?rlkey=hw3hlemgizrnj4ta2fkrcs1ep&st=6it80vyn&raw=1" },
             { id: 11, name: "Pebolim", qty: 1, price: 220, category: "mesa_jogo", age: "L", size: "Padrão", power: false, motorForte: false, relevance: 10, photo: "https://www.dropbox.com/scl/fi/bx7605s0ls33k02y74t4j/pebolim.webp?rlkey=409zdmagm2yj6ao6g4mfhfquj&st=j6elwlyz&raw=1" },
             { id: 13, name: "Mesas", qty: 4, price: 15, category: "mesa_comer", age: "L", size: "mesa c/ 4 cadeiras", power: false, motorForte: false, relevance: 11, photo: "https://www.dropbox.com/scl/fi/zpcyj8a466fhms7vqwcr6/mesas.webp?rlkey=8ca2hbxbnvxbftagrprq7scj7&st=bb24hbti&raw=1" }
